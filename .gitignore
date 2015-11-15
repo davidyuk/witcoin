@@ -1,0 +1,5 @@
+.idea/*
+*.pyc
+db.sqlite3
+
+witcoin/settings.py
