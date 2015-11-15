@@ -1,0 +1,48 @@
+{% load staticfiles %}
+{% with site_name='WitCoin' %}
+<!DOCTYPE html>
+<html lang="ru-RU">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="keywords" content="">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <!--<link rel="icon" href="favicon.ico">-->
+
+        <title>{{ site_name }} — {% block title %}{% endblock %}</title>
+
+        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+    </head>
+    <body>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">{{ site_name }}</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+<? include "users.html" ?>
+            </div>
+        </div>
+    </nav>
+
+<main class="container">
+{% block content %}
+{% endblock %}
+</main>
+
+        <footer class="container">
+            <hr>
+            <p>2015 {{ site_name }}</p>
+        </footer>
+        <script type="text/javascript" src="{% static 'assets/js/jquery-2.1.4.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    </body>
+</html>
+{% endwith %}
