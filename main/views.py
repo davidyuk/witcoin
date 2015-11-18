@@ -9,3 +9,12 @@ def user(request, user_id):
     return render(request, 'main/userpage.html', {
         'profile': get_object_or_404(Profile, pk=user_id),
     })
+
+
+def transactions(request):
+    return render(request, 'main/transactions.html', {
+        'transactions': getpager(
+            Transaction.objects.all(),
+            request.GET.get('page')
+        )
+    })

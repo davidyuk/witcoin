@@ -1,0 +1,21 @@
+{% extends "main/base.html" %}
+{% block title %}Операции{% endblock %}
+{% block content %}
+<table class="table table-hover table-condensed">
+    <thead>
+        <tr><td>От кого</td><td>Кому</td><td>Сколько</td><td>Когда</td><td>Статус</td></tr>
+    </thead>
+    <tbody>
+    {% for transaction in transactions %}
+        <tr>
+            <td><a href="{% url 'user' transaction.user_from.id %}">{{ transaction.user_from.profile }}</a></td>
+            <td><a href="{% url 'user' transaction.user_to.id %}">{{ transaction.user_to.profile }}</a></td>
+            <td>{{ transaction.amount }}</td><td>{{ transaction.timestamp }}</td>
+            <td>{% if transaction.isPaid %}Оплачено{% else %}Не оплачено{% endif %}</td>
+        </tr>
+    {% endfor %}
+    <tbody>
+</table>
+{% include 'main/pager.html' with objects=transactions page_name='transactions' %}
+
+{% endblock %}

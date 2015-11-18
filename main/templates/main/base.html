@@ -26,6 +26,11 @@
                 </button>
                 <a class="navbar-brand" href="{% url 'index' %}">{{ site_name }}</a>
             </div>
+            <ul class="nav navbar-nav">
+                <li class="{% if request.resolver_match.url_name == "transactions" %}active{% endif %}">
+                    <a href="{% url 'transactions' %}">Операции</a>
+                </li>
+            </ul>
             <div id="navbar" class="collapse navbar-collapse">
                 {% if user.is_authenticated %}
                     <ul class="nav navbar-right">

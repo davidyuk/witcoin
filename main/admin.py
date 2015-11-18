@@ -4,4 +4,5 @@ from .models import *
 
 admin.site.register(Profile)
 admin.site.register(Group)
+admin.site.register(Transaction)
 

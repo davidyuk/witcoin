@@ -1,0 +1,9 @@
+<ul class="pager">
+    {% if objects.has_previous %}
+        <li><a href="?page={{ objects.previous_page_number }}">Предыдущая</a></li>
+    {% endif %}
+    <li>Страница {{ objects.number }} из {{ objects.paginator.num_pages }}</li>
+    {% if objects.has_next %}
+        <li><a href="?page={{ objects.next_page_number }}">Следующая</a></li>
+    {% endif %}
+</ul>
