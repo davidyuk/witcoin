@@ -15,6 +15,18 @@ class Profile(models.Model):
     about = models.TextField()
     group = models.ForeignKey(Group, verbose_name='Группа', default=None)
 
+    def earned(self):
+        return self.user.transactions_from.aggregate(Sum('amount'))['amount__sum']
+
+    def spend(self):
+        return self.user.transactions_to.aggregate(Sum('amount'))['amount__sum']
+
+    def balance(self):
+        try:
+            return self.earned() - self.spend()
+        except:
+            return 0
+
     def __str__(self):
         s = self.user.first_name + ' ' + self.user.last_name
         s = self.user.username if s == ' ' else s

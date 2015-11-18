@@ -6,6 +6,10 @@
             <h3>{{ profile }}</h3>
             <table class="table table-bordered table-condensed">
                 {% if profile.group %}<tr><td>Группа</td><td>{{ profile.group }}</td></tr>{% endif %}
+                <tr><td>Баланс</td><td>{{ profile.balance }} WitCoin</td></tr>
+                <tr><td>Заработано</td><td>{{ profile.earned }} WitCoin</td></tr>
+                <tr><td>Потрачено</td><td>{{ profile.spend }} WitCoin</td></tr>
+                <tr><td>Оборот</td><td>{{ profile.spend }} WitCoin</td></tr>
                 <tr><td>Был в системе</td><td>{{ profile.user.last_login }}</td></tr>
                 <tr><td>Дата регистрации</td><td>{{ profile.user.date_joined }}</td></tr>
             </table>
@@ -17,6 +21,36 @@
             </div>
         </div>
         <div class="col-md-7">
+            <h4>Последние операции</h4>
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr><td></td><td>Участник</td><td>Стоимость</td><td>Когда</td><td></td></tr>
+                </thead>
+                <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>
+                        {% if transaction.user_from == profile.user %}
+                            <span title="Научил" class="glyphicon glyphicon-education"><!--Продажа glyphicon-chevron-right--></span>
+                        {% else %}
+                            <span title="Научился" class="glyphicon glyphicon-briefcase"><!--Покупка glyphicon-chevron-left--></span>
+                        {% endif %}</td>
+                        {% if transaction.user_from != profile.user %}
+                            <td><a href="{% url 'user' transaction.user_from.id %}">{{ transaction.user_from.profile }}</a></td>
+                        {% else %}
+                            <td><a href="{% url 'user' transaction.user_to.id %}">{{ transaction.user_to.profile }}</a></td>
+                        {% endif %}
+                        <td>{{ transaction.amount }} WitCoin</td><td>{{ transaction.timestamp }}</td>
+                        <td>{% if transaction.isPaid %}
+                            <span title="Оплачено" class="glyphicon glyphicon-ok-sign text-success"></span>
+                        {% else %}
+                            <span title="Не оплачено" class="glyphicon glyphicon-question-sign text-warning"></span>
+                        {% endif %}</td>
+                    </tr>
+                {% endfor %}
+                <tbody>
+            </table>
+            {% include 'main/pager.html' with objects=transactions %}
         </div>
     </div>
 {% endblock %}
