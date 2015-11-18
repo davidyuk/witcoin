@@ -1,5 +1,40 @@
 {% extends "main/base.html" %}
 {% block title %}Hello!{% endblock %}
 {% block content %}
-Test block
+{% with currency_name='WitCoin' %}
+<div class="row">
+    <div class="col-md-8">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Информация о системе</div>
+            <table class="table">
+                <tbody>
+                    <tr><td>Всего</td><td>{{ money_all }} {{ currency_name }}</td></tr>
+                    <tr><td>Средняя стоимость операции</td><td>{{ money_avg }} {{ currency_name }}</td></tr>
+                    <tr><td>Зарегистрированно пользователей</td><td>{{ users_count }} человек(а)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Лидеры</div>
+            <ul class="list-group">
+                {% for user in users_top %}
+                    <li class="list-group-item"><a href="{% url 'user' user.id %}">{{ user }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Недавно зарегистрировавшиеся</div>
+            <ul class="list-group">
+                {% for user in users_last %}
+                    <li class="list-group-item"><a href="{% url 'user' user.id %}">{{ user }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endwith %}
 {% endblock %}

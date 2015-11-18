@@ -6,7 +6,13 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def index(request):
-    return render(request, 'main/index.html', [])
+    return render(request, 'main/index.html', {
+        'users_top': sorted(Profile.objects.all(), key=lambda a: a.balance())[:5],
+        'users_last': sorted(Profile.objects.all(), key=lambda a: a.user.date_joined)[:5],
+        'users_count': Profile.objects.count(),
+        'money_all': 10000,
+        'money_avg': Transaction.objects.aggregate(Avg('amount'))['amount__avg'],
+    })
 
 
 def getpager(objects, page=1, objects_per_page=25):
