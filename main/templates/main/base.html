@@ -27,7 +27,27 @@
             <a class="navbar-brand" href="/">{{ site_name }}</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
-<? include "users.html" ?>
+                {% if user.is_authenticated %}
+                    <ul class="nav navbar-right">
+                        <span class="navbar-text">{{ user.profile }}</span>
+                        <a href="{% url 'logout' %}" class="btn btn-default navbar-btn">Выход</a>
+                    </ul>
+                {% else %}
+                    <ul class="nav navbar-right hidden-onlogin">
+                        <a href="{% url 'login' %}" class="btn btn-default navbar-btn hidden-lg hidden-xs">Вход</a>
+                        <a href="{% url 'register' %}" class="btn btn-success navbar-btn">Регистрация</a>
+                    </ul>
+                    <form method="post" action="{% url 'login' %}" class="form-login navbar-form navbar-right hidden-md hidden-sm">
+                        <div class="form-group">
+                            <input name="username" type="text" placeholder="Имя пользователя" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <input name="password" type="password" placeholder="Пароль" class="form-control" required>
+                        </div>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-default">Войти</button>
+                    </form>
+                {% endif %}
             </div>
         </div>
     </nav>
