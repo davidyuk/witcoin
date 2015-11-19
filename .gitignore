@@ -4,3 +4,10 @@ db.sqlite3
 
 main/migrations/*
 witcoin/settings.py
+
+[Oo]bj/
+[Bb]in/
+[Dd]ebug/
+[Rr]elease/
+*.pyproj
+*.sln
