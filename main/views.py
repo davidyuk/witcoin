@@ -5,6 +5,7 @@ from django.db.models import Avg, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from .forms import *
 from django.contrib.auth import authenticate, login
 
 
@@ -15,6 +16,26 @@ def index(request):
         'users_count': UserProfile.objects.count(),
         'money_all': 10000,
         'money_avg': Transaction.objects.aggregate(Avg('amount'))['amount__avg'],
+    })
+
+
+def register(request):
+    if request.method == "POST":
+        user_form = UserCreationForm(data=request.POST)
+        profile_form = UserProfileCreationForm(data=request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
+            new_user = user_form.save()
+            profile_form = profile_form.save(commit=False)
+            profile_form.user = new_user
+            profile_form.save()
+            new_user = authenticate(username=request.POST['username'], password=request.POST['password1'])
+            login(request, new_user)
+            return HttpResponseRedirect(reverse('home'))
+    else:
+        user_form = UserCreationForm()
+        profile_form = UserProfileCreationForm()
+    return render(request, 'registration/register.html', {
+        'userForm': user_form, 'userProfileForm': profile_form
     })
 
 
