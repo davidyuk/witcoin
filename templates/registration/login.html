@@ -1,0 +1,28 @@
+{% extends "main/base.html" %}
+{% block title %}Вход{% endblock %}
+{% block replace_autofocus %}{% endblock %}
+{% block content %}
+
+{% if next %}
+    <div class="alert alert-danger alert-dismissable alert-link">
+        <button class="close" type="button" data-dismiss="alert" aria-hidden="true">&#215;</button>
+        {% if user.is_authenticated %}
+            Ваш аккаунт имеет недостаточно прав для доступа к этой странице. Чтобы продолжить,
+            воспользуйтесь аккаунтом который имеет достаточные права доступа.
+        {% else %}
+            Пожалуйста, войдите в систему, чтобы увидеть эту страницу.
+        {% endif %}
+    </div>
+{% endif %}
+
+<form class="form-horizontal" method="POST" action="{% url 'django.contrib.auth.views.login' %}">
+    {% csrf_token %}
+    {% load bootstrap3 %}
+    {% bootstrap_form form layout="horizontal" %}
+    {% buttons submit='Войти' layout='horizontal' %}
+    {% endbuttons %}
+
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}
