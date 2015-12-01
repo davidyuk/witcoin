@@ -36,9 +36,9 @@
                             <span title="Научился" class="glyphicon glyphicon-briefcase"><!--Покупка glyphicon-chevron-left--></span>
                         {% endif %}</td>
                         {% if transaction.user_from != profile.user %}
-                            <td><a href="{% url 'user' transaction.user_from.id %}">{{ transaction.user_from.profile }}</a></td>
+                            <td><a href="{% url 'user' transaction.user_from.username %}">{{ transaction.user_from.profile }}</a></td>
                         {% else %}
-                            <td><a href="{% url 'user' transaction.user_to.id %}">{{ transaction.user_to.profile }}</a></td>
+                            <td><a href="{% url 'user' transaction.user_to.username %}">{{ transaction.user_to.profile }}</a></td>
                         {% endif %}
                         <td>{{ transaction.amount }} WitCoin</td><td>{{ transaction.timestamp }}</td>
                         <td>{% if transaction.isPaid %}

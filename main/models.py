@@ -10,10 +10,10 @@ class Group(models.Model):
         return self.name
 
 
-class Profile(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    about = models.TextField()
-    group = models.ForeignKey(Group, verbose_name='Группа', default=None)
+    about = models.TextField('О себе', blank=True)
+    group = models.ForeignKey(Group, verbose_name='Группа')
 
     def earned(self):
         return self.user.transactions_from.aggregate(Sum('amount'))['amount__sum']
