@@ -9,6 +9,10 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Группа'
+        verbose_name_plural = 'Группы'
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -32,6 +36,10 @@ class UserProfile(models.Model):
         s = self.user.username if s == ' ' else s
         return s
 
+    class Meta:
+        verbose_name = 'Профиль пользователя'
+        verbose_name_plural = 'Профили пользователей'
+
 
 class Transaction(models.Model):
     user_from = models.ForeignKey(User, verbose_name='От кого', related_name='transactions_from')
@@ -46,3 +54,7 @@ class Transaction(models.Model):
 
     def __str__(self):
         return 'От: %s, кому: %s, количество: %s' % (self.user_from, self.user_to, self.amount)
+
+    class Meta:
+        verbose_name = 'Транзакция'
+        verbose_name_plural = 'Транзакции'
