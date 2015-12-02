@@ -1,0 +1,11 @@
+{% extends "main/base.html" %}
+{% block title %}Параметры{% endblock %}
+{% block content %}
+<form class="form-horizontal" method="POST" action="">
+    {% csrf_token %}
+    {% load bootstrap3 %}
+    {% bootstrap_form userForm layout="horizontal" %}
+    {% bootstrap_form userProfileForm layout="horizontal" %}
+    {% buttons submit='Сохранить' layout='horizontal' %}{% endbuttons %}
+</form>
+{% endblock %}

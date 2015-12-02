@@ -39,6 +39,23 @@ def register(request):
     })
 
 
+@login_required
+def settings(request):
+    if request.method == "POST":
+        user_form = UserEditingForm(data=request.POST, instance=request.user)
+        profile_form = UserProfileEditingForm(data=request.POST, instance=request.user.userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            curr_user = user_form.save()
+            profile_form.save()
+            return HttpResponseRedirect(reverse('home'))
+    else:
+        user_form = UserEditingForm(instance=request.user)
+        profile_form = UserProfileEditingForm(instance=request.user.userprofile)
+    return render(request, 'main/settings.html', {
+        'userForm': user_form, 'userProfileForm': profile_form
+    })
+
+
 def getpager(objects, page=1, objects_per_page=25):
     paginator = Paginator(objects, objects_per_page)
     try:

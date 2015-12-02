@@ -8,6 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 class UserCreationForm(auth_forms.UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)
+        self.make_fields_required()
+
+    def make_fields_required(self):
         self.fields['username'].widget.attrs['autofocus'] = 'autofocus'
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
@@ -30,5 +33,22 @@ class UserProfileCreationForm(forms.ModelForm):
         }
         help_texts = {
             'about': _('Этот текст отобразится на вашей странице, его можно будет изменить позже.'),
-            'last_name': _('Например: Петров.'),
+        }
+
+
+class UserEditingForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserEditingForm, self).__init__(*args, **kwargs)
+        self.make_fields_required()
+
+    make_fields_required = UserCreationForm.make_fields_required
+    Meta = UserCreationForm.Meta
+
+
+class UserProfileEditingForm(forms.ModelForm):
+    class Meta(UserProfileCreationForm.Meta):
+        help_texts = {
+            'about': _('Этот текст отображается на вашей странице.')
+        }
+
         }
