@@ -27,7 +27,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li class="{% if request.resolver_match.url_name == "transactions" %}active{% endif %}">
-                    <a href="{% url 'transactions' %}">Операции</a>
+                    <a href="{% url 'transaction_all' %}">Все операции</a>
                 </li>
             </ul>
             <div id="navbar" class="collapse navbar-collapse">

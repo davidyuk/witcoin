@@ -83,7 +83,6 @@ def home(request):
     return HttpResponseRedirect(reverse('user', args=[request.user.username]))
 
 
-def transactions(request):
 @login_required
 def transaction_create(request):
     if request.method == "POST":
@@ -97,7 +96,8 @@ def transaction_create(request):
     else:
         form = TransactionCreationForm(user=request.user.userprofile)
     return render(request, 'main/transaction_create.html', {'form': form})
-    return render(request, 'main/transactions.html', {
+def transaction_all(request):
+    return render(request, 'main/transaction_all.html', {
         'transactions': getpager(
             Transaction.objects.all(),
             request.GET.get('page')
