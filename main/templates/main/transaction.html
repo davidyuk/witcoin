@@ -1,0 +1,17 @@
+{% extends "main/base.html" %}
+{% block title %}Транзакция {{ transaction.user_from }} — {{ transaction.user_to }}{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-bordered table-hover col-md-6">
+                <tr><td>От кого</td><td>{% user transaction.user_from %}</td></tr>
+                <tr><td>Кому</td><td>{% user transaction.user_to %}</td></tr>
+                <tr><td>Сумма</td><td>{% coins transaction.amount %}</td></tr>
+                <tr><td>Дата создания</td><td>{{ transaction.timestamp_create }}</td></tr>
+                <tr><td>Дата подтверждения</td><td>{{ transaction.timestamp_confirm }}</td></tr>
+                <tr><td>Статус</td><td>{% status transaction.status %}</td></tr>
+                <tr><td>Описание</td><td>{{ transaction.description }}</td></tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

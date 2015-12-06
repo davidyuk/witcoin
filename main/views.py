@@ -96,6 +96,15 @@ def transaction_create(request):
     else:
         form = TransactionCreationForm(user=request.user.userprofile)
     return render(request, 'main/transaction_create.html', {'form': form})
+
+
+def transaction(request, pk):
+    trans = get_object_or_404(Transaction, pk=pk)
+    return render(request, 'main/transaction.html', {
+        'transaction': trans
+    })
+
+
 def transaction_all(request):
     return render(request, 'main/transaction_all.html', {
         'transactions': getpager(

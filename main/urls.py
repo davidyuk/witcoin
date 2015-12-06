@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^user/(?P<username>[A-zА-я0-9_-]+)$', views.user, name='user'),
     url(r'^transaction/all$', views.transaction_all, name='transaction_all'),
     url(r'^transaction/create$', views.transaction_create, name='transaction_create'),
+    url(r'^transaction/(?P<pk>[0-9]+)$', views.transaction, name='transaction'),
     url(r'^$', views.index, name='index'),
 ]
