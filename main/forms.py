@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth import models as auth_models
 from django.contrib.auth import forms as auth_forms
 from .models import UserProfile
-from django.utils.translation import ugettext_lazy as _
 
 
 class UserCreationForm(auth_forms.UserCreationForm):
@@ -32,7 +31,7 @@ class UserProfileCreationForm(forms.ModelForm):
             'about': forms.Textarea(attrs={'rows': 5}),
         }
         help_texts = {
-            'about': _('Этот текст отобразится на вашей странице, его можно будет изменить позже.'),
+            'about': 'Этот текст отобразится на вашей странице, его можно будет изменить позже.',
         }
 
 
@@ -48,7 +47,7 @@ class UserEditingForm(forms.ModelForm):
 class UserProfileEditingForm(forms.ModelForm):
     class Meta(UserProfileCreationForm.Meta):
         help_texts = {
-            'about': _('Этот текст отображается на вашей странице.')
+            'about': 'Этот текст отображается на вашей странице.'
         }
 
         }
