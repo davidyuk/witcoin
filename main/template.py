@@ -7,8 +7,8 @@ register = template.Library()
 @register.inclusion_tag('main/common/coins.html')
 def coins(_coins):
     return {
-        'int': _coins.is_integer(),
-        'coins': int(_coins) if _coins.is_integer() else _coins
+        'int': _coins % 1 == 0,
+        'coins': int(_coins) if _coins % 1 == 0 else _coins
     }
 
 

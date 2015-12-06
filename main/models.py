@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.core.validators import MinValueValidator
 
 
 class Group(models.Model):
@@ -20,16 +21,15 @@ class UserProfile(models.Model):
     group = models.ForeignKey(Group, verbose_name='Группа', default=1)
 
     def earned(self):
-        return self.user.transactions_from.aggregate(Sum('amount'))['amount__sum']
+        r = self.transactions_to.aggregate(Sum('amount'))['amount__sum']
+        return r if r is not None else 0
 
     def spend(self):
-        return self.user.transactions_to.aggregate(Sum('amount'))['amount__sum']
+        r = self.transactions_from.aggregate(Sum('amount'))['amount__sum']
+        return r if r is not None else 0
 
     def balance(self):
-        try:
-            return self.earned() - self.spend()
-        except:
-            return 0
+        return self.earned() - self.spend()
 
     def __str__(self):
         s = self.user.first_name + ' ' + self.user.last_name
@@ -58,7 +58,7 @@ class Transaction(models.Model):
     user_from = models.ForeignKey(UserProfile, verbose_name='От кого', related_name='transactions_from')
     user_to = models.ForeignKey(UserProfile, verbose_name='Кому', related_name='transactions_to')
     description = models.CharField('Описание', max_length=500)
-    amount = models.FloatField('Сумма', default=0)
+    amount = models.DecimalField('Сумма', default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
     timestamp_create = models.DateTimeField('Дата создания', auto_now_add=True)
     timestamp_confirm = models.DateTimeField('Дата подтверждения', blank=True)
     status = models.ForeignKey(TransactionStatus, verbose_name='Статус', default=1)

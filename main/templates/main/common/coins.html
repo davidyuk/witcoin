@@ -2,5 +2,5 @@
 {% if int %}
     {% blocktrans count coins=coins %}{{ coins }} witcoin{% plural %}{{ coins }} witcoins{% endblocktrans %}
 {% else %}
-    {{ coins }} {% trans "witcoins" %}
+    {{ coins|floatformat:"-2" }} {% trans "witcoins" %}
 {% endif %}
