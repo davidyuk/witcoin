@@ -1,7 +1,7 @@
 {% extends "main/base.html" %}
-{% block title %}Hello!{% endblock %}
+{% load i18n %}
+{% block title %}Привет!{% endblock %}
 {% block content %}
-{% with currency_name='WitCoin' %}
 <div class="row">
     <div class="col-md-8">
 
@@ -9,9 +9,11 @@
             <div class="panel-heading">Информация о системе</div>
             <table class="table">
                 <tbody>
-                    <tr><td>Всего</td><td>{{ money_all }} {{ currency_name }}</td></tr>
-                    <tr><td>Средняя стоимость операции</td><td>{{ money_avg }} {{ currency_name }}</td></tr>
-                    <tr><td>Зарегистрированно пользователей</td><td>{{ users_count }} человек(а)</td></tr>
+                    <tr><td>Всего</td><td>{% coins money_all %}</td></tr>
+                    <tr><td>Средняя стоимость операции</td><td>{% coins money_avg %}</td></tr>
+                    <tr><td>Зарегистрированно пользователей</td><td>
+                        {% blocktrans count users=users_count %}{{ users }} user{% plural %}{{ users }} users{% endblocktrans %}
+                    </td></tr>
                 </tbody>
             </table>
         </div>
@@ -22,7 +24,7 @@
             <div class="panel-heading">Лидеры</div>
             <ul class="list-group">
                 {% for user in users_top %}
-                    <li class="list-group-item"><a href="{% url 'user' user.user.username %}">{{ user }}</a></li>
+                    <li class="list-group-item">{% user user %}</li>
                 {% endfor %}
             </ul>
         </div>
@@ -30,11 +32,10 @@
             <div class="panel-heading">Недавно зарегистрировавшиеся</div>
             <ul class="list-group">
                 {% for user in users_last %}
-                    <li class="list-group-item"><a href="{% url 'user' user.user.username %}">{{ user }}</a></li>
+                    <li class="list-group-item">{% user user %}</li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 </div>
-{% endwith %}
 {% endblock %}
