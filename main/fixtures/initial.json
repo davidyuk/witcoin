@@ -1,0 +1,6 @@
+[
+  {"pk": 1, "model": "main.transactionstatus", "fields": {"name": "Ожидание", "icon"="question-sign", "color"="warning"}},
+  {"pk": 2, "model": "main.transactionstatus", "fields": {"name": "Переведено", "icon"="ok-sign", "color"="success"}},
+  {"pk": 3, "model": "main.transactionstatus", "fields": {"name": "Отказано", "icon"="info-sign", "color"="danger"}},
+  {"pk": 4, "model": "main.transactionstatus", "fields": {"name": "Отменено", "icon"="info-sign", "color"="info"}}
+]
