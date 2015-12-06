@@ -67,12 +67,11 @@ def getpager(objects, page=1, objects_per_page=25):
 
 
 def user(request, username):
-    user = get_object_or_404(User, username=username)
+    _user = get_object_or_404(User, username=username)
     return render(request, 'main/userpage.html', {
-        'profile': get_object_or_404(UserProfile, pk=user.id),
-        'contacts': Contact.objects.filter(user=user.id),
+        'profile': _user.userprofile,
         'transactions': getpager(
-            Transaction.objects.filter(Q(user_to=user.id) | Q(user_from=user.id)),
+            Transaction.objects.filter(Q(user_to=_user.id) | Q(user_from=_user.id)),
             request.GET.get('page')
         )
     })
