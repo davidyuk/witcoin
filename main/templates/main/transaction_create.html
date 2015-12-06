@@ -1,0 +1,11 @@
+{% extends "main/base.html" %}
+{% block title %}Создать транзакцию{% endblock %}
+{% block replace_autofocus %}{% endblock %}
+{% block content %}
+<form class="form-horizontal" method="POST" action="">
+    {% csrf_token %}
+    {% load bootstrap3 %}
+    {% bootstrap_form form layout="horizontal" %}
+    {% buttons submit='Создать транзакцию' layout='horizontal' %}{% endbuttons %}
+</form>
+{% endblock %}

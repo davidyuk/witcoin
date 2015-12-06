@@ -60,11 +60,8 @@ class Transaction(models.Model):
     description = models.CharField('Описание', max_length=500)
     amount = models.DecimalField('Сумма', default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
     timestamp_create = models.DateTimeField('Дата создания', auto_now_add=True)
-    timestamp_confirm = models.DateTimeField('Дата подтверждения', blank=True)
+    timestamp_confirm = models.DateTimeField('Дата подтверждения', null=True, blank=True)
     status = models.ForeignKey(TransactionStatus, verbose_name='Статус', default=1)
-
-    def timestamp(self):
-        return max(self.timestamp_create, self.timestamp_confirm)
 
     def __str__(self):
         return 'От: %s, кому: %s, количество: %s' % (self.user_from, self.user_to, self.amount)

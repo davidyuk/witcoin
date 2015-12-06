@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import models as auth_models
 from django.contrib.auth import forms as auth_forms
-from .models import UserProfile
+from .models import UserProfile, Transaction
 
 
 class UserCreationForm(auth_forms.UserCreationForm):
@@ -50,4 +50,38 @@ class UserProfileEditingForm(forms.ModelForm):
             'about': 'Этот текст отображается на вашей странице.'
         }
 
+
+class TransactionCreationForm(forms.ModelForm):
+    TRANSACTION_CREATION_TYPES = (
+        ('transfer', 'Перевести средства пользователю'),
+        ('offer', 'Предложить пользователю перевести средства вам'),
+    )
+
+    type = forms.ChoiceField(label='Тип', choices=TRANSACTION_CREATION_TYPES, widget=forms.RadioSelect)
+    user = forms.ModelChoiceField(label='Пользователь', queryset=UserProfile.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        self.user_curr = kwargs.pop('user', None)
+        super(TransactionCreationForm, self).__init__(*args, **kwargs)
+        self.fields['user'].queryset = UserProfile.objects.exclude(pk=self.user_curr.pk)
+
+    def save(self, force_insert=False, force_update=False, commit=True):
+        m = super(TransactionCreationForm, self).save(commit=False)
+        m.user_from = self.user_curr
+        m.user_to = self.cleaned_data['user']
+        if self.cleaned_data['type'] == 'offer':
+            m.user_to, m.user_from = m.user_from, m.user_to
+        if commit:
+            m.save()
+        return m
+
+    class Meta:
+        model = Transaction
+        fields = ['type', 'user', 'description', 'amount']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 3})
+        }
+        help_texts = {
+            'description': 'Описание причины перевода.',
+            'amount': 'Может быть не целым числом.'
         }

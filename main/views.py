@@ -84,6 +84,19 @@ def home(request):
 
 
 def transactions(request):
+@login_required
+def transaction_create(request):
+    if request.method == "POST":
+        form = TransactionCreationForm(request.POST, user=request.user.userprofile)
+        if form.is_valid():
+            form.save()
+            if 'from' in request.GET:
+                return HttpResponseRedirect(request.GET['from'])
+            else:
+                return HttpResponseRedirect(reverse('home'))
+    else:
+        form = TransactionCreationForm(user=request.user.userprofile)
+    return render(request, 'main/transaction_create.html', {'form': form})
     return render(request, 'main/transactions.html', {
         'transactions': getpager(
             Transaction.objects.all(),
