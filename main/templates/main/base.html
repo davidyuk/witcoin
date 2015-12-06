@@ -34,8 +34,29 @@
             <div id="navbar" class="collapse navbar-collapse">
                 {% if user.is_authenticated %}
                     <ul class="nav navbar-right">
-                        <span class="navbar-text">{{ user.profile }}</span>
-                        <a href="{% url 'logout' %}" class="btn btn-default navbar-btn">Выход</a>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" style="margin-right: 10px;">
+                        <li>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                {{ user.userprofile }}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" id="user_menu">
+                                {% with request.resolver_match as r %}
+                                    <li class="{% if r.url_name == 'user' and r.kwargs.username == user.username %}active{% endif %}">
+                                        <a href="{% url 'user' user.username %}">Моя страница</a>
+                                    </li>
+                                {% endwith %}
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="{% url 'settings' %}">Параметры</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="{% url 'logout' %}">Выход</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 {% else %}
                     <ul class="nav navbar-right hidden-onlogin">
