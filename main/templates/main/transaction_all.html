@@ -12,7 +12,7 @@
                     <td>{% user transaction.user_from %}</td>
                     <td>{% user transaction.user_to %}</td>
                     <td><a href="{% url 'transaction' transaction.pk %}">{% coins transaction.amount %}</a></td>
-                    <td><a href="{% url 'transaction' transaction.pk %}">{{ transaction.timestamp }}</a></td>
+                    <td><a href="{% url 'transaction' transaction.pk %}">{{ transaction.timestamp_create }}</a></td>
                     <td><a href="{% url 'transaction' transaction.pk %}">{% status transaction.status %}</a></td>
                 </tr>
             {% endfor %}
