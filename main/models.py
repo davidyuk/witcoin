@@ -42,15 +42,18 @@ class UserProfile(models.Model):
 
 
 class Transaction(models.Model):
-    user_from = models.ForeignKey(User, verbose_name='От кого', related_name='transactions_from')
-    user_to = models.ForeignKey(User, verbose_name='Кому', related_name='transactions_to')
+    user_from = models.ForeignKey(UserProfile, verbose_name='От кого', related_name='transactions_from')
+    user_to = models.ForeignKey(UserProfile, verbose_name='Кому', related_name='transactions_to')
     description = models.CharField('Описание', max_length=500)
     amount = models.FloatField('Сумма', default=0)
-    timestamp = models.DateTimeField('Дата создания')
     status = models.PositiveSmallIntegerField('Статус', default=0)
+    timestamp_create = models.DateTimeField('Дата создания', auto_now_add=True)
+    timestamp_confirm = models.DateTimeField('Дата подтверждения', blank=True)
 
     def isPaid(self):
         return self.status == 1
+    def timestamp(self):
+        return max(self.timestamp_create, self.timestamp_confirm)
 
     def __str__(self):
         return 'От: %s, кому: %s, количество: %s' % (self.user_from, self.user_to, self.amount)
