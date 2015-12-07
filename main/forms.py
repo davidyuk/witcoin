@@ -65,6 +65,11 @@ class TransactionCreationForm(forms.ModelForm):
         super(TransactionCreationForm, self).__init__(*args, **kwargs)
         self.fields['user'].queryset = UserProfile.objects.exclude(pk=self.user_curr.pk)
 
+    def clean(self):
+        cleaned_data = super(TransactionCreationForm, self).clean()
+        if cleaned_data['type'] != 'offer' and cleaned_data['amount'] > self.user_curr.balance():
+            self.add_error('amount', 'Недостаточно средств, доступно %s.' % self.user_curr.balance())
+
     def save(self, force_insert=False, force_update=False, commit=True):
         m = super(TransactionCreationForm, self).save(commit=False)
         m.user_from = self.user_curr
