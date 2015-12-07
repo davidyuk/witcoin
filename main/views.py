@@ -11,8 +11,8 @@ from django.contrib.auth import authenticate, login
 
 def index(request):
     return render(request, 'main/index.html', {
-        'users_top': sorted(UserProfile.objects.all(), key=lambda a: a.balance())[:5],
-        'users_last': sorted(UserProfile.objects.all(), key=lambda a: a.user.date_joined)[:5],
+        'users_top': sorted(UserProfile.objects.all(), key=lambda a: a.balance(), reverse=True)[:5],
+        'users_last': sorted(UserProfile.objects.all(), key=lambda a: a.user.date_joined, reverse=True)[:5],
         'users_count': UserProfile.objects.count(),
         'money_all': 10000,
         'money_avg': Transaction.objects.aggregate(Avg('amount'))['amount__avg'],
@@ -71,7 +71,7 @@ def user(request, username):
     return render(request, 'main/userpage.html', {
         'profile': _user.userprofile,
         'transactions': getpager(
-            Transaction.objects.filter(Q(user_to=_user.id) | Q(user_from=_user.id)),
+            Transaction.objects.filter(Q(user_to=_user.id) | Q(user_from=_user.id)).order_by('-timestamp_create'),
             request.GET.get('page')
         )
     })
@@ -121,7 +121,7 @@ def transaction(request, pk):
 def transaction_all(request):
     return render(request, 'main/transaction_all.html', {
         'transactions': getpager(
-            Transaction.objects.all(),
+            Transaction.objects.order_by('-timestamp_create'),
             request.GET.get('page')
         )
     })
