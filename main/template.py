@@ -18,26 +18,21 @@ def user(user_profile):
 
 
 @register.inclusion_tag('main/common/status.html')
-def status(_status):
-    if _status.pk == 1:
+def status(_status, display_text=False):
+    if _status is None:
         icon = 'question-sign'
-    elif _status.pk == 2:
+        color = 'warning'
+        title = 'Ожидание'
+    elif _status:
         icon = 'ok-sign'
+        color = 'success'
+        title = 'Передано'
     else:
         icon = 'info-sign'
-
-    if _status.pk == 1:
-        color = 'warning'
-    elif _status.pk == 2:
-        color = 'success'
-    elif _status.pk == 3:
-        color = 'danger'
-    elif _status.pk == 4:
         color = 'info'
-    else:
-        color = 'info'
+        title = 'Отменено'
 
-    return {'status': _status, 'icon': icon, 'color': color}
+    return {'status': _status, 'icon': icon, 'color': color, 'title': title, 'display_text': display_text}
 
 
 def context_processor(request):

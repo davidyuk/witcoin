@@ -9,7 +9,7 @@
                 <tr><td>Сумма</td><td>{% coins transaction.amount %}</td></tr>
                 <tr><td>Дата создания</td><td>{{ transaction.timestamp_create }}</td></tr>
                 <tr><td>Дата подтверждения</td><td>{{ transaction.timestamp_confirm }}</td></tr>
-                <tr><td>Статус</td><td>{% status transaction.status %}</td></tr>
+                <tr><td>Статус</td><td>{% status transaction.status True %}</td></tr>
                 <tr><td>Описание</td><td>{{ transaction.description }}</td></tr>
             </table>
         </div>

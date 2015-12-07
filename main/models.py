@@ -21,11 +21,11 @@ class UserProfile(models.Model):
     group = models.ForeignKey(Group, verbose_name='Группа', default=1)
 
     def earned(self):
-        r = self.transactions_to.aggregate(Sum('amount'))['amount__sum']
+        r = self.transactions_to.filter(status=True).aggregate(Sum('amount'))['amount__sum']
         return r if r is not None else 0
 
     def spend(self):
-        r = self.transactions_from.aggregate(Sum('amount'))['amount__sum']
+        r = self.transactions_from.filter(status=True).aggregate(Sum('amount'))['amount__sum']
         return r if r is not None else 0
 
     def balance(self):
@@ -41,19 +41,6 @@ class UserProfile(models.Model):
         verbose_name_plural = 'Профили пользователей'
 
 
-class TransactionStatus(models.Model):
-    name = models.CharField('Название', max_length=100)
-    icon = models.CharField('Название иконки bootstrap', max_length=100, default='')
-    color = models.CharField('Цвет иконки bootstrap', max_length=100, default='')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Статус транзакции'
-        verbose_name_plural = 'Статусы транзакций'
-
-
 class Transaction(models.Model):
     user_from = models.ForeignKey(UserProfile, verbose_name='От кого', related_name='transactions_from')
     user_to = models.ForeignKey(UserProfile, verbose_name='Кому', related_name='transactions_to')
@@ -61,10 +48,11 @@ class Transaction(models.Model):
     amount = models.DecimalField('Сумма', default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
     timestamp_create = models.DateTimeField('Дата создания', auto_now_add=True)
     timestamp_confirm = models.DateTimeField('Дата подтверждения', null=True, blank=True)
-    status = models.ForeignKey(TransactionStatus, verbose_name='Статус', default=1)
+    status = models.NullBooleanField('Статус', null=True, blank=True)
 
     def __str__(self):
-        return 'От: %s, кому: %s, количество: %s' % (self.user_from, self.user_to, self.amount)
+        st = 'ожидание' if self.status is None else 'передано' if self.status else 'отменено'
+        return 'От: %s, кому: %s, количество: %s (%s)' % (self.user_from, self.user_to, self.amount, st)
 
     class Meta:
         verbose_name = 'Транзакция'
