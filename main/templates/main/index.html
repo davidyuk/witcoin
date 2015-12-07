@@ -9,7 +9,7 @@
             <div class="panel-heading">Информация о системе</div>
             <table class="table">
                 <tbody>
-                    <tr><td>Всего</td><td>{% coins money_all %}</td></tr>
+                    <tr><td>Всего в системе</td><td>{% coins money_all %}</td></tr>
                     <tr><td>Средняя стоимость операции</td><td>{% coins money_avg %}</td></tr>
                     <tr><td>Зарегистрированно пользователей</td><td>
                         {% blocktrans count users=users_count %}{{ users }} user{% plural %}{{ users }} users{% endblocktrans %}
