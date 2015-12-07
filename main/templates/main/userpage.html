@@ -11,16 +11,18 @@
                 <tr><td>Был в системе</td><td>{{ profile.user.last_login }}</td></tr>
                 <tr><td>Дата регистрации</td><td>{{ profile.user.date_joined }}</td></tr>
             </table>
-            <div class="panel panel-default">
-                <div class="panel-heading">О себе{% if user == profile.user %}
-                        <a title="Изменить" href="{% url 'settings' %}" class="btn btn-warning btn-xs pull-right">
-                            <span class="glyphicon glyphicon-edit"></span>
-                        </a>
-                {% endif %}</div>
-                <div class="panel-body">
-                    <div style="white-space: pre;">{{ profile.about }}</div>
+            {% if profile.about %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">О себе{% if user == profile.user %}
+                            <a title="Изменить" href="{% url 'settings' %}" class="btn btn-warning btn-xs pull-right">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                    {% endif %}</div>
+                    <div class="panel-body">
+                        <div style="white-space: pre;">{{ profile.about }}</div>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
         <div class="col-md-7">
             {% if transactions %}
