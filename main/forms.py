@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import models as auth_models
 from django.contrib.auth import forms as auth_forms
 from .models import UserProfile, Transaction
+from django.utils import timezone
 
 
 class UserCreationForm(auth_forms.UserCreationForm):
@@ -74,7 +75,10 @@ class TransactionCreationForm(forms.ModelForm):
         m = super(TransactionCreationForm, self).save(commit=False)
         m.user_from = self.user_curr
         m.user_to = self.cleaned_data['user']
-        if self.cleaned_data['type'] == 'offer':
+        if self.cleaned_data['type'] == 'transfer':
+            m.timestamp_confirm = timezone.now()
+            m.status = True
+        else:
             m.user_to, m.user_from = m.user_from, m.user_to
         if commit:
             m.save()
