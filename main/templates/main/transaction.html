@@ -11,6 +11,22 @@
                 <tr><td>Дата подтверждения</td><td>{{ transaction.timestamp_confirm }}</td></tr>
                 <tr><td>Статус</td><td>{% status transaction.status True %}</td></tr>
                 <tr><td>Описание</td><td>{{ transaction.description }}</td></tr>
+                {% if status_editable %}
+                    <tr><td>Действия</td><td>
+                        <form class="form-horizontal" method="POST">
+                            {% csrf_token %}
+                            {% ifequal transaction.user_to request.user.userprofile %}
+                                <button type="submit" class="btn btn-danger">Удалить</button>
+                            {% else %}
+                                <button type="submit" name="status" value="ok" class="btn btn-success"
+                                    {% if request.user.userprofile.balance < transaction.amount %}
+                                        disabled title="Недостаточно средств"
+                                    {% endif %}>Подтвердить</button>
+                                <button type="submit" name="status" value="cancel" class="btn btn-warning">Отменить</button>
+                            {% endifequal %}
+                        </form>
+                    </td></tr>
+                {% endif %}
             </table>
         </div>
     </div>

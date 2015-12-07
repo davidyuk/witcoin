@@ -99,8 +99,22 @@ def transaction_create(request):
 
 def transaction(request, pk):
     trans = get_object_or_404(Transaction, pk=pk)
+    status_editable = request.user.userprofile in [trans.user_to, trans.user_from] and trans.status is None
+    if request.method == "POST":
+        if status_editable:
+            if request.user.userprofile == trans.user_from:
+                if request.POST['status'] != 'ok' or request.user.userprofile.balance() >= trans.amount:
+                    trans.status = request.POST['status'] == 'ok'
+                    trans.timestamp_confirm = timezone.now()
+                    trans.save()
+                return HttpResponseRedirect(reverse('transaction', args=[trans.pk]))
+            if request.user.userprofile == trans.user_to:
+                trans.delete()
+                return HttpResponseRedirect(reverse('home'))
+
     return render(request, 'main/transaction.html', {
-        'transaction': trans
+        'transaction': trans,
+        'status_editable': status_editable
     })
 
 
