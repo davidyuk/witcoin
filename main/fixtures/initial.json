@@ -1,6 +1,6 @@
 [
   {"pk": 1, "model": "main.group", "fields": {"name": "Не задано"}},
 
-  {"pk": 0, "model": "auth.user", "fields": {"username": "Банк"}},
-  {"pk": 0, "model": "main.userprofile", "fields": {"user": 0}}
+  {"pk": 1, "model": "auth.user", "fields": {"username": "Банк"}},
+  {"pk": 1, "model": "main.userprofile", "fields": {"user": 1}}
 ]
