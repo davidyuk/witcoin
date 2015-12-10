@@ -15,7 +15,7 @@ def index(request):
         'users_last': sorted(UserProfile.objects.all(), key=lambda a: a.user.date_joined, reverse=True)[:5],
         'users_count': UserProfile.objects.count(),
         'money_all': -UserProfile.objects.get(pk=1).balance(),
-        'money_avg': Transaction.objects.filter(status=True).aggregate(Avg('amount'))['amount__avg'],
+        'money_avg': Transaction.objects.filter(status=True).aggregate(Avg('amount'))['amount__avg'] or 0,
     })
 
 
