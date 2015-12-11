@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% block title %}{{ profile }}{% endblock %}
+{% block header %}{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-md-5">
@@ -34,7 +35,7 @@
                 <h4>Последние операции</h4>
                 <table class="table table-hover table-condensed table-middle">
                     <thead>
-                        <tr><td></td><td>Участник</td><td>Стоимость</td><td>Когда</td><td></td></tr>
+                        <tr><td></td><td>Участник</td><td>Сумма</td><td>Когда</td><td></td></tr>
                     </thead>
                     <tbody>
                     {% for transaction in transactions %}
@@ -49,7 +50,7 @@
                                 {% user transaction.user_from %}{% else %}{% user transaction.user_to %}
                             {% endif %}</td>
                             <td><a href="{% url 'transaction' transaction.pk %}">{% coins transaction.amount %}</a></td>
-                            <td><a href="{% url 'transaction' transaction.pk %}">{{ transaction.timestamp_create }}</a></td>
+                            <td>{{ transaction.timestamp_create }}</td>
                             <td><a href="{% url 'transaction' transaction.pk %}">{% status transaction.status %}</a></td>
                         </tr>
                     {% endfor %}
