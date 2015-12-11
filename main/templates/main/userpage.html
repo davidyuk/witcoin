@@ -42,9 +42,9 @@
                         <tr>
                             <td>
                             {% if transaction.user_from == profile %}
-                                <span title="Перевёл" class="glyphicon glyphicon-chevron-right glyphicon-status"></span>
+                                <span title="Перевёл" class="glyphicon glyphicon-chevron-right glyphicon-status text-danger"></span>
                             {% else %}
-                                <span title="Получил" class="glyphicon glyphicon-chevron-left glyphicon-status"></span>
+                                <span title="Получил" class="glyphicon glyphicon-chevron-left glyphicon-status text-success"></span>
                             {% endif %}</td>
                             <td>{% if transaction.user_from != profile %}
                                 {% user transaction.user_from %}{% else %}{% user transaction.user_to %}
