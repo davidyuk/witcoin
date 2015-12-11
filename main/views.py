@@ -110,7 +110,7 @@ def fefu_send_mail(request):
         else:
             form = FefuMailRegisterForm(instance=instance, user=user)
     else:
-        messages.info(request, 'Email %s зарегистрирован.' % instance.email)
+        messages.info(request, 'Email %s уже зарегистрирован.' % instance.email)
     return render(request, 'main/fefu_mail/form.html', {
         'form': form,
         'mail_last': mail_last,
@@ -123,7 +123,8 @@ def fefu_from_mail(request, token):
     instance.save()
     Transaction.objects.create(user_from_id=1, user_to=instance.user, amount=10, status=True,
                                timestamp_confirm=timezone.now(), description='Зарегистрирован email студента ДВФУ.')
-    return render(request, 'main/fefu_mail/form.html', {'mail_last': instance.email})
+    messages.info(request, 'Email %s зарегистрирован.' % instance.email)
+    return render(request, 'main/fefu_mail/form.html')
 
 
 @login_required
