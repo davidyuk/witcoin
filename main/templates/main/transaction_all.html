@@ -19,7 +19,7 @@
             {% endfor %}
             <tbody>
         </table>
-        {% include 'main/pager.html' with objects=transactions page_name='transactions' %}
+        {% include 'main/pager.html' with objects=transactions %}
     {% else %}
         <h2>Операции не найдены</h2>
     {% endif %}
