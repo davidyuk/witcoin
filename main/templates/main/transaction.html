@@ -4,8 +4,8 @@
     <div class="row">
         <div class="col-md-6">
             <table class="table table-bordered table-hover col-md-6 table-middle">
-                <tr><td>От кого</td><td>{% user transaction.user_from %}</td></tr>
-                <tr><td>Кому</td><td>{% user transaction.user_to %}</td></tr>
+                <tr><td>Отправитель</td><td>{% user transaction.user_from %}</td></tr>
+                <tr><td>Получатель</td><td>{% user transaction.user_to %}</td></tr>
                 <tr><td>Сумма</td><td>{% coins transaction.amount %}</td></tr>
                 <tr><td>Дата создания</td><td>{{ transaction.timestamp_create }}</td></tr>
                 <tr><td>Дата подтверждения</td><td>{{ transaction.timestamp_confirm }}</td></tr>
