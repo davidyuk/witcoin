@@ -111,3 +111,12 @@ LOGOUT_URL = '/logout'
 LOGIN_REDIRECT_URL = '/home'
 # Specify the default test runner.
 # TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+# Email
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "<your_user_name>@gmail.com"
+EMAIL_HOST_PASSWORD = '<your_password>'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Dont Reply <your_user_name>@gmail.com>'

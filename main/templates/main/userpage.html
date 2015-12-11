@@ -23,6 +23,11 @@
                     </div>
                 </div>
             {% endif %}
+
+            {% if user == profile.user %}
+                <a href="{% url 'fefu_send_mail' %}">Получите 10 кленинок, зарегистрировав почту с домена students.dvfu.ru.</a>
+            {% endif %}
+
         </div>
         <div class="col-md-7">
             {% if transactions %}

@@ -1,0 +1,18 @@
+{% extends 'main/base.html' %}
+{% block title %}Зарегистрировать email ДВФУ.{% endblock %}
+{% load bootstrap3 %}
+{% block content %}
+    {% if form %}
+        <form class="form-horizontal" method="POST">
+            {% csrf_token %}
+            {% bootstrap_form form layout="horizontal" %}
+            {% buttons layout='horizontal' %}
+                {% if mail_last %}
+                    {% bootstrap_button 'Изменить email и отправить новое письмо' button_type="submit" button_class='btn-warning' %}
+                {% else %}
+                    {% bootstrap_button 'Зарегистрировать' button_type="submit" button_class='btn-primary' %}
+                {% endif %}
+            {% endbuttons %}
+        </form>
+    {% endif %}
+{% endblock %}

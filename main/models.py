@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 
 
 class Group(models.Model):
@@ -57,3 +57,12 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = 'Транзакция'
         verbose_name_plural = 'Транзакции'
+
+
+class FefuMail(models.Model):
+    user = models.OneToOneField(UserProfile)
+    email = models.EmailField()
+    status = models.BooleanField('Статус', default=False)
+    token = models.CharField('Ключ для регистрации', validators=[RegexValidator(regex='^[0-9A-z]{32}$',
+                                                                                message='Неправильный ключ')],
+                             max_length=32, default='0000000000000000000000000000000000000000')

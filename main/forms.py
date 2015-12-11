@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import models as auth_models
 from django.contrib.auth import forms as auth_forms
-from .models import UserProfile, Transaction
+from .models import UserProfile, Transaction, FefuMail
 from django.utils import timezone
 
 
@@ -93,4 +93,32 @@ class TransactionCreationForm(forms.ModelForm):
         help_texts = {
             'description': 'Описание причины перевода.',
             'amount': 'Может быть не целым числом.'
+        }
+
+
+class FefuMailRegisterForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user_curr = kwargs.pop('user', None)
+        super(FefuMailRegisterForm, self).__init__(*args, **kwargs)
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        if data.split('@')[1] != 'students.dvfu.ru':
+            raise forms.ValidationError("Неправильный домен.")
+        if FefuMail.objects.filter(email=data, status=True).count() > 0:
+            raise forms.ValidationError("Email уже зарегистрирован.")
+        return data
+
+    def save(self, force_insert=False, force_update=False, commit=True):
+        m = super(FefuMailRegisterForm, self).save(commit=False)
+        m.user = self.user_curr
+        if commit:
+            m.save()
+        return m
+
+    class Meta:
+        model = FefuMail
+        fields = ['email']
+        help_texts = {
+            'email': 'Email должен быть в домене students.dvfu.ru.',
         }
