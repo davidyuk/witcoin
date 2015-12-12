@@ -119,6 +119,8 @@ def fefu_send_mail(request):
 
 def fefu_from_mail(request, token):
     instance = get_object_or_404(FefuMail, token=token)
+    if instance.status:
+        return HttpResponseRedirect(reverse(fefu_send_mail))
     instance.status = True
     instance.save()
     Transaction.objects.create(user_from_id=1, user_to=instance.user, amount=10, status=True,
