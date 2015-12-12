@@ -124,8 +124,9 @@ def fefu_from_mail(request, token):
     instance.status = True
     instance.save()
     Transaction.objects.create(user_from_id=1, user_to=instance.user, amount=10, status=True,
-                               timestamp_confirm=timezone.now(), description='Зарегистрирован email студента ДВФУ.')
-    messages.info(request, 'Email %s зарегистрирован.' % instance.email)
+                               timestamp_confirm=timezone.now(),
+                               description='Зарегистрирован email студента ДВФУ: %s.' % instance.email)
+    messages.info(request, 'Email %s успешно зарегистрирован.' % instance.email)
     return render(request, 'main/fefu_mail/form.html')
 
 
