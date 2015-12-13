@@ -68,7 +68,7 @@ class TransactionCreationForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(TransactionCreationForm, self).clean()
-        if cleaned_data['type'] != 'offer' and cleaned_data['amount'] > self.user_curr.balance():
+        if cleaned_data.get('type', 'transfer') != 'offer' and cleaned_data.get('amount', 0) > self.user_curr.balance():
             self.add_error('amount', 'Недостаточно средств, доступно %s.' % self.user_curr.balance())
 
     def save(self, force_insert=False, force_update=False, commit=True):
