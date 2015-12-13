@@ -22,9 +22,17 @@
     </div>
     <div class="col-md-4">
         <div class="panel panel-default">
-            <div class="panel-heading">Лидеры</div>
+            <div class="panel-heading">Лидеры по обороту</div>
             <ul class="list-group">
-                {% for user in users_top %}
+                {% for user in users_top_spend %}
+                    <li class="list-group-item">{% user user %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Лидеры по балансу</div>
+            <ul class="list-group">
+                {% for user in users_top_balance %}
                     <li class="list-group-item">{% user user %}</li>
                 {% endfor %}
             </ul>
