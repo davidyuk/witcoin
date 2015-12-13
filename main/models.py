@@ -32,11 +32,10 @@ class UserProfile(models.Model):
         return self.earned() - self.spend()
 
     def __str__(self):
-        s = self.user.first_name + ' ' + self.user.last_name
-        s = self.user.username if s == ' ' else s
-        return s
+        return self.user.first_name + ' ' + self.user.last_name
 
     class Meta:
+        ordering = ['user__first_name']
         verbose_name = 'Профиль пользователя'
         verbose_name_plural = 'Профили пользователей'
 

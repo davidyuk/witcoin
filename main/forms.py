@@ -59,12 +59,12 @@ class TransactionCreationForm(forms.ModelForm):
     )
 
     type = forms.ChoiceField(label='Тип', choices=TRANSACTION_CREATION_TYPES, widget=forms.RadioSelect)
-    user = forms.ModelChoiceField(label='Пользователь', queryset=UserProfile.objects.all())
+    user = forms.ModelChoiceField(UserProfile.objects, label='Пользователь')
 
     def __init__(self, *args, **kwargs):
         self.user_curr = kwargs.pop('user', None)
         super(TransactionCreationForm, self).__init__(*args, **kwargs)
-        self.fields['user'].queryset = UserProfile.objects.exclude(pk=self.user_curr.pk)
+        self.fields['user'].queryset = self.fields['user'].queryset.exclude(pk=self.user_curr.pk)
 
     def clean(self):
         cleaned_data = super(TransactionCreationForm, self).clean()
