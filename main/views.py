@@ -38,7 +38,7 @@ def register(request):
             profile_form.save()
             new_user = authenticate(username=request.POST['username'], password=request.POST['password1'])
             login(request, new_user)
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('user', args=[new_user.username]))
     else:
         user_form = UserCreationForm()
         profile_form = UserProfileCreationForm()
@@ -55,7 +55,7 @@ def settings(request):
         if user_form.is_valid() and profile_form.is_valid():
             curr_user = user_form.save()
             profile_form.save()
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('user', args=[request.user.username]))
     else:
         user_form = UserEditingForm(instance=request.user)
         profile_form = UserProfileEditingForm(instance=request.user.userprofile)
@@ -146,7 +146,7 @@ def transaction_create(request):
             if 'from' in request.GET:
                 return HttpResponseRedirect(request.GET['from'])
             else:
-                return HttpResponseRedirect(reverse('home'))
+                return HttpResponseRedirect(reverse('user', args=[request.user.username]))
     else:
         form = TransactionCreationForm(user=request.user.userprofile)
     return render(request, 'main/transaction_create.html', {'form': form})
@@ -165,7 +165,7 @@ def transaction(request, pk):
                 return HttpResponseRedirect(reverse('transaction', args=[trans.pk]))
             if request.user.userprofile == trans.user_to:
                 trans.delete()
-                return HttpResponseRedirect(reverse('home'))
+                return HttpResponseRedirect(reverse('user', args=[request.user.username]))
 
     return render(request, 'main/transaction.html', {
         'transaction': trans,
