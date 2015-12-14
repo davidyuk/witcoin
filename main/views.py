@@ -154,7 +154,9 @@ def transaction_create(request):
 
 def transaction(request, pk):
     trans = get_object_or_404(Transaction, pk=pk)
-    status_editable = request.user.userprofile in [trans.user_to, trans.user_from] and trans.status is None
+    status_editable = \
+        trans.status is None and request.user.is_authenticated()\
+        and request.user.userprofile in [trans.user_to, trans.user_from]
     if request.method == "POST":
         if status_editable:
             if request.user.userprofile == trans.user_from:
