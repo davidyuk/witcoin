@@ -157,17 +157,16 @@ def transaction(request, pk):
     status_editable = \
         trans.status is None and request.user.is_authenticated()\
         and request.user.userprofile in [trans.user_to, trans.user_from]
-    if request.method == "POST":
-        if status_editable:
-            if request.user.userprofile == trans.user_from:
-                if request.POST['status'] != 'ok' or request.user.userprofile.balance() >= trans.amount:
-                    trans.status = request.POST['status'] == 'ok'
-                    trans.timestamp_confirm = timezone.now()
-                    trans.save()
-                return HttpResponseRedirect(reverse('transaction', args=[trans.pk]))
-            if request.user.userprofile == trans.user_to:
-                trans.delete()
-                return HttpResponseRedirect(reverse('user', args=[request.user.username]))
+    if request.method == "POST" and status_editable:
+        if request.user.userprofile == trans.user_from:
+            if request.POST['status'] != 'ok' or request.user.userprofile.balance() >= trans.amount:
+                trans.status = request.POST['status'] == 'ok'
+                trans.timestamp_confirm = timezone.now()
+                trans.save()
+            return HttpResponseRedirect(reverse('transaction', args=[trans.pk]))
+        else:
+            trans.delete()
+            return HttpResponseRedirect(reverse('user', args=[request.user.username]))
 
     return render(request, 'main/transaction.html', {
         'transaction': trans,
