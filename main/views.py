@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from django.contrib.auth import authenticate, login
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.template.context import RequestContext
 from django.utils.crypto import get_random_string
@@ -53,7 +53,7 @@ def settings(request):
         user_form = UserEditingForm(data=request.POST, instance=request.user)
         profile_form = UserProfileEditingForm(data=request.POST, instance=request.user.userprofile)
         if user_form.is_valid() and profile_form.is_valid():
-            curr_user = user_form.save()
+            user_form.save()
             profile_form.save()
             return HttpResponseRedirect(reverse('user', args=[request.user.username]))
     else:

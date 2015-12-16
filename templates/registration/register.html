@@ -2,7 +2,7 @@
 {% block title %}Регистрация{% endblock %}
 {% block replace_autofocus %}{% endblock %}
 {% block content %}
-<form class="form-horizontal" method="POST" action="">
+<form class="form-horizontal" method="POST">
     {% csrf_token %}
     {% load bootstrap3 %}
     {% bootstrap_form userForm layout="horizontal" %}

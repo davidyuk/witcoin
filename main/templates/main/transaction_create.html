@@ -3,7 +3,7 @@
 {% block header-text %}Создать операцию{% endblock %}
 {% block replace_autofocus %}{% endblock %}
 {% block content %}
-<form class="form-horizontal" method="POST" action="">
+<form class="form-horizontal" method="POST">
     {% csrf_token %}
     {% load bootstrap3 %}
     {% bootstrap_form form layout="horizontal" %}
