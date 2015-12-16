@@ -1,0 +1,48 @@
+{% extends 'main/base.html' %}
+{% block title %}{{ task.author }} — {{ task.title }}{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-5 col-md-6">
+            <h3>{{ task.title }}</h3>
+            <table class="table">
+                <tr><td>{% user task.author %}</td><td>{% task_status task.status show_caption=True %}</td></tr>
+                <tr><td>Дата создания</td><td>{{ task.timestamp_create }}</td></tr>
+                {% ifequal task.author user.userprofile %}
+                <tr><td></td><td>
+                    <a class="btn btn-primary btn-sm" href="{% url 'task_edit' task.pk %}">Редактировать задание</a>
+                </td></tr>
+                {% endifequal %}
+            </table>
+            {{ task.description }}
+        </div>
+        <div class="col-sm-7 col-md-6">
+            {% if task.status or task.offers.all %}
+                <h3>Предложения</h3>
+                {% for offer in task.offers.all %}
+                    <div class="media">
+                        <div class="media-body">
+                            <b class="media-heading">{% user offer.user %}</b><br>
+                            {{ offer.description }}
+                            {% if offer.price %}<div><i>Стоимость: {% coins offer.price %}</i></div>{% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% if task.status %}
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% load bootstrap3 %}
+                    {% bootstrap_form form size='small' layout='inline' %}
+                    {% if not form.instance.pk %}
+                        <button type="submit" class="btn btn-success btn-sm">Добавить предложение</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-primary btn-sm">Сохранить изменения</button>
+                        <button type="submit" name="delete" class="btn btn-danger btn-sm pull-right">Удалить предложение</button>
+                    {% endif %}
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -16,6 +16,7 @@
         <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
         <style>
             .glyphicon-status { font-size: 22px; vertical-align: middle; }
+            textarea { resize: vertical; }
         </style>
     </head>
     <body>
@@ -31,6 +32,9 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
+                    <li class="{% if request.resolver_match.url_name == "task_all" %}active{% endif %}">
+                        <a href="{% url 'task_all' %}">Задания</a>
+                    </li>
                     <li class="{% if request.resolver_match.url_name == "transaction_all" %}active{% endif %}">
                         <a href="{% url 'transaction_all' %}">Операции</a>
                     </li>
@@ -57,6 +61,9 @@
                                 </li>
                             </ul>
                         </li>
+                    </ul>
+                    <ul class="nav navbar-right" style="margin-right: 10px;">
+                        <a href="{% url 'task_create' %}" class="btn btn-success navbar-btn">Новое задание</a>
                     </ul>
                     <ul class="nav navbar-right" style="margin-right: 10px;">
                         <a href="{% url 'transaction_create' %}?from={{ request.path }}" class="btn btn-info navbar-btn">

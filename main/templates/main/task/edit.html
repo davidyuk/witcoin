@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{% if form.instance.pk %}Изменить задание{% else %}Создать задание{% endif %}{% endblock %}
+{% block header-text %}{% if form.instance.pk %}Изменить задание{% else %}Создать задание{% endif %}{% endblock %}
+
+{% block content %}
+    <form class="form-horizontal" method="POST">
+        {% csrf_token %}
+        {% load bootstrap3 %}
+        {% bootstrap_form form layout="horizontal" %}
+        {% if form.instance.pk %}
+            {% buttons submit='Сохранить' layout='horizontal' %}
+                {% url 'task' form.instance.pk as task_href %}
+                {% bootstrap_button 'Отменить' button_type='link' href=task_href button_class='btn-default' %}
+            {% endbuttons %}
+        {% else %}
+            {% buttons submit='Создать задание' layout='horizontal' %}{% endbuttons %}
+        {% endif %}
+    </form>
+{% endblock %}

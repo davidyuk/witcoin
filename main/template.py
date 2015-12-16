@@ -35,6 +35,20 @@ def status(_status, display_text=False):
     return {'status': _status, 'icon': icon, 'color': color, 'title': title, 'display_text': display_text}
 
 
+@register.inclusion_tag('main/common/status.html')
+def task_status(_status, show_caption=False):
+    if _status:
+        icon = 'flag'
+        color = 'info'
+        title = 'Актуально'
+    else:
+        icon = 'ok'
+        color = 'success'
+        title = 'Выполнено'
+
+    return {'status': _status, 'icon': icon, 'color': color, 'title': title, 'display_text': show_caption}
+
+
 def context_processor(request):
     return {
         'site_name': _('WitCoin'),

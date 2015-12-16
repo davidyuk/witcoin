@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import models as auth_models
 from django.contrib.auth import forms as auth_forms
-from .models import UserProfile, Transaction, FefuMail
+from .models import UserProfile, Transaction, FefuMail, Task, TaskUser
 from django.utils import timezone
 
 
@@ -121,4 +121,49 @@ class FefuMailRegisterForm(forms.ModelForm):
         fields = ['email']
         help_texts = {
             'email': 'Email должен быть в домене students.dvfu.ru.',
+        }
+
+
+class TaskForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.author = kwargs.pop('user', None)
+        super(TaskForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:
+            self.fields.pop('status')
+
+    def save(self, force_insert=False, force_update=False, commit=True):
+        m = super(TaskForm, self).save(commit=False)
+        m.author = self.author
+        if commit:
+            m.save()
+        return m
+
+    class Meta:
+        model = Task
+        fields = ['title', 'description', 'status']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 5}),
+        }
+
+
+class TaskUserForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.task = kwargs.pop('task', None)
+        super(TaskUserForm, self).__init__(*args, **kwargs)
+
+    def save(self, force_insert=False, force_update=False, commit=True):
+        m = super(TaskUserForm, self).save(commit=False)
+        m.user = self.user
+        m.task = self.task
+        if commit:
+            m.save()
+        return m
+
+    class Meta:
+        model = TaskUser
+        fields = ['description', 'price']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 2}),
+            'price': forms.NumberInput(attrs={'step': 0.25}),
         }

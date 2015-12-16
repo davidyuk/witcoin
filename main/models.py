@@ -60,6 +60,36 @@ class Transaction(models.Model):
         verbose_name_plural = 'Транзакции'
 
 
+class Task(models.Model):
+    author = models.ForeignKey(UserProfile, verbose_name='Автор')
+    title = models.CharField('Заголовок', max_length=100)
+    description = models.CharField('Описание', blank=True, max_length=5000)
+    timestamp_create = models.DateTimeField('Дата создания', auto_now_add=True)
+    status = models.BooleanField('Актуально', default=True)
+
+    def __str__(self):
+        return '%s (%s)' % (self.title, self.author)
+
+    class Meta:
+        verbose_name = 'Задание'
+        verbose_name_plural = 'Задания'
+
+
+class TaskUser(models.Model):
+    task = models.ForeignKey(Task, verbose_name='Задание', related_name='offers')
+    user = models.ForeignKey(UserProfile, verbose_name='Пользователь')
+    price = models.DecimalField('Стоимость', null=True, blank=True, max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
+    description = models.CharField('Комментарий', blank=True, max_length=1000)
+    timestamp_create = models.DateTimeField('Дата создания', auto_now_add=True)
+
+    def __str__(self):
+        return '%s для задания %s' % (self.user, self.task)
+
+    class Meta:
+        verbose_name = 'Предложение'
+        verbose_name_plural = 'Предложения'
+
+
 class FefuMail(models.Model):
     user = models.OneToOneField(UserProfile)
     email = models.EmailField()
