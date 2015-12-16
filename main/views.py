@@ -75,11 +75,11 @@ def getpager(objects, page=1, objects_per_page=25):
 
 
 def user(request, username):
-    _user = get_object_or_404(User, username=username)
+    profile = get_object_or_404(UserProfile, user__username=username)
     return render(request, 'main/userpage.html', {
-        'profile': _user.userprofile,
+        'profile': profile,
         'transactions': getpager(
-            Transaction.objects.filter(Q(user_to=_user.id) | Q(user_from=_user.id)).order_by('-timestamp_create'),
+            Transaction.objects.filter(Q(user_to=profile) | Q(user_from=profile)).order_by('-timestamp_create'),
             request.GET.get('page')
         )
     })
