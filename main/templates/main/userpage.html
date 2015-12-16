@@ -4,7 +4,7 @@
 {% block content %}
     <div class="row">
         <div class="col-md-5">
-            <h4>{{ profile }}</h4>
+            <h3>{{ profile }}</h3>
             <table class="table table-bordered table-condensed">
                 {% if profile.group %}<tr><td>Группа</td><td>{{ profile.group }}</td></tr>{% endif %}
                 <tr><td>Баланс</td><td>{% coins profile.balance %}</td></tr>
@@ -32,7 +32,7 @@
         </div>
         <div class="col-md-7">
             {% if transactions %}
-                <h4>Последние операции</h4>
+                <h3>Последние операции</h3>
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr><td></td><td>Участник</td><td>Сумма</td><td>Когда</td><td></td></tr>
