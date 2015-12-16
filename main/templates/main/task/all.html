@@ -1,27 +1,36 @@
 {% extends 'main/base.html' %}
-{% load i18n %}
 {% block title %}Задания{% endblock %}
 {% block header-text %}Задания{% endblock %}
 {% block content %}
     {% if tasks %}
-        <table class="table table-hover table-condensed">
-            <thead>
-                <tr><td></td><td>Тема</td><td>Автор</td><td>Предложение</td><td class="hidden-xs">Дата создания</td></tr>
-            </thead>
-            <tbody>
+        <div class="row">
             {% for task in tasks %}
-                <tr>
-                    <td>{% task_status task.status %}</td>
-                    <td><a href="{% url 'task' task.pk %}">{{ task.title }}</a></td>
-                    <td>{% user task.author %}</td>
-                    <td>
-                        {% blocktrans count users=task.offers.count %}{{ users }} user{% plural %}{{ users }} users{% endblocktrans %}
-                    </td>
-                    <td class="hidden-xs">{{ task.timestamp_create }}</td>
-                </tr>
+                <div class="col-sm-6 col-md-4">
+                    <div class="panel panel-{% if task.status %}default{% else %}success{% endif %}">
+                        <div class="panel-heading">
+                            {% task_status task.status %}
+                            <a href="{% url 'task' task.pk %}">{{ task.title }}</a>
+                            {% if task.offers.count %}
+                                <span class="badge pull-right" title="Предложений пользователей">
+                                    {{ task.offers.count }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        {% if task.description %}
+                            <div class="panel-body">
+                                {{ task.description|truncatechars:200 }}
+                            </div>
+                        {% endif %}
+                        <div class="panel-footer">
+                            <table style="width: 100%"><tr>
+                                <td>{% user task.author %}</td>
+                                <td class="text-right">{{ task.timestamp_create }}</td>
+                            </tr></table>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-            <tbody>
-        </table>
+        </div>
         {% include 'main/pager.html' with objects=tasks %}
     {% else %}
         <h2>Задания не найдены</h2>
