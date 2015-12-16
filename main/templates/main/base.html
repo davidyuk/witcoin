@@ -36,10 +36,7 @@
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
-                    <ul class="nav navbar-right">
-                        <a href="{% url 'transaction_create' %}?from={{ request.path }}" class="btn btn-info navbar-btn">Перевести</a>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right" style="margin-right: 10px;">
+                    <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                 {{ user.userprofile }}
@@ -51,10 +48,6 @@
                                         <a href="{% url 'user' user.username %}">Моя страница</a>
                                     </li>
                                 {% endwith %}
-                                <li class="divider"></li>
-                                <li class="{% if request.resolver_match.url_name == "transaction_create" %}active{% endif %}">
-                                    <a href="{% url 'transaction_create' %}?from={{ request.path }}">Перевести</a>
-                                </li>
                                 <li>
                                     <a href="{% url 'settings' %}">Параметры</a>
                                 </li>
@@ -64,6 +57,11 @@
                                 </li>
                             </ul>
                         </li>
+                    </ul>
+                    <ul class="nav navbar-right" style="margin-right: 10px;">
+                        <a href="{% url 'transaction_create' %}?from={{ request.path }}" class="btn btn-info navbar-btn">
+                            Перевести <span class="hidden-sm">кленинки</span>
+                        </a>
                     </ul>
                 {% else %}
                     <ul class="nav navbar-right hidden-onlogin">
