@@ -4,7 +4,7 @@
 {% block content %}
     <div class="row">
         <div class="col-md-6">
-            <table class="table table-bordered table-hover col-md-6 table-middle">
+            <table class="table table-bordered table-hover col-md-6">
                 <tr><td>Отправитель</td><td>{% user transaction.user_from %}</td></tr>
                 <tr><td>Получатель</td><td>{% user transaction.user_to %}</td></tr>
                 <tr><td>Сумма</td><td>{% coins transaction.amount %}</td></tr>
