@@ -25,6 +25,7 @@ def index(request):
         'users_count': UserProfile.objects.count(),
         'money_all': -UserProfile.objects.get(pk=1).balance(),
         'money_avg': Transaction.objects.filter(status=True).exclude(user_from=1).aggregate(Avg('amount'))['amount__avg'] or 0,
+        'tasks_last': Task.objects.filter(status=True).order_by('-timestamp_create')[:10],
     })
 
 
