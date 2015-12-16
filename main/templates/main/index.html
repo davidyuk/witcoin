@@ -4,7 +4,7 @@
 {% block header %}{% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-sm-8">
 
         <div class="panel panel-default">
             <div class="panel-heading">Информация о системе</div>
@@ -20,7 +20,7 @@
         </div>
 
     </div>
-    <div class="col-md-4">
+    <div class="col-sm-4">
         <div class="panel panel-default">
             <div class="panel-heading">Лидеры по обороту</div>
             <ul class="list-group">
@@ -29,7 +29,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="panel panel-default">
+        <div class="panel panel-default hidden-xs">
             <div class="panel-heading">Лидеры по балансу</div>
             <ul class="list-group">
                 {% for user in users_top_balance %}
@@ -37,7 +37,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="panel panel-default">
+        <div class="panel panel-default hidden-xs">
             <div class="panel-heading">Недавно зарегистрировавшиеся</div>
             <ul class="list-group">
                 {% for user in users_last %}
