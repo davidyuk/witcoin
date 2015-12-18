@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import UserCreationForm, UserEditingForm, UserProfileCreationForm, UserProfileEditingForm,\
     FefuMailRegisterForm, TransactionCreationForm, TaskForm, TaskUserForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, forms as auth_forms, update_session_auth_hash
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.template.context import RequestContext
@@ -51,18 +51,34 @@ def register(request):
 
 @login_required
 def settings(request):
-    if request.method == "POST":
+    user_form = profile_form = password_form = None
+    if request.method == "POST" and request.POST.get('form_type', None) == 'userProfile':
         user_form = UserEditingForm(data=request.POST, instance=request.user)
         profile_form = UserProfileEditingForm(data=request.POST, instance=request.user.userprofile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return HttpResponseRedirect(reverse('user', args=[request.user.username]))
-    else:
+            messages.success(request, 'Параметры успешно сохранены')
+            return HttpResponseRedirect(reverse('settings'))
+
+    if request.method == "POST" and request.POST.get('form_type', None) == 'password':
+        password_form = auth_forms.PasswordChangeForm(request.user, data=request.POST)
+        if password_form.is_valid():
+            password_form.save()
+            update_session_auth_hash(request, password_form.user)
+            messages.success(request, 'Пароль успешно изменён')
+            return HttpResponseRedirect(reverse('settings'))
+
+    if not user_form or not profile_form:
         user_form = UserEditingForm(instance=request.user)
         profile_form = UserProfileEditingForm(instance=request.user.userprofile)
+    if not password_form:
+        password_form = auth_forms.PasswordChangeForm(request.user)
+
     return render(request, 'main/settings.html', {
-        'userForm': user_form, 'userProfileForm': profile_form
+        'userForm': user_form,
+        'userProfileForm': profile_form,
+        'passwordForm': password_form,
     })
 
 
