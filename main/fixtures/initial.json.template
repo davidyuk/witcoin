@@ -1,4 +1,6 @@
 [
+  {"model": "sites.site", "pk": 1, "fields": {"domain": "<site_domain>", "name": "Кленинка"}},
+
   {"pk": 1, "model": "main.group", "fields": {"name": "Не задано"}},
 
   {"pk": 1, "model": "auth.user", "fields": {"username": "Банк"}},
