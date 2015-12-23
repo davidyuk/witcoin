@@ -7,13 +7,14 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import UserCreationForm, UserEditingForm, UserProfileCreationForm, UserProfileEditingForm,\
     FefuMailRegisterForm, TransactionCreationForm, TaskForm, TaskUserForm
-from django.contrib.auth import authenticate, login, forms as auth_forms, update_session_auth_hash
+from django.contrib.auth import authenticate, login, forms as auth_forms, update_session_auth_hash, views as auth_views
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.template.context import RequestContext
 from django.utils.crypto import get_random_string
 from django.utils import timezone
 from django.contrib import messages
+from django.utils.http import urlsafe_base64_decode
 
 
 def index(request):
@@ -242,3 +243,35 @@ def task_all(request):
             request.GET.get('page')
         )
     })
+
+
+def password_reset_done(request):
+    messages.info(request, 'На указанный вами email отправлено письмо с' +
+                  ' дальнейшими инструкциями по восстановлению пароля.')
+    return HttpResponseRedirect(reverse('login'))
+
+
+def password_reset_confirm(request, uidb64, token):
+    template_response = auth_views.password_reset_confirm(request, uidb64=uidb64, token=token)
+
+    if template_response.status_code == HttpResponseRedirect.status_code:
+        try:
+            uid = urlsafe_base64_decode(uidb64)
+            _user = UserProfile.objects.get(user__pk=uid).user
+        except (TypeError, ValueError, OverflowError, UserProfile.DoesNotExist):
+            pass
+        else:
+            _user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, _user)
+
+    if hasattr(template_response, 'context_data') and not template_response.context_data['validlink']:
+        messages.error(request, 'Ссылка для сброса пароля недействительна.')
+        return HttpResponseRedirect(reverse('login'))
+
+    return template_response
+
+
+@login_required
+def password_reset_complete(request):
+    messages.success(request, 'Пароль успешно изменён.')
+    return HttpResponseRedirect(reverse('user', args=[request.user.username]))

@@ -1,6 +1,5 @@
 from django import forms
-from django.contrib.auth import models as auth_models
-from django.contrib.auth import forms as auth_forms
+from django.contrib.auth import models as auth_models, forms as auth_forms
 from .models import UserProfile, Transaction, FefuMail, Task, TaskUser
 from django.utils import timezone
 
