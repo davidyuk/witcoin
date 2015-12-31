@@ -217,7 +217,7 @@ def task_edit(request, pk=None):
 def task(request, pk):
     _task = get_object_or_404(Task, pk=pk)
     form = None
-    if _task.status:
+    if _task.status and hasattr(request.user, 'userprofile'):
         offer = TaskUser.objects.filter(user=request.user.userprofile, task=_task).all()
         offer = offer[0] if offer.count() > 0 else None
         if request.method == "POST":

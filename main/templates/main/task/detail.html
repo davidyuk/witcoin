@@ -29,7 +29,7 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            {% if task.status %}
+            {% if form %}
                 <hr>
                 <form method="POST">
                     {% csrf_token %}
