@@ -4,7 +4,7 @@ from ..models import Task, TaskUser
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from ..forms import TaskForm, TaskUserForm
-from .getpager import getpager
+from django.views.generic.list import ListView
 
 
 @login_required
@@ -41,10 +41,8 @@ def task(request, pk):
     })
 
 
-def task_all(request):
-    return render(request, 'main/task/all.html', {
-        'tasks': getpager(
-            Task.objects.order_by('-status', '-timestamp_create'),
-            request.GET.get('page')
-        )
-    })
+class TaskListView(ListView):
+    model = Task
+    paginate_by = 10
+    template_name = 'main/task/all.html'
+    ordering = ['-status', '-timestamp_create']

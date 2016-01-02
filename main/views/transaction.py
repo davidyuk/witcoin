@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from ..forms import TransactionCreationForm
 from django.utils import timezone
-from .getpager import getpager
+from django.views.generic.list import ListView
 
 
 @login_required
@@ -45,10 +45,8 @@ def transaction(request, pk):
     })
 
 
-def transaction_all(request):
-    return render(request, 'main/transaction/all.html', {
-        'transactions': getpager(
-            Transaction.objects.order_by('-timestamp_create'),
-            request.GET.get('page')
-        )
-    })
+class TransactionListView(ListView):
+    model = Transaction
+    paginate_by = 20
+    template_name = 'main/transaction/all.html'
+    ordering = '-timestamp_create'

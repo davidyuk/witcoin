@@ -2,9 +2,9 @@
 {% block title %}Задания{% endblock %}
 {% block header-text %}Задания{% endblock %}
 {% block content %}
-    {% if tasks %}
+    {% if object_list %}
         <div class="row">
-            {% for task in tasks %}
+            {% for task in object_list %}
                 <div class="col-sm-6 col-md-4">
                     <div class="panel panel-{% if task.status %}default{% else %}success{% endif %}">
                         <div class="panel-heading">
@@ -31,7 +31,7 @@
                 </div>
             {% endfor %}
         </div>
-        {% include 'main/pager.html' with objects=tasks %}
+        {% include 'main/pager.html' with objects=page_obj %}
     {% else %}
         <h4>Задания не найдены</h4>
     {% endif %}

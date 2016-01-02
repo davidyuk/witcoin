@@ -8,17 +8,24 @@ from ..forms import UserCreationForm, UserEditingForm, UserProfileCreationForm, 
 from django.contrib.auth import authenticate, login, forms as auth_forms, update_session_auth_hash, views as auth_views
 from django.contrib import messages
 from django.utils.http import urlsafe_base64_decode
-from .getpager import getpager
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def user(request, username):
     profile = get_object_or_404(UserProfile, user__username=username)
+
+    transactions = Transaction.objects.filter(Q(user_to=profile) | Q(user_from=profile)).order_by('-timestamp_create')
+    paginator = Paginator(transactions, 20)
+    try:
+        transactions = paginator.page(request.GET.get('page'))
+    except PageNotAnInteger:
+        transactions = paginator.page(1)
+    except EmptyPage:
+        transactions = paginator.page(paginator.num_pages)
+
     return render(request, 'main/userpage.html', {
         'profile': profile,
-        'transactions': getpager(
-            Transaction.objects.filter(Q(user_to=profile) | Q(user_from=profile)).order_by('-timestamp_create'),
-            request.GET.get('page')
-        )
+        'transactions': transactions
     })
 
 

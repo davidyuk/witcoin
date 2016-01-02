@@ -2,13 +2,13 @@
 {% block title %}Операции{% endblock %}
 {% block header-text %}Операции{% endblock %}
 {% block content %}
-    {% if transactions %}
+    {% if object_list %}
         <table class="table table-hover table-condensed">
             <thead>
                 <tr><td></td><td>Отправитель</td><td>Получатель</td><td>Сумма</td><td class="hidden-xs">Дата создания</td></tr>
             </thead>
             <tbody>
-            {% for transaction in transactions %}
+            {% for transaction in object_list %}
                 <tr>
                     <td><a href="{% url 'transaction' transaction.pk %}">{% status transaction.status %}</a></td>
                     <td>{% user transaction.user_from %}</td>
@@ -19,7 +19,7 @@
             {% endfor %}
             <tbody>
         </table>
-        {% include 'main/pager.html' with objects=transactions %}
+        {% include 'main/pager.html' with objects=page_obj %}
     {% else %}
         <h4>Операции не найдены</h4>
     {% endif %}
