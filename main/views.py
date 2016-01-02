@@ -168,7 +168,7 @@ def transaction_create(request):
                 return HttpResponseRedirect(reverse('user', args=[request.user.username]))
     else:
         form = TransactionCreationForm(user=request.user.userprofile)
-    return render(request, 'main/transaction_create.html', {'form': form})
+    return render(request, 'main/transaction/create.html', {'form': form})
 
 
 def transaction(request, pk):
@@ -187,14 +187,14 @@ def transaction(request, pk):
             trans.delete()
             return HttpResponseRedirect(reverse('user', args=[request.user.username]))
 
-    return render(request, 'main/transaction.html', {
+    return render(request, 'main/transaction/detail.html', {
         'transaction': trans,
         'status_editable': status_editable
     })
 
 
 def transaction_all(request):
-    return render(request, 'main/transaction_all.html', {
+    return render(request, 'main/transaction/all.html', {
         'transactions': getpager(
             Transaction.objects.order_by('-timestamp_create'),
             request.GET.get('page')
