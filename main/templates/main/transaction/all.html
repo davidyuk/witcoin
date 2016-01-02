@@ -1,4 +1,5 @@
 {% extends "main/base.html" %}
+{% load bootstrap3 %}
 {% block title %}Операции{% endblock %}
 {% block header-text %}Операции{% endblock %}
 {% block content %}
@@ -19,7 +20,7 @@
             {% endfor %}
             <tbody>
         </table>
-        {% include 'main/pager.html' with objects=page_obj %}
+        {% bootstrap_pagination page_obj %}
     {% else %}
         <h4>Операции не найдены</h4>
     {% endif %}

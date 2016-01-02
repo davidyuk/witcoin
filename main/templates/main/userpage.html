@@ -1,4 +1,5 @@
 {% extends "main/base.html" %}
+{% load bootstrap3 %}
 {% block title %}{{ profile }}{% endblock %}
 {% block header %}{% endblock %}
 {% block content %}
@@ -56,7 +57,7 @@
                     {% endfor %}
                     <tbody>
                 </table>
-                {% include 'main/pager.html' with objects=transactions %}
+                {% bootstrap_pagination transactions %}
             {% else %}
                 <h4>Операций не произведено</h4>
             {% endif %}
