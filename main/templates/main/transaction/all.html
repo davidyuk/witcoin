@@ -5,18 +5,16 @@
 
 {% block extra_head %}
     <style>
-        label[for$='_0'] { display: block; }
-        input[id$='_0'], input[id$='_1'] {
-            width: 45%;
-            display: inline;
+        .range-widget { width: 100%; }
+        .range-widget td:nth-child(2) {
+            padding: 0 4px;
+            text-align: center;
         }
         .link-dotted { border-bottom: 1px dashed #23527C; }
         .link-dotted:hover {
             text-decoration: none;
             border-bottom-style: solid;
         }
-        input[id$='_0'] { margin-right: 5px; }
-        input[id$='_1'] { margin-left: 5px; }
     </style>
 {% endblock %}
 

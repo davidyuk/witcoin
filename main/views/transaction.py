@@ -11,6 +11,8 @@ from django.db.models import Q
 from distutils.util import strtobool
 from functools import reduce
 from operator import and_, or_
+from django_filters.widgets import RangeWidget
+from django.forms import NumberInput, DateInput
 
 
 @login_required
@@ -55,11 +57,24 @@ class TransactionFilterView(FilterView):
     template_name = 'main/transaction/all.html'
 
     class filterset_class(FilterSet):
-        amount = RangeFilter(label='Сумма')
+
+        class CustomRangeWidget(RangeWidget):
+            def __init__(self, widget, attrs=None):
+                attrs_start = {'placeholder': 'От', **(attrs or {})}
+                attrs_stop = {'placeholder': 'До', **(attrs or {})}
+                widgets = (widget(attrs_start), widget(attrs_stop))
+                super(RangeWidget, self).__init__(widgets, attrs)
+
+            def format_output(self, rendered_widgets):
+                rendered_widgets.insert(1, ' — ')
+                return '<table class="range-widget"><tr><td>' + '</td><td>'.join(rendered_widgets) +\
+                       '</td></tr></table>'
+
+        amount = RangeFilter(label='Сумма', widget=CustomRangeWidget(NumberInput, attrs={'step': 0.25}))
         user = MethodFilter(label='Участник')
         user_to = MethodFilter(label='Получатель')
         user_from = MethodFilter(label='Отправитель')
-        timestamp_create = DateFromToRangeFilter(label='Дата создания')
+        timestamp_create = DateFromToRangeFilter(label='Дата создания', widget=CustomRangeWidget(DateInput))
         STATUS_CHOICES = (
             (None, 'Все'),
             (True, 'Подтверждённые'),
