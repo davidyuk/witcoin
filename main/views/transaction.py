@@ -80,7 +80,7 @@ class TransactionFilterView(FilterView):
             (True, 'Подтверждённые'),
             (False, 'Отменённые'),
         )
-        status = TypedChoiceFilter(label='Статус', choices=STATUS_CHOICES, coerce=strtobool)
+        status = TypedChoiceFilter(label='Статус', choices=STATUS_CHOICES, coerce=strtobool, initial=True)
 
         @staticmethod
         def get_user_to_q(value):
