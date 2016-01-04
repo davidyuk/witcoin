@@ -95,6 +95,10 @@ class TransactionFilterView(FilterView):
                 f.field.help_text = {}
             super().__init__(*args, **kwargs)
             self.form.fields['o'].label = 'Сортировать по'
+            self.form.fields['user_to'].advanced = True
+            self.form.fields['user_from'].advanced = True
+            self.form.fields['amount'].advanced = True
+            self.form.fields['timestamp_create'].advanced = True
 
         class Meta:
             model = Transaction

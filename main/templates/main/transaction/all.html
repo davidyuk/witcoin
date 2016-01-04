@@ -3,16 +3,42 @@
 {% block title %}Операции{% endblock %}
 {% block header-text %}Операции{% endblock %}
 
-{% block content %}
+{% block extra_head %}
     <style>
         label[for$='_0'] { display: block; }
         input[id$='_0'], input[id$='_1'] {
             width: 45%;
             display: inline;
         }
+        .link-dotted { border-bottom: 1px dashed #23527C; }
+        .link-dotted:hover {
+            text-decoration: none;
+            border-bottom-style: solid;
+        }
         input[id$='_0'] { margin-right: 5px; }
         input[id$='_1'] { margin-left: 5px; }
     </style>
+{% endblock %}
+
+{% block extra_script %}
+    <script>
+        $(document).ready(function(){
+            var f = false;
+            $('.advanced input').each(function(_, elem){
+                f = f || $(elem).val();
+            });
+            $('.advanced').addClass('collapse' + (f ? ' in' : ''));
+            var label_more = 'Больше параметров';
+            var label_less = 'Меньше параметров';
+            $('#btn-filters').click(function(e){
+                $(this).text($(this).text() == label_more ? label_less : label_more);
+                e.preventDefault();
+            }).text(f ? label_less : label_more);
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
     <div class="row">
         <div class="col-md-9 col-lg-8">
             {% if object_list %}
@@ -39,10 +65,17 @@
         </div>
         <div class="col-md-3 col-lg-4">
             <form method="GET">
-                {% bootstrap_form filter.form %}
+                {% for field in filter.form %}
+                    {% if field.field.advanced %}
+                        {% bootstrap_field field form_group_class='form-group advanced' %}
+                    {% else %}
+                        {% bootstrap_field field %}
+                    {% endif %}
+                {% endfor %}
                 {% buttons submit='Применить' %}
                     {% url 'transaction_all' as clear_href %}
                     {% bootstrap_button 'Очистить' button_type='link' href=clear_href button_class='btn-default' %}
+                    <a id="btn-filters" class="link-dotted" data-toggle="collapse" data-target=".advanced" href="#">Больше параметров</a>
                 {% endbuttons %}
             </form>
         </div>

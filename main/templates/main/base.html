@@ -16,6 +16,7 @@
             .glyphicon-status { font-size: 22px; vertical-align: middle; }
             textarea { resize: vertical; }
         </style>
+        {% block extra_head %}{% endblock %}
     </head>
     <body>
     <nav class="navbar navbar-default">
@@ -108,5 +109,6 @@
         </footer>
         <script type="text/javascript" src="{% static 'assets/js/jquery-2.1.4.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+        {% block extra_script %}{% endblock %}
     </body>
 </html>
