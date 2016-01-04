@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^fefu$', views.fefu_send_mail, name='fefu_send_mail'),
     url(r'^fefu/(?P<token>[0-9A-z]{32})$', views.fefu_from_mail, name='fefu_from_mail'),
 
-    url(r'^transaction/all$', views.TransactionListView.as_view(), name='transaction_all'),
+    url(r'^transaction/all$', views.TransactionFilterView.as_view(), name='transaction_all'),
     url(r'^transaction/create$', views.transaction_create, name='transaction_create'),
     url(r'^transaction/(?P<pk>[0-9]+)$', views.transaction, name='transaction'),
 
