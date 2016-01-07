@@ -19,7 +19,7 @@
         {% csrf_token %}
         {% bootstrap_form form layout="horizontal" %}
         {% buttons submit='Войти' layout='horizontal' %}
-            <a class="btn btn-info" type="button" data-toggle="collapse" data-target="#reset_password" href="{% url 'password_reset' %}" onclick="return false;">Забыли пароль?</a>
+            <a class="link-dotted" type="button" data-toggle="collapse" data-target="#reset_password" href="{% url 'password_reset' %}" onclick="return false;">Забыли пароль?</a>
         {% endbuttons %}
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
