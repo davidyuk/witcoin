@@ -1,0 +1,23 @@
+{% load threadedcomments_tags i18n %}
+{% for comment in comment_list|fill_tree|annotate_tree %}
+    {% if not comment.open %}
+        </div></div>
+    {% endif %}
+    <div class="media">
+        <div class="media-body">
+            <strong class="media-heading">
+                {% if comment.user_id %}
+                    <a href="{% url 'user' comment.user.username %}">{{ comment.user.userprofile }}</a>
+                {% else %}
+                    {{ comment.user_name }}
+                {% endif %}
+            </strong><br>
+            <div class="user-text">{{ comment.comment }}</div>
+            <div class="media-footer"><small>
+                {{ comment.submit_date }}
+                | <a href="#" data-comment-id="{{ comment.id }}" class="link-reply link-dotted">Ответить</a>
+            </small></div>
+    {% for close in comment.close %}
+        </div></div>
+    {% endfor %}
+{% endfor %}

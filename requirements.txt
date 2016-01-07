@@ -1,3 +1,5 @@
 django
 django-bootstrap3
 django-filter
+django-contrib-comments
+django-threadedcomments
