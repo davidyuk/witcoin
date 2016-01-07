@@ -15,6 +15,7 @@
                 {% endifequal %}
             </table>
             {{ task.description }}
+            {% include 'main/common/comments.html' with object=task %}
         </div>
         <div class="col-sm-7 col-md-6">
             {% if task.status or task.offers.all %}
@@ -25,12 +26,15 @@
                             <b class="media-heading">{% user offer.user %}</b><br>
                             {{ offer.description }}
                             {% if offer.price %}<div><i>Стоимость: {% coins offer.price %}</i></div>{% endif %}
+                            <div style="margin-left: 8%">
+                                {% include 'main/common/comments.html' with object=offer %}
+                            </div>
                         </div>
                     </div>
+                    <hr>
                 {% endfor %}
             {% endif %}
             {% if form %}
-                <hr>
                 <form method="POST">
                     {% csrf_token %}
                     {% load bootstrap3 %}
