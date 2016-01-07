@@ -7,5 +7,7 @@ http://stackoverflow.com/questions/7625991/how-to-properly-add-entries-for-compu
 http://stackoverflow.com/questions/7878028/override-default-django-translations
 """
 
+ungettext_lazy('%d week', '%d weeks')
+ungettext_lazy('%d minute', '%d minutes')
 ugettext_lazy('Comment')
 pgettext_lazy("Person name", "Name")

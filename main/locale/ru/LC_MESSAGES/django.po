@@ -42,6 +42,22 @@ msgstr[0] "%(users)s пользователь"
 msgstr[1] "%(users)s пользователя"
 msgstr[2] "%(users)s пользователей"
 
+#: .\main\translations.py:11
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d неделю"
+msgstr[1] "%d недели"
+msgstr[2] "%d недель"
+
+#: .\main\translations.py:14
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d минуту"
+msgstr[1] "%d минуты"
+msgstr[2] "%d минут"
+
 #: .\main\translations.py:15
 msgid "Comment"
 msgstr "Комментарий"
