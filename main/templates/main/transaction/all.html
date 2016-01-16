@@ -33,11 +33,11 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-9 col-lg-8">
+        <div class="col-sm-8 col-md-9 col-lg-8">
             {% if object_list %}
                 <table class="table table-hover table-condensed">
                     <thead>
-                        <tr><td></td><td>Отправитель</td><td>Получатель</td><td>Сумма</td><td class="hidden-xs">Дата создания</td></tr>
+                        <tr><td></td><td>Отправитель</td><td>Получатель</td><td>Сумма</td><td class="hidden-xs hidden-sm">Дата создания</td></tr>
                     </thead>
                     <tbody>
                     {% for transaction in object_list %}
@@ -46,7 +46,7 @@
                             <td>{% user transaction.user_from %}</td>
                             <td>{% user transaction.user_to %}</td>
                             <td><a href="{% url 'transaction' transaction.pk %}">{% coins transaction.amount %}</a></td>
-                            <td class="hidden-xs">{{ transaction.timestamp_create }}</td>
+                            <td class="hidden-xs hidden-sm">{{ transaction.timestamp_create }}</td>
                         </tr>
                     {% endfor %}
                     <tbody>
@@ -56,7 +56,7 @@
                 <h4>Операции не найдены</h4>
             {% endif %}
         </div>
-        <div class="col-md-3 col-lg-4">
+        <div class="col-sm-4 col-md-3 col-lg-4">
             <form method="GET">
                 {% for field in filter.form %}
                     {% if field.field.advanced %}
