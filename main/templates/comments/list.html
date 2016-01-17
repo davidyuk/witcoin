@@ -14,7 +14,7 @@
             </strong><br>
             <div class="user-text">{{ comment.comment }}</div>
             <div class="media-footer"><small>
-                {{ comment.submit_date|timesince }} назад
+                <span data-toggle="tooltip" data-placement="bottom" title="{{ comment.submit_date }}">{{ comment.submit_date|timesince }} назад</span>
                 | <a href="#" data-comment-id="{{ comment.id }}" class="link-reply link-dotted">Ответить</a>
             </small></div>
     {% for close in comment.close %}

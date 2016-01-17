@@ -130,6 +130,7 @@
         <script type="text/javascript" src="{% static 'assets/js/bootstrap.min.js' %}"></script>
         <script type="text/javascript">
             $(document).ready(function() {
+                $('[data-toggle="tooltip"]').tooltip();
                 $('.comments form button[type="submit"]').tooltip({
                     'delay': 1000,
                     'placement': 'bottom',
