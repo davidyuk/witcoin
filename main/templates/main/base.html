@@ -48,12 +48,12 @@
                 </button>
                 <a class="navbar-brand" href="{% url 'index' %}">{{ site_name }}</a>
             </div>
-            <div id="navbar" class="collapse navbar-collapse">
+            <div id="navbar" class="collapse navbar-collapse">{% with request.resolver_match.url_name as url_name %}
                 <ul class="nav navbar-nav">
-                    <li class="{% if request.resolver_match.url_name == "task_all" %}active{% endif %}">
+                    <li{% if url_name == 'task_all' %} class="active"{% endif %}>
                         <a href="{% url 'task_all' %}">Задания</a>
                     </li>
-                    <li class="{% if request.resolver_match.url_name == "transaction_all" %}active{% endif %}">
+                    <li{% if url_name == 'transaction_all' %} class="active"{% endif %}>
                         <a href="{% url 'transaction_all' %}">Операции</a>
                     </li>
                 </ul>
@@ -64,19 +64,15 @@
                                 {{ user.userprofile }}
                                 <b class="caret"></b>
                             </a>
-                            <ul class="dropdown-menu" id="user_menu">
-                                {% with request.resolver_match as r %}
-                                    <li class="{% if r.url_name == 'user' and r.kwargs.username == user.username %}active{% endif %}">
-                                        <a href="{% url 'user' user.username %}">Моя страница</a>
-                                    </li>
-                                {% endwith %}
-                                <li>
+                            <ul class="dropdown-menu">
+                                <li{% if url_name == 'user' and request.resolver_match.kwargs.username == user.username %} class="active"{% endif %}>
+                                    <a href="{% url 'user' user.username %}">Моя страница</a>
+                                </li>
+                                <li{% if url_name == 'settings' %} class="active"{% endif %}>
                                     <a href="{% url 'settings' %}">Параметры</a>
                                 </li>
                                 <li class="divider"></li>
-                                <li>
-                                    <a href="{% url 'logout' %}">Выход</a>
-                                </li>
+                                <li><a href="{% url 'logout' %}">Выход</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -109,7 +105,7 @@
                         {% csrf_token %}
                     </form>
                 {% endif %}
-            </div>
+            {% endwith %}</div>
         </div>
     </nav>
 
