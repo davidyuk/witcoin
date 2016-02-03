@@ -4,7 +4,7 @@
         </div></div>
     {% endif %}
     <div class="media">
-        <div class="media-body">
+        <div class="media-body" id="c{{ comment.id }}">
             <strong class="media-heading">
                 {% if comment.user_id %}
                     <a href="{% url 'user' comment.user.username %}">{{ comment.user.userprofile }}</a>
