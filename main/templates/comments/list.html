@@ -17,7 +17,10 @@
                 <span data-toggle="tooltip" data-placement="bottom" title="{{ comment.submit_date }}">{{ comment.submit_date|timesince }} назад</span>
                 | {% include 'main/common/toolbar_inline.html' with object=comment %}
                 <span class="hover">
-                    | <a href="#" data-comment-id="{{ comment.id }}" class="link-reply link-dotted">Ответить</a>
+                    | <a href="#" data-comment-id="{{ comment.id }}" class="link-reply link-dotted">
+                        <span class="hidden-sm hidden-xs">Ответить</span>
+                        <span class="hidden-lg hidden-md text-muted glyphicon glyphicon-comment" data-toggle="tooltip" data-placement="bottom" title="Ответить"></span>
+                    </a>
                 </span>
             </small></div>
         </div>
