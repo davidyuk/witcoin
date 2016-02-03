@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'django_filters',
     'threadedcomments',
     'django_comments',
+    'voting',
 )
 
 MIDDLEWARE_CLASSES = (

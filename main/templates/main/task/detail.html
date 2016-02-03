@@ -13,6 +13,7 @@
                     <a class="btn btn-primary btn-sm" href="{% url 'task_edit' task.pk %}">Редактировать задание</a>
                 </td></tr>
                 {% endifequal %}
+                <tr><td></td><td>{% include 'main/common/toolbar.html' with object=task %}</td></tr>
             </table>
             {{ task.description }}
             {% include 'main/common/comments.html' with object=task %}
@@ -23,7 +24,9 @@
                 {% for offer in task.offers.all %}
                     <div class="media">
                         <div class="media-body">
-                            <b class="media-heading">{% user offer.user %}</b><br>
+                            <span class="media-heading"><b>{% user offer.user %}</b>
+                                <small>| {% include 'main/common/toolbar_inline.html' with object=offer %}</small>
+                            </span><br>
                             {{ offer.description }}
                             {% if offer.price %}<div><i>Стоимость: {% coins offer.price %}</i></div>{% endif %}
                             <div style="margin-left: 8%">

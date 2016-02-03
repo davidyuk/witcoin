@@ -15,7 +15,10 @@
             <div class="user-text">{{ comment.comment }}</div>
             <div class="media-footer"><small>
                 <span data-toggle="tooltip" data-placement="bottom" title="{{ comment.submit_date }}">{{ comment.submit_date|timesince }} назад</span>
-                | <a href="#" data-comment-id="{{ comment.id }}" class="link-reply link-dotted">Ответить</a>
+                | {% include 'main/common/toolbar_inline.html' with object=comment %}
+                <span class="hover">
+                    | <a href="#" data-comment-id="{{ comment.id }}" class="link-reply link-dotted">Ответить</a>
+                </span>
             </small></div>
         </div>
     {% for close in comment.close %}

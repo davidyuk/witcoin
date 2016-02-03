@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'', include('main.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^comments/', include('django_comments.urls')),
+    url(r'', include('voting.urls')),
 ]

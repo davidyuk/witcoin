@@ -1,0 +1,12 @@
+{% load voting_tags %}
+{% score_for_object object as score %}
+{{ score.score }}
+<span class="hover">
+    {% vote_by_user request.user on object as vote %}
+    {% if vote.vote != 1 %}
+        <a href="{% vote_url object up %}" class="text-muted"><span class="glyphicon glyphicon-arrow-up"></span></a>
+    {% endif %}
+    {% if vote.vote != -1 %}
+        <a href="{% vote_url object down %}" class="text-muted"><span class="glyphicon glyphicon-arrow-down"></span></a>
+    {% endif %}
+</span>

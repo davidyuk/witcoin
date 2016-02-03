@@ -12,6 +12,7 @@
                 <tr><td>Оборот</td><td>{% coins profile.spend %}</td></tr>
                 <tr><td>Был в системе</td><td>{{ profile.user.last_login }}</td></tr>
                 <tr><td>Дата регистрации</td><td>{{ profile.user.date_joined }}</td></tr>
+                <tr><td></td><td>{% include 'main/common/toolbar.html' with object=profile %}</td></tr>
             </table>
             {% if profile.about %}
                 <div class="panel panel-default">

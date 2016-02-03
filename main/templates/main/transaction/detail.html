@@ -12,6 +12,7 @@
                 <tr><td>Дата подтверждения</td><td>{{ transaction.timestamp_confirm }}</td></tr>
                 <tr><td>Статус</td><td>{% status transaction.status True %}</td></tr>
                 <tr><td>Описание</td><td>{{ transaction.description }}</td></tr>
+                <tr><td></td><td>{% include 'main/common/toolbar.html' with object=transaction %}</td></tr>
                 {% if status_editable %}
                     <tr><td>Действия</td><td>
                         <form class="form-horizontal" method="POST">
