@@ -1,7 +1,7 @@
 {% load threadedcomments_tags i18n %}
 {% for comment in comment_list|fill_tree|annotate_tree %}
     {% if not comment.open %}
-        </div></div>
+        </div>
     {% endif %}
     <div class="media">
         <div class="media-body" id="c{{ comment.id }}">
@@ -17,7 +17,8 @@
                 <span data-toggle="tooltip" data-placement="bottom" title="{{ comment.submit_date }}">{{ comment.submit_date|timesince }} назад</span>
                 | <a href="#" data-comment-id="{{ comment.id }}" class="link-reply link-dotted">Ответить</a>
             </small></div>
+        </div>
     {% for close in comment.close %}
-        </div></div>
+        </div>
     {% endfor %}
 {% endfor %}
