@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.core.validators import MinValueValidator, RegexValidator
+from django.core.urlresolvers import reverse
 
 
 class Group(models.Model):
@@ -31,6 +32,9 @@ class UserProfile(models.Model):
     def balance(self):
         return self.earned() - self.spend()
 
+    def get_absolute_url(self):
+        return reverse('user', args=[self.user.username])
+
     def __str__(self):
         s = self.user.first_name + ' ' + self.user.last_name
         s = self.user.username if s == ' ' else s
@@ -51,6 +55,9 @@ class Transaction(models.Model):
     timestamp_confirm = models.DateTimeField('дата подтверждения', null=True, blank=True)
     status = models.NullBooleanField('статус', null=True, blank=True)
 
+    def get_absolute_url(self):
+        return reverse('transaction', args=[self.id])
+
     def __str__(self):
         st = 'ожидание' if self.status is None else 'передано' if self.status else 'отменено'
         return 'От: %s, кому: %s, количество: %s (%s)' % (self.user_from, self.user_to, self.amount, st)
@@ -67,6 +74,9 @@ class Task(models.Model):
     timestamp_create = models.DateTimeField('дата создания', auto_now_add=True)
     status = models.BooleanField('актуально', default=True)
 
+    def get_absolute_url(self):
+        return reverse('task', args=[self.id])
+
     def __str__(self):
         return '%s (%s)' % (self.title, self.author)
 
@@ -81,6 +91,9 @@ class TaskUser(models.Model):
     price = models.DecimalField('стоимость', null=True, blank=True, max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
     description = models.CharField('комментарий', blank=True, max_length=1000)
     timestamp_create = models.DateTimeField('дата создания', auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse('task', args=[self.task.id])
 
     def __str__(self):
         return '%s для задания %s' % (self.user, self.task)
