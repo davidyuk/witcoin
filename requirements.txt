@@ -3,4 +3,4 @@ django-bootstrap3
 django-filter
 django-contrib-comments
 django-threadedcomments
--e git+https://github.com/DenisDavidyuk/django-voting.git#egg=django-voting
+git+https://github.com/DenisDavidyuk/django-voting.git#egg=django-voting
