@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'threadedcomments',
     'django_comments',
     'voting',
+    'actstream',
 )
 
 MIDDLEWARE_CLASSES = (
