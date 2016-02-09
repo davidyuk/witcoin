@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from main.models import UserProfile, Group
+from main.models import UserProfile, Group, Task, TaskUser, Transaction
 
 
 def create_group(name='group_name_test'):
@@ -28,3 +28,26 @@ def create_user_profile(about='user_profile_about_test', group=None, user=None):
     user_profile = UserProfile(**locals())
     user_profile.save()
     return user_profile
+
+
+def create_task(author=None, title='task_title_test', description='task_description_test', status=True):
+    author = author or create_user_profile()
+    task = Task(**locals())
+    task.save()
+    return task
+
+
+def create_task_user(user=None, task=None, description='task_user_description_test', price=10):
+    task = task or create_task()
+    user = user or create_user_profile()
+    task_user = TaskUser(**locals())
+    task_user.save()
+    return task_user
+
+
+def create_transaction(user_from=None, user_to=None, description='transaction_description_test', status=True, amount=10):
+    user_from = user_from or create_user_profile()
+    user_to = user_to or create_user_profile()
+    transaction = Transaction(**locals())
+    transaction.save()
+    return transaction

@@ -6,6 +6,7 @@ class MainConfig(AppConfig):
     verbose_name = 'Приложение WitCoin'
 
     def ready(self):
+        import main.signals.handlers
         from actstream import registry as actstream_registry
         actstream_registry.register(self.get_model('Task'))
         actstream_registry.register(self.get_model('TaskUser'))
