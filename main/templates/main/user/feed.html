@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+{% block title %}Новости{% endblock %}
+{% block header-text %}Новости{% endblock %}
+{% load bootstrap3 activity_tags %}
+
+{% block extra_head %}
+    <style>
+        .range-widget { width: 100%; }
+        .range-widget td:nth-child(2) {
+            padding: 0 4px;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-8 col-md-9 col-lg-8">
+            {% if object_list %}
+                <ul class="list-group">
+                    {% for action in object_list %}
+                        {% if request.GET.o == 'target_object_id' %}
+                            {% ifchanged %}
+                                {% if action.target %}<li class="list-group-item" style="background-color: #eee;">
+                                    {% include 'main/common/object.html' with object=action.target capfirst=True %}
+                                </li>{% endif %}
+                            {% endifchanged %}
+                            {% include 'main/common/action.html' with hide_target=True %}
+                        {% else %}
+                            {% include 'main/common/action.html' %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                {% if is_paginated %}
+                    {% bootstrap_pagination page_obj url=request.get_full_path %}
+                {% endif %}
+            {% else %}
+                <h4>Новости не найдены</h4>
+            {% endif %}
+        </div>
+        <div class="col-sm-4 col-md-3 col-lg-4">
+            <form method="GET">
+                {% for field in filter.form %}
+                    {% if field.field.advanced %}
+                        {% bootstrap_field field form_group_class='form-group advanced' %}
+                    {% else %}
+                        {% bootstrap_field field %}
+                    {% endif %}
+                {% endfor %}
+                {% buttons submit='Применить' %}
+                    {% url 'notification_all' as clear_href %}
+                    {% bootstrap_button 'Очистить' button_type='link' href=clear_href button_class='btn-default' %}
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

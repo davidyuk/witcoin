@@ -70,6 +70,9 @@
                                 <li{% if url_name == 'user' and request.resolver_match.kwargs.username == user.username %} class="active"{% endif %}>
                                     <a href="{% url 'user' user.username %}">Моя страница</a>
                                 </li>
+                                <li{% if url_name == 'feed' %} class="active"{% endif %}>
+                                    <a href="{% url 'feed' %}">Мои новости</a>
+                                </li>
                                 <li{% if url_name == 'settings' %} class="active"{% endif %}>
                                     <a href="{% url 'settings' %}">Параметры</a>
                                 </li>

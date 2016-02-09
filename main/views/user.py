@@ -8,6 +8,13 @@ from ..forms import UserCreationForm, UserEditingForm, UserProfileCreationForm, 
 from django.contrib.auth import authenticate, login, forms as auth_forms, update_session_auth_hash, views as auth_views
 from django.contrib import messages
 from django.utils.http import urlsafe_base64_decode
+from actstream.models import user_stream
+from django.utils.decorators import method_decorator
+from django_filters import FilterSet, DateFromToRangeFilter, ModelChoiceFilter, CharFilter
+from django_filters.views import FilterView
+from django.forms import DateInput
+from django.contrib.contenttypes.models import ContentType
+from ..widgets import CustomRangeWidget
 
 
 def user(request, username):
@@ -36,6 +43,41 @@ def register(request):
     return render(request, 'registration/register.html', {
         'userForm': user_form, 'userProfileForm': profile_form
     })
+
+
+class FeedFilterView(FilterView):
+    paginate_by = 20
+    template_name = 'main/user/feed.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return user_stream(self.request.user)
+
+    class filterset_class(FilterSet):
+        timestamp = DateFromToRangeFilter(label='Дата создания', widget=CustomRangeWidget(DateInput))
+        verb = CharFilter(label='Действие', lookup_type='contains')
+        content_types = Q(model='threadedcomment') | Q(app_label='main') & Q(model__in=['task', 'taskuser', 'transaction'])
+        actor_content_type = ModelChoiceFilter(label='Источник действия', empty_label='Произвольный', queryset=ContentType.objects.filter(content_types))
+        action_object_content_type = ModelChoiceFilter(label='Объект действия', empty_label='Произвольный', queryset=ContentType.objects.filter(content_types))
+        target_content_type = ModelChoiceFilter(label='Целевой объект', empty_label='Произвольный', queryset=ContentType.objects.filter(content_types))
+
+        def __init__(self, *args, **kwargs):
+            # remove useless help_text 'Filter'
+            # https://github.com/alex/django-filter/issues/292
+            for _, f in self.base_filters.items():
+                f.field.help_text = {}
+            super().__init__(*args, **kwargs)
+            self.form.fields['o'].label = 'Сортировать по'
+
+        class Meta:
+            fields = ['timestamp', 'verb', 'actor_content_type', 'action_object_content_type', 'target_content_type']
+            order_by = (
+                ('-timestamp', 'Дата создания'),
+                ('target_object_id', 'Целевой объект'),  # break if two objects with different types, but the same id appear as target
+            )
 
 
 @login_required

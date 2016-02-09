@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^login$', auth_views.login, {'extra_context': {'password_reset': auth_forms.PasswordResetForm()}},
         name='login'),
     url(r'^home$', views.home, name='home'),
+    url(r'^feed$', views.FeedFilterView.as_view(), name='feed'),
     url(r'^settings$', views.settings, name='settings'),
     url(r'^logout$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^user/(?P<username>[\w.@+-]+)$', views.user, name='user'),
