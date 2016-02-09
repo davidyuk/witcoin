@@ -59,8 +59,7 @@ class Transaction(models.Model):
         return reverse('transaction', args=[self.id])
 
     def __str__(self):
-        st = 'ожидание' if self.status is None else 'передано' if self.status else 'отменено'
-        return 'От: %s, кому: %s, количество: %s (%s)' % (self.user_from, self.user_to, self.amount, st)
+        return '%s → %s, %s кл' % (self.user_from, self.user_to, self.amount)
 
     class Meta:
         verbose_name = 'транзакция'
