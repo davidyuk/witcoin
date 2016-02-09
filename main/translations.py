@@ -10,4 +10,5 @@ http://stackoverflow.com/questions/7878028/override-default-django-translations
 ungettext_lazy('%d week', '%d weeks')
 ungettext_lazy('%d minute', '%d minutes')
 ugettext_lazy('Comment')
+ugettext_lazy('Threaded comment')
 pgettext_lazy("Person name", "Name")

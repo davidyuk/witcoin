@@ -63,6 +63,9 @@ msgid "Comment"
 msgstr "Комментарий"
 
 #: .\main\translations.py:16
+msgid "Threaded comment"
+msgstr "комментарий"
+
 msgctxt "Person name"
 msgid "Name"
 msgstr "Имя"
