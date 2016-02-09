@@ -23,7 +23,7 @@ def user(request, username):
     except EmptyPage:
         transactions = paginator.page(paginator.num_pages)
 
-    return render(request, 'main/userpage.html', {
+    return render(request, 'main/user/detail.html', {
         'profile': profile,
         'transactions': transactions
     })
@@ -75,7 +75,7 @@ def settings(request):
     if not password_form:
         password_form = auth_forms.PasswordChangeForm(request.user)
 
-    return render(request, 'main/settings.html', {
+    return render(request, 'main/user/settings.html', {
         'userForm': user_form,
         'userProfileForm': profile_form,
         'passwordForm': password_form,
