@@ -49,6 +49,14 @@ def task_status(_status, show_caption=False):
     return {'status': _status, 'icon': icon, 'color': color, 'title': title, 'display_text': show_caption}
 
 
+@register.filter
+def verbose_name(value):
+    try:
+        return value._meta.verbose_name
+    except AttributeError:
+        return ''
+
+
 def context_processor(request):
     return {
         'site_name': _('WitCoin'),
