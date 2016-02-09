@@ -78,7 +78,7 @@ class Task(models.Model):
         return reverse('task', args=[self.id])
 
     def __str__(self):
-        return '%s (%s)' % (self.title, self.author)
+        return '%s' % self.title
 
     class Meta:
         verbose_name = 'задание'
