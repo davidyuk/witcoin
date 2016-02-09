@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views, forms as auth_forms
+from actstream import views as actstream_views
 
 from . import views
 
@@ -29,6 +30,12 @@ urlpatterns = [
     url(r'^task/create$', views.task_edit, name='task_create'),
     url(r'^task/(?P<pk>[0-9]+)$', views.task, name='task'),
     url(r'^task/(?P<pk>[0-9]+)/edit$', views.task_edit, name='task_edit'),
+
+    # set 'send_action': False
+    url(r'^activity/follow/(?P<content_type_id>[^/]+)/(?P<object_id>[^/]+)/$',
+        actstream_views.follow_unfollow, {'send_action': False}, name='actstream_follow'),
+    url(r'^activity/follow_all/(?P<content_type_id>[^/]+)/(?P<object_id>[^/]+)/$',
+        actstream_views.follow_unfollow, {'actor_only': False, 'send_action': False}, name='actstream_follow_all'),
 
     url(r'^$', views.index, name='index'),
 ]
