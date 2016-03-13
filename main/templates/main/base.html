@@ -62,6 +62,16 @@
                                 <a href="{% url 'task_create' %}">Создать задание</a></li>
                         </ul>
                     </li>
+                    <li{% if 'service' in url_name %} class="active"{% endif %}>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'service_all' %}">
+                            Услуги <b class="caret"></b></a>
+                        <ul class="dropdown-menu" id="user_menu">
+                            <li{% if url_name == 'service_all' %} class="active"{% endif %}>
+                                <a href="{% url 'service_all' %}">Все услуги</a></li>
+                            <li{% if url_name == 'service_create' %} class="active"{% endif %}>
+                                <a href="{% url 'service_create' %}?from={{ request.path }}">Добавить услугу</a></li>
+                        </ul>
+                    </li>
                     <li{% if 'transaction' in url_name %} class="active"{% endif %}>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'transaction_all' %}">
                             Операции <b class="caret"></b></a>

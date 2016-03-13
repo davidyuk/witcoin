@@ -72,3 +72,42 @@ class ActivityStreamTestCase(TestCase):
         comment_reply = self.create_comment(user_profile, comment_object, comment_text, comment.pk)
         self.check_follow(user_profile, comment_reply)
         self.check_action(user_profile, 'добавил', comment_reply, comment, [comment_text])
+
+    def test_service_published(self):
+        up = create_user_profile()
+        o = create_service(author=up)
+        self.check_follow(up, o)
+        self.check_action(up, 'опубликовал', o, None, [o.description, o.price])
+
+    def test_service_not_published(self):
+        up = create_user_profile()
+        o = create_service(author=up, published=False)
+        self.check_follow(up, o)
+        self.assertEqual(Action.objects.count(), 0)
+
+    def test_service_published_hide_show(self):
+        o = create_service()
+        self.assertEqual(Action.objects.count(), 1)
+        o.published = False
+        o.save()
+        self.assertEqual(Action.objects.count(), 1)
+        o.published = True
+        o.save()
+        self.assertEqual(Action.objects.count(), 2)
+
+    def test_service_published_hide_show_new_instance(self):
+        o = create_service()
+        self.assertEqual(Action.objects.count(), 1)
+        o.published = False
+        o.save()
+        self.assertEqual(Action.objects.count(), 1)
+        o = Service.objects.last()
+        o.published = True
+        o.save()
+        self.assertEqual(Action.objects.count(), 2)
+
+    def test_service_published_edit(self):
+        o = create_service()
+        o.title = 'test_service_title_new'
+        o.save()
+        self.assertEqual(Action.objects.count(), 1)

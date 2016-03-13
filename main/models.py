@@ -66,6 +66,26 @@ class Transaction(models.Model):
         verbose_name_plural = 'транзакции'
 
 
+class Service(models.Model):
+    author = models.ForeignKey(UserProfile, verbose_name='автор')
+    title = models.CharField('заголовок', max_length=100)
+    description = models.TextField('описание', blank=True, max_length=5000)
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+    published = models.BooleanField('опубликовано', default=True)
+    price = models.DecimalField('стоимость', null=True, blank=True, max_digits=10, decimal_places=2)
+
+    def get_absolute_url(self):
+        return reverse('service', args=[self.id])
+
+    def __str__(self):
+        return '%s' % self.title
+
+    class Meta:
+        verbose_name = 'услуга'
+        verbose_name_plural = 'услуги'
+
+
 class Task(models.Model):
     author = models.ForeignKey(UserProfile, verbose_name='автор')
     title = models.CharField('заголовок', max_length=100)

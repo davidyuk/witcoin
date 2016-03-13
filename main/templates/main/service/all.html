@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+{% load bootstrap3 %}
+{% block title %}Услуги{% endblock %}
+{% block header-text %}Услуги{% endblock %}
+{% block content %}
+    {% if object_list %}
+        <div class="row">
+            {% for object in object_list %}
+                <div class="col-sm-6 col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+                        </div>
+                        {% if object.description %}
+                            <div class="panel-body">
+                                {{ object.description|truncatechars:200 }}
+                            </div>
+                        {% endif %}
+                        <div class="panel-footer">
+                            <table style="width: 100%"><tr>
+                                <td>{% user object.author %}</td>
+                                <td class="text-right">{{ object.updated_at }}</td>
+                            </tr></table>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% bootstrap_pagination page_obj %}
+    {% else %}
+        <h4>Услуги не найдены</h4>
+    {% endif %}
+{% endblock %}

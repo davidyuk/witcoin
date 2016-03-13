@@ -4,8 +4,8 @@ from actstream import action
 from actstream.actions import follow
 from actstream.models import Action
 
-from django.db.models.signals import post_save
-from ..models import Task, TaskUser, Transaction
+from django.db.models.signals import post_save, post_init
+from ..models import Task, TaskUser, Transaction, Service
 from django_comments.signals import comment_was_posted
 
 
@@ -36,6 +36,21 @@ def handler(sender, instance, created, raw, **kwargs):
                     description=instance.description)
     else:
         action.send(instance, verb='подтверждена' if instance.status else 'отменена')
+
+
+@receiver(post_init, sender=Service, weak=False)
+def handler(sender, instance, **kwargs):
+    instance.__original_published = instance.published
+
+
+@receiver(post_save, sender=Service, weak=False)
+def handler(sender, instance, created, raw, **kwargs):
+    if created and not raw:
+        follow(instance.author.user, instance, actor_only=False, send_action=False)
+    if instance.published and (created or instance.published != instance.__original_published) and not raw:
+        d = instance.description + ('\nСтоимость: ' + str(instance.price)) if instance.price else ''
+        action.send(instance.author.user, verb='опубликовал', action_object=instance, description=d)
+    instance.__original_published = instance.published
 
 
 @receiver(comment_was_posted, weak=False)

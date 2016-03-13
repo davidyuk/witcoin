@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+{% block title %}{{ object.title }} — {{ object.author }}{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>{{ object.title }}</h3>
+            <table class="table">
+                <tr><td colspan="2">{% user object.author %}</td></tr>
+                {% if object.price %}
+                    <tr><td>Стоимость</td><td>{% coins object.price %}</td></tr>
+                {% endif %}
+                <tr><td>Дата создания</td><td>{{ object.created_at }}</td></tr>
+                {% if object.created_at != object.updated_at %}
+                    <tr><td>Дата обновления</td><td>{{ object.updated_at }}</td></tr>
+                {% endif %}
+                {% ifequal object.author user.userprofile %}
+                    <tr><td>
+                        <span class="label label-{% if object.published %}success{% else %}warning{% endif %}">
+                            {% if object.published %}О{% else %}Не о{% endif %}публиковано</span>
+                    </td><td>
+                        <a class="btn btn-primary btn-xs" href="{% url 'service_edit' object.pk %}">
+                            <span class="glyphicon glyphicon-edit"></span><span class="hidden-sm"> Редактировать</span></a>
+                        <a class="btn btn-danger btn-xs" href="{% url 'service_delete' object.pk %}">
+                            <span class="glyphicon glyphicon-remove"></span><span class="hidden-sm"> Удалить</span></a>
+                    </td></tr>
+                {% endifequal %}
+                <tr><td></td><td>{% include 'main/common/toolbar.html' with object=object %}</td></tr>
+            </table>
+            {{ object.description }}
+        </div>
+        <div class="col-sm-6">
+            {% include 'main/common/comments.html' with object=object %}
+        </div>
+    </div>
+{% endblock %}

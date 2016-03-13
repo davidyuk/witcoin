@@ -32,6 +32,12 @@ urlpatterns = [
     url(r'^task/(?P<pk>[0-9]+)$', views.task, name='task'),
     url(r'^task/(?P<pk>[0-9]+)/edit$', views.task_edit, name='task_edit'),
 
+    url(r'^service/all$', views.ServiceListView.as_view(), name='service_all'),
+    url(r'^service/create$', views.ServiceCreateView.as_view(), name='service_create'),
+    url(r'^service/(?P<pk>[0-9]+)$', views.ServiceDetailView.as_view(), name='service'),
+    url(r'^service/(?P<pk>[0-9]+)/edit$', views.ServiceUpdateView.as_view(), name='service_edit'),
+    url(r'^service/(?P<pk>[0-9]+)/delete', views.ServiceDeleteView.as_view(), name='service_delete'),
+
     # set 'send_action': False
     url(r'^activity/follow/(?P<content_type_id>[^/]+)/(?P<object_id>[^/]+)/$',
         actstream_views.follow_unfollow, {'send_action': False}, name='actstream_follow'),
