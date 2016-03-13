@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{% if form.instance.pk %}Изменить{% else %}Создать{% endif %} {{ form.instance|verbose_name }}{% endblock %}
+{% block header-text %}{% if form.instance.pk %}Изменить{% else %}Создать{% endif %} {{ form.instance|verbose_name }}{% endblock %}
+
+{% block content %}
+    <form class="form-horizontal" method="POST">
+        {% csrf_token %}
+        {% load bootstrap3 %}
+        {% bootstrap_form form layout="horizontal" %}
+        {% if form.instance.pk %}
+            {% buttons submit='Сохранить' layout='horizontal' %}
+                {% bootstrap_button 'Отменить' button_type='link' href=object.get_absolute_url button_class='btn-default' %}
+            {% endbuttons %}
+        {% else %}
+            {% buttons submit='Создать' layout='horizontal' %}{% endbuttons %}
+        {% endif %}
+    </form>
+{% endblock %}

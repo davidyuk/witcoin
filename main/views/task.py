@@ -16,7 +16,7 @@ def task_edit(request, pk=None):
             return HttpResponseRedirect(reverse('task', args=[form.save().pk]))
     else:
         form = TaskForm(user=request.user.userprofile, instance=instance)
-    return render(request, 'main/task/edit.html', {'form': form})
+    return render(request, 'main/edit.html', {'form': form})
 
 
 def task(request, pk):

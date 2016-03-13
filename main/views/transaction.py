@@ -27,7 +27,7 @@ def transaction_create(request):
                 return HttpResponseRedirect(reverse('user', args=[request.user.username]))
     else:
         form = TransactionCreationForm(user=request.user.userprofile)
-    return render(request, 'main/transaction/create.html', {'form': form})
+    return render(request, 'main/edit.html', {'form': form})
 
 
 def transaction(request, pk):
