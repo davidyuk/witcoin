@@ -52,11 +52,25 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">{% with request.resolver_match.url_name as url_name %}
                 <ul class="nav navbar-nav">
-                    <li{% if url_name == 'task_all' %} class="active"{% endif %}>
-                        <a href="{% url 'task_all' %}">Задания</a>
+                    <li{% if 'task' in url_name %} class="active"{% endif %}>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'task_all' %}">
+                            Задания <b class="caret"></b></a>
+                        <ul class="dropdown-menu" id="user_menu">
+                            <li{% if url_name == 'task_all' %} class="active"{% endif %}>
+                                <a href="{% url 'task_all' %}">Все задания</a></li>
+                            <li{% if url_name == 'task_create' %} class="active"{% endif %}>
+                                <a href="{% url 'task_create' %}">Создать задание</a></li>
+                        </ul>
                     </li>
-                    <li{% if url_name == 'transaction_all' %} class="active"{% endif %}>
-                        <a href="{% url 'transaction_all' %}">Операции</a>
+                    <li{% if 'transaction' in url_name %} class="active"{% endif %}>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'transaction_all' %}">
+                            Операции <b class="caret"></b></a>
+                        <ul class="dropdown-menu" id="user_menu">
+                            <li{% if url_name == 'transaction_all' %} class="active"{% endif %}>
+                                <a href="{% url 'transaction_all' %}">Все операции</a></li>
+                            <li{% if url_name == 'transaction_create' %} class="active"{% endif %}>
+                                <a href="{% url 'transaction_create' %}?from={{ request.path }}">Перевести кленинки</a></li>
+                        </ul>
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
@@ -80,14 +94,6 @@
                                 <li><a href="{% url 'logout' %}">Выход</a></li>
                             </ul>
                         </li>
-                    </ul>
-                    <ul class="nav navbar-right" style="margin-right: 10px;">
-                        <a href="{% url 'task_create' %}" class="btn btn-success navbar-btn">Новое задание</a>
-                    </ul>
-                    <ul class="nav navbar-right" style="margin-right: 10px;">
-                        <a href="{% url 'transaction_create' %}?from={{ request.path }}" class="btn btn-info navbar-btn">
-                            Перевести <span class="hidden-sm">кленинки</span>
-                        </a>
                     </ul>
                 {% else %}
                     <form method="post" action="{% url 'login' %}" class="navbar-form navbar-right">
