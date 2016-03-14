@@ -123,28 +123,6 @@ class FefuMailRegisterForm(forms.ModelForm):
         }
 
 
-class TaskForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.author = kwargs.pop('user', None)
-        super(TaskForm, self).__init__(*args, **kwargs)
-        if not self.instance.pk:
-            self.fields.pop('status')
-
-    def save(self, force_insert=False, force_update=False, commit=True):
-        m = super(TaskForm, self).save(commit=False)
-        m.author = self.author
-        if commit:
-            m.save()
-        return m
-
-    class Meta:
-        model = Task
-        fields = ['title', 'description', 'status']
-        widgets = {
-            'description': forms.Textarea(attrs={'rows': 5}),
-        }
-
-
 class TaskUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)

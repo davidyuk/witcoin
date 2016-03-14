@@ -89,7 +89,7 @@ class Service(models.Model):
 class Task(models.Model):
     author = models.ForeignKey(UserProfile, verbose_name='автор')
     title = models.CharField('заголовок', max_length=100)
-    description = models.CharField('описание', blank=True, max_length=5000)
+    description = models.TextField('описание', blank=True, max_length=5000)
     timestamp_create = models.DateTimeField('дата создания', auto_now_add=True)
     status = models.BooleanField('актуально', default=True)
 

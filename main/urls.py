@@ -28,9 +28,10 @@ urlpatterns = [
     url(r'^transaction/(?P<pk>[0-9]+)$', views.transaction, name='transaction'),
 
     url(r'^task/all$', views.TaskListView.as_view(), name='task_all'),
-    url(r'^task/create$', views.task_edit, name='task_create'),
+    url(r'^task/create$', views.TaskCreateView.as_view(), name='task_create'),
     url(r'^task/(?P<pk>[0-9]+)$', views.task, name='task'),
-    url(r'^task/(?P<pk>[0-9]+)/edit$', views.task_edit, name='task_edit'),
+    url(r'^task/(?P<pk>[0-9]+)/edit$', views.TaskUpdateView.as_view(), name='task_edit'),
+    url(r'^task/(?P<pk>[0-9]+)/delete$', views.TaskDeleteView.as_view(), name='task_delete'),
 
     url(r'^service/all$', views.ServiceListView.as_view(), name='service_all'),
     url(r'^service/create$', views.ServiceCreateView.as_view(), name='service_create'),

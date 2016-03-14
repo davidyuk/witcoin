@@ -1,22 +1,56 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from ..models import Task, TaskUser
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
-from ..forms import TaskForm, TaskUserForm
+from django.core.urlresolvers import reverse, reverse_lazy
+from ..forms import TaskUserForm
 from django.views.generic.list import ListView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.views import redirect_to_login
+from django.contrib import messages
 
 
-@login_required
-def task_edit(request, pk=None):
-    instance = Task.objects.filter(pk=pk).first()
-    if request.method == "POST":
-        form = TaskForm(request.POST, user=request.user.userprofile, instance=instance)
-        if form.is_valid():
-            return HttpResponseRedirect(reverse('task', args=[form.save().pk]))
-    else:
-        form = TaskForm(user=request.user.userprofile, instance=instance)
-    return render(request, 'main/edit.html', {'form': form})
+class TaskCreateView(CreateView):
+    fields = ['title', 'description']
+    model = Task
+    template_name = 'main/edit.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user.userprofile
+        return super().form_valid(form)
+
+    @method_decorator(login_required())
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+class TaskUpdateView(UpdateView):
+    fields = ['title', 'description', 'status']
+    model = Task
+    template_name = 'main/edit.html'
+
+    @method_decorator(login_required())
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().author != self.request.user.userprofile:
+            return redirect_to_login(request.get_full_path())
+        return super().dispatch(request, *args, **kwargs)
+
+
+class TaskDeleteView(DeleteView):
+    model = Task
+    template_name = 'main/delete.html'
+    success_url = reverse_lazy('task_all')
+
+    @method_decorator(login_required())
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().author != self.request.user.userprofile:
+            return redirect_to_login(request.get_full_path())
+        return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Задание успешно удалено')
+        return super().delete(request, args, kwargs)
 
 
 def task(request, pk):
