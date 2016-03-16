@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.core.validators import MinValueValidator, RegexValidator
 from django.core.urlresolvers import reverse
+from decimal import Decimal
 
 
 class Group(models.Model):
@@ -50,7 +51,7 @@ class Transaction(models.Model):
     user_from = models.ForeignKey(UserProfile, verbose_name='отправитель', related_name='transactions_from')
     user_to = models.ForeignKey(UserProfile, verbose_name='получатель', related_name='transactions_to')
     description = models.CharField('описание', max_length=500)
-    amount = models.DecimalField('сумма', default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
+    amount = models.DecimalField('сумма', default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     timestamp_create = models.DateTimeField('дата создания', auto_now_add=True)
     timestamp_confirm = models.DateTimeField('дата подтверждения', null=True, blank=True)
     status = models.NullBooleanField('статус', null=True, blank=True)
