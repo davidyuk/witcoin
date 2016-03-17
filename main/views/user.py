@@ -113,6 +113,13 @@ def settings(request):
     })
 
 
+password_reset_params = {
+    'email_template_name': 'main/email/password_reset.txt',
+    'subject_template_name': 'main/email/password_reset_subject.txt',
+    'html_email_template_name': 'main/email/password_reset.html',
+}
+
+
 def password_reset_done(request):
     messages.info(request, 'На указанный вами email отправлено письмо с' +
                   ' дальнейшими инструкциями по восстановлению пароля.')
