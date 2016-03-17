@@ -21,6 +21,9 @@ class UserCreationForm(auth_forms.UserCreationForm):
     class Meta:
         model = auth_models.User
         fields = ['username', 'first_name', 'last_name', 'email']
+        help_texts = {
+            'email': 'Используется для рассылки уведомлений, восстановления пароля.',
+        }
 
 
 class UserProfileCreationForm(forms.ModelForm):
