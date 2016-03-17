@@ -1,15 +1,5 @@
 {# params: action, hide_actor, hide_target, hide_link #}
-{% if not hide_actor %}
-    {% include "main/common/object.html" with object=action.actor capfirst=True %}
-    {{ action.verb }}
-{% else %}
-    {{ action.verb|capfirst }}
-{% endif %}
-{% if action.action_object %}
-    {% include "main/common/object.html" with hide_name=action.description object=action.action_object  %}
-{% elif not hide_target %}
-    {% include "main/common/object.html" with hide_name=action.description object=action.target %}
-{% endif %}
+{% include 'main/common/action_title.html' %}
 {% if action.description %}
     <div class="well-sm">
         {{ action.description|linebreaksbr|truncatechars:100 }}
