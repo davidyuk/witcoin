@@ -11,6 +11,8 @@ from django.utils.crypto import get_random_string
 from django.utils import timezone
 from django.contrib import messages
 
+import re
+
 
 @login_required
 def fefu_send_mail(request):
@@ -27,8 +29,9 @@ def fefu_send_mail(request):
                 instance.token = get_random_string(length=32)
                 context = RequestContext(request, {'token': instance.token})
                 try:
-                    if send_mail('Регистрация email ДВФУ.', render_to_string('main/email/fefu.txt', context), None,
-                                 [instance.email], html_message=render_to_string('main/email/fefu.html', context)) == 1:
+                    if send_mail(re.sub('\n', '', render_to_string('main/email/fefu_subject.txt', context)),
+                                 render_to_string('main/email/fefu.txt', context), None, [instance.email],
+                                 html_message=render_to_string('main/email/fefu.html', context)) == 1:
                         instance.save()
                         messages.success(request, 'Письмо успешно отправленно на %s.' % instance.email)
                     else:
