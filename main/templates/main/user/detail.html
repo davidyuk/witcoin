@@ -37,7 +37,9 @@
             <ul class="list-group">
                 {% activity_stream 'actor' profile.user %}
                 {% for action in stream %}
-                    {% include 'main/common/action.html' with hide_actor=True %}
+                    <li class="list-group-item">
+                        {% include 'main/common/action.html' with hide_actor=True %}
+                    </li>
                 {% empty %}
                     Нет действий
                 {% endfor %}

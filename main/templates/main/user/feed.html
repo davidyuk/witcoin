@@ -25,9 +25,13 @@
                                     {% include 'main/common/object.html' with object=action.target capfirst=True %}
                                 </li>{% endif %}
                             {% endifchanged %}
-                            {% include 'main/common/action.html' with hide_target=True %}
+                            <li class="list-group-item">
+                                {% include 'main/common/action.html' with hide_target=True %}
+                            </li>
                         {% else %}
-                            {% include 'main/common/action.html' %}
+                            <li class="list-group-item">
+                                {% include 'main/common/action.html' %}
+                            </li>
                         {% endif %}
                     {% endfor %}
                 </ul>

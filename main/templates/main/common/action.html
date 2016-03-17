@@ -1,26 +1,24 @@
-{# params: action, hide_actor, hide_target #}
-<li class="list-group-item">
-    {% if not hide_actor %}
-        {% include "main/common/object.html" with object=action.actor capfirst=True %}
-        {{ action.verb }}
-    {% else %}
-        {{ action.verb|capfirst }}
+{# params: action, hide_actor, hide_target, hide_link #}
+{% if not hide_actor %}
+    {% include "main/common/object.html" with object=action.actor capfirst=True %}
+    {{ action.verb }}
+{% else %}
+    {{ action.verb|capfirst }}
+{% endif %}
+{% if action.action_object %}
+    {% include "main/common/object.html" with hide_name=action.description object=action.action_object  %}
+{% elif not hide_target %}
+    {% include "main/common/object.html" with hide_name=action.description object=action.target %}
+{% endif %}
+{% if action.description %}
+    <div class="well-sm">
+        {{ action.description|linebreaksbr|truncatechars:100 }}
+    </div>
+{% endif %}
+<div><small>
+    {% include 'main/common/time.html' with time=action.timestamp %}
+    {% if action.target and not hide_target and action.action_object %}
+        | в ответ на
+        {% include "main/common/object.html" with object=action.target %}
     {% endif %}
-    {% if action.action_object %}
-        {% include "main/common/object.html" with hide_name=action.description object=action.action_object  %}
-    {% elif not hide_target %}
-        {% include "main/common/object.html" with hide_name=action.description object=action.target %}
-    {% endif %}
-    {% if action.description %}
-        <div class="well-sm">
-            {{ action.description|linebreaksbr|truncatechars:100 }}
-        </div>
-    {% endif %}
-    <div><small>
-        {% include 'main/common/time.html' with time=action.timestamp %}
-        {% if action.target and not hide_target and action.action_object %}
-            | в ответ на
-            {% include "main/common/object.html" with object=action.target %}
-        {% endif %}
-    </small></div>
-</li>
+</small></div>
