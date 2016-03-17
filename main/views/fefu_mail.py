@@ -27,8 +27,8 @@ def fefu_send_mail(request):
                 instance.token = get_random_string(length=32)
                 context = RequestContext(request, {'token': instance.token})
                 try:
-                    if send_mail('Регистрация email ДВФУ.', render_to_string('main/fefu_mail/mail.txt', context), None,
-                                 [instance.email], html_message=render_to_string('main/fefu_mail/mail.html', context)) == 1:
+                    if send_mail('Регистрация email ДВФУ.', render_to_string('main/email/fefu.txt', context), None,
+                                 [instance.email], html_message=render_to_string('main/email/fefu.html', context)) == 1:
                         instance.save()
                         messages.success(request, 'Письмо успешно отправленно на %s.' % instance.email)
                     else:
