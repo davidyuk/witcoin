@@ -11,11 +11,12 @@ user_counter = 0
 
 
 def create_user(username=None, password='user_password_test',
-                first_name='user_first_name_test', last_name='user_last_name_test', email='user@email.test'):
-    if not username:
+                first_name='user_first_name_test', last_name='user_last_name_test', email=None):
+    if not username or not email:
         global user_counter
         user_counter += 1
-        username = 'user_username_test_' + str(user_counter)
+        username = 'user_username_test_' + str(user_counter) if not username else username
+        email = 'user@email.test' + str(user_counter) if not email else email
     user = User(**locals())
     user.set_password(password)
     user.save()
