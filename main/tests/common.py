@@ -60,3 +60,30 @@ def create_service(author=None, title='service_title_test', description='service
     service = Service(**locals())
     service.save()
     return service
+
+
+def create_comment(data=None, parent=None, target=None, user=None):
+    from django.test import Client
+    import django_comments as comments
+    from django.contrib.sites.models import Site
+    Comment = comments.get_model()
+    body = {
+        'name': 'user_anonymous_name',
+        'email': 'user.anonymous@email.test',
+        'comment': 'test_comment',
+    }
+    if data:
+        body.update(data)
+    url = comments.get_form_target()
+    args = [target if target else Site.objects.all()[0]]
+    kwargs = {}
+    if parent is not None:
+        kwargs['parent'] = str(parent.pk)
+        body['parent'] = str(parent.pk)
+    form = comments.get_form()(*args, **kwargs)
+    body.update(form.generate_security_data())
+    client = Client()
+    if user:
+        client.force_login(user)
+    client.post(url, body, follow=True)
+    return Comment.objects.last()

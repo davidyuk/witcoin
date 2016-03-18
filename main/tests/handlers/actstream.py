@@ -1,7 +1,5 @@
-from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
+from django.test import TestCase
 from actstream.models import Action, Follow
-from threadedcomments.models import ThreadedComment
 from ..common import *
 
 
@@ -50,26 +48,16 @@ class ActivityStreamTestCase(TestCase):
         self.check_follow(up_t, t)
         self.check_action(up_t, 'запросил перевод', t, None, [t.description])
 
-    def create_comment(self, user, comment_object, comment='ThreadedComment_comment_test', parent=''):
-        client = Client()
-        client.force_login(user.user)
-        response = client.get(comment_object.get_absolute_url())
-        comment_data = response.context[-1].dicts[-1]['form'].initial
-        comment_data['parent'] = parent
-        comment_data['comment'] = comment
-        response = client.post(reverse('comments-post-comment'), comment_data)
-        return ThreadedComment.objects.latest('id')
-
     def test_comment_create(self):
         (comment_object, user_profile, comment_text) = (create_task(), create_user_profile(), 'comment_test')
-        comment = self.create_comment(user_profile, comment_object, comment_text)
+        comment = create_comment({'comment': comment_text}, None, comment_object, user_profile.user)
         self.check_follow(user_profile, comment)
         self.check_action(user_profile, 'добавил', comment, comment_object, [comment_text])
 
     def test_comment_reply_create(self):
         (comment_object, user_profile, comment_text) = (create_task(), create_user_profile(), 'comment_test')
-        comment = self.create_comment(create_user_profile(), comment_object)
-        comment_reply = self.create_comment(user_profile, comment_object, comment_text, comment.pk)
+        comment = create_comment(None, None, comment_object, create_user_profile().user)
+        comment_reply = create_comment({'comment': comment_text}, comment, comment_object, user_profile.user)
         self.check_follow(user_profile, comment_reply)
         self.check_action(user_profile, 'добавил', comment_reply, comment, [comment_text])
 
