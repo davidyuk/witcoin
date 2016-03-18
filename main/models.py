@@ -21,6 +21,9 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name='пользователь')
     about = models.TextField('о себе', blank=True)
     group = models.ForeignKey(Group, verbose_name='группа', default=1)
+    notify_by_email = models.BooleanField('Уведомлять о новых событиях по email', default=True, blank=True)
+    notify_about_new_tasks = models.BooleanField('Уведомлять о новых заданиях', default=False, blank=True)
+    notify_about_new_services = models.BooleanField('Уведомлять о новых услугах', default=False, blank=True)
 
     def earned(self):
         r = self.transactions_to.filter(status=True).aggregate(Sum('amount'))['amount__sum']

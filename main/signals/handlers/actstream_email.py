@@ -1,9 +1,11 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.sites.models import Site
+from django.db.models import Q
 from actstream.models import Action, followers
 
 import django_comments
+from ...models import User, Task, Service
 
 from django.core.mail import get_connection, EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -24,8 +26,17 @@ def create_action_email(context, email, connection):
 
 
 def send_action_mail(action):
-    users = reduce(lambda res, x: (res | set(followers(x))) if x else res,
-                   [action.actor, action.action_object, action.target], set())
+    users = set(filter(lambda x: x.userprofile.notify_by_email,
+                       reduce(lambda res, x: (res | set(followers(x))) if x else res,
+                              [action.actor, action.action_object, action.target], set())))
+
+    q = None
+    if isinstance(action.action_object, Task):
+        q = Q(userprofile__notify_about_new_tasks=True)
+    if isinstance(action.action_object, Service):
+        q = Q(userprofile__notify_about_new_services=True)
+    if q:
+        users |= set(User.objects.filter(q & Q(userprofile__notify_by_email=True)))
 
     connection = get_connection(fail_silently=True)
     site = Site.objects.get(pk=1)

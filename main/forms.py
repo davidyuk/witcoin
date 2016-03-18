@@ -29,7 +29,7 @@ class UserCreationForm(auth_forms.UserCreationForm):
 class UserProfileCreationForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ["about", "group"]
+        fields = ['notify_by_email', 'notify_about_new_tasks', 'notify_about_new_services', 'about', 'group']
         widgets = {
             'about': forms.Textarea(attrs={'rows': 5}),
         }
