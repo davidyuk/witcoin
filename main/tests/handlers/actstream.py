@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from actstream.models import Action, Follow
 from threadedcomments.models import ThreadedComment
-from .common import *
+from ..common import *
 
 
 class ActivityStreamTestCase(TestCase):

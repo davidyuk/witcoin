@@ -1,3 +1,3 @@
 from .user import *
-from .activity_stream import *
+from .handlers import *
 from .service import *

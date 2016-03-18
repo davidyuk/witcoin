@@ -5,7 +5,7 @@ from actstream.actions import follow
 from actstream.models import Action
 
 from django.db.models.signals import post_save, post_init
-from ..models import Task, TaskUser, Transaction, Service
+from main.models import Task, TaskUser, Transaction, Service
 from django_comments.signals import comment_was_posted
 
 
