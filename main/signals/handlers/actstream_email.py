@@ -63,4 +63,9 @@ def send_action_mail(action):
 @receiver(post_save, sender=Action, weak=False)
 def handler(sender, instance, created, raw, **kwargs):
     if created and not raw:
-        send_action_mail(instance)
+        from django.conf import settings
+        if settings.DATABASES['default']['ENGINE'].split('.')[-1] == 'sqlite3':
+            send_action_mail(instance)
+        else:
+            from threading import Thread
+            Thread(target=send_action_mail, args=[instance]).start()
