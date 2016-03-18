@@ -2,7 +2,6 @@ from django.dispatch import receiver
 
 from actstream import action
 from actstream.actions import follow
-from actstream.models import Action
 
 from django.db.models.signals import post_save, post_init
 from main.models import Task, TaskUser, Transaction, Service
@@ -62,12 +61,3 @@ def handler(sender, comment, **kwargs):
         action.send(comment.user, target=t, description=d, verb='добавил', action_object=comment)
     else:
         action.send(comment, target=t, description=d, verb='добавлен')
-    if comment.parent and not comment.parent.user:
-        pass  # todo: send email to anonymous user
-
-
-@receiver(post_save, sender=Action, weak=False)
-def handler(sender, instance, created, raw, **kwargs):
-    if created and not raw:
-        pass
-        # todo: send mail to all followers, but not to actor
