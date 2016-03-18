@@ -1,8 +1,8 @@
-{# params: object, hide_verbose_name, hide_name, hide_link, capfirst #}
-{# example: verbose_name «<a href="...">name</a>» #}
+{# params: object, hide_verbose_name, hide_name, hide_link, capfirst, url_prefix #}
+{# example: verbose_name «<a href="url_prefix/path">name</a>» #}
 {% if object.userprofile %}
     {% with object=object.userprofile %}
-        {% if not hide_link %}<a href="{{ object.get_absolute_url }}">{{ object }}</a>{% else %}{{ object }}{% endif %}
+        {% if not hide_link %}<a href="{{ url_prefix }}{{ object.get_absolute_url }}">{{ object }}</a>{% else %}{{ object }}{% endif %}
     {% endwith %}
 {% else %}
     {% if not hide_verbose_name %}
@@ -11,6 +11,6 @@
         {% if hide_name and not hide_link %}</a>{% endif %}
     {% endif %}
     {% if not hide_name %}
-        «{% if not hide_link %}<a href="{{ object.get_absolute_url }}">{{ object }}</a>{% else %}{{ object }}{% endif %}»
+        «{% if not hide_link %}<a href="{{ url_prefix }}{{ object.get_absolute_url }}">{{ object }}</a>{% else %}{{ object }}{% endif %}»
     {% endif %}
 {% endif %}
