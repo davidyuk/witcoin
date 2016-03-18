@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% include 'main/common/action_title.html' with hide_link=True %}</title>
+</head>
+<body>
+    {% with url_prefix='http://'|add:site.domain %}
+        {% include 'main/common/action_title.html' %}
+        {% if action.description %}
+            <hr>
+            {{ action.description|linebreaksbr }}
+            <hr>
+        {% endif %}
+        <small>
+            {{ action.timestamp }}
+            {% if action.target and not hide_target and action.action_object %}
+                | в ответ на
+                {% include "main/common/object.html" with object=action.target %}
+            {% endif %}
+        </small><br>
+    {% endwith %}
+    {% if user %}
+        <a href="http://{{ site.domain }}{% url 'user' user.username %}">{{ user.userprofile }}</a>,
+        вы можете ограничить или отменить уведомления на email в
+        <a href="http://{{ site.domain }}{% url 'settings' %}">параметрах</a>.
+    {% endif %}
+</body>
+</html>

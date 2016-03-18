@@ -1,0 +1,7 @@
+{% if action.actor.userprofile %}{{ action.actor.userprofile }}{% else %}{{ action.actor }}{% endif %} {{ action.verb }} {% if action.action_object %}{{ action.action_object|verbose_name }}{% endif %}
+
+"{% if action.description %}{{ action.description|linebreaksbr|truncatechars:100 }}{% endif %}"
+
+{{ action.timestamp }}{% if action.target %} | в ответ на "{{ action.target }}"{% endif %}
+{% if user %}{{ user.userprofile }}, вы можете ограничить или отменить уведомления на email в параметрах:
+http://{{ site.domain }}{% url 'settings' %}{% endif %}
