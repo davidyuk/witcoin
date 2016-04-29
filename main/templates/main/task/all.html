@@ -7,7 +7,7 @@
         <div class="row">
             {% for task in object_list %}
                 <div class="col-sm-6 col-md-4">
-                    <div class="panel panel-{% if task.status %}default{% else %}success{% endif %}">
+                    <div class="panel panel-{% if task.status %}default{% else %}success{% endif %} task-panel">
                         <div class="panel-heading">
                             {% task_status task.status %}
                             <a href="{% url 'task' task.pk %}">{{ task.title }}</a>
