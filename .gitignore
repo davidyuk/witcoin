@@ -12,3 +12,11 @@ main/fixtures/initial.json
 [Rr]elease/
 *.pyproj
 *.sln
+/.vs
+/web.debug.config
+/web.config
+
+# Virtual environment
+env/
+venv/
+/ptvs_virtualenv_proxy.py
