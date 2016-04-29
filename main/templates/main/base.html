@@ -1,4 +1,4 @@
-{% load staticfiles bootstrap3 %}<!DOCTYPE html>
+﻿{% load staticfiles bootstrap3 %}<!DOCTYPE html>
 <html lang="ru">
     <head>
         <meta charset="utf-8">
@@ -32,7 +32,8 @@
             .comments .media-body:hover > .media-footer .hover { visibility: visible; }
             .comments .media .media { margin-left: 8%; }
             .comments .media .media .media .media .media .media { margin-left: 0; }
-            .task-panel > .panel-heading, .task-panel > .panel-body { word-break: break-all; }
+            .text-wrapped { word-wrap: break-word; }
+            .text-wrapped.forced { word-break: break-all; }
             .user-text {
                 white-space: pre-wrap;
                 word-break: break-all;
@@ -131,7 +132,7 @@
         </div>
     </nav>
 
-<main class="container">
+<main class="container text-wrapped">
     {% block header %}
         <h3>{% block header-text %}{% endblock %}</h3>
     {% endblock %}

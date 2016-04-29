@@ -32,7 +32,7 @@
                     <tbody>
                         {% for task in tasks %}
                             <tr>
-                                <td><a href="{{ task.get_absolute_url }}">{{ task.title }}</a></td>
+                                <td class="text-wrapped forced"><a href="{{ task.get_absolute_url }}">{{ task.title }}</a></td>
                                 <td>{% user task.author %}</td>
                                 <td><span class="badge pull-right" title="Предложений пользователей">
                                     {{ task.offers.count }}
