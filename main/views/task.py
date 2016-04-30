@@ -12,7 +12,7 @@ from django.contrib import messages
 
 
 class TaskCreateView(CreateView):
-    fields = ['title', 'description']
+    fields = ['title', 'description', 'tags']
     model = Task
     template_name = 'main/edit.html'
 
@@ -26,7 +26,7 @@ class TaskCreateView(CreateView):
 
 
 class TaskUpdateView(UpdateView):
-    fields = ['title', 'description', 'status']
+    fields = ['title', 'description', 'tags', 'status']
     model = Task
     template_name = 'main/edit.html'
 
@@ -80,3 +80,8 @@ class TaskListView(ListView):
     paginate_by = 10
     template_name = 'main/task/all.html'
     ordering = ['-status', '-timestamp_create']
+
+    def get_queryset(self):
+        q = super().get_queryset()
+        t = self.request.GET.get('tag')
+        return q.filter(tags__slug=t) if t is not None else q

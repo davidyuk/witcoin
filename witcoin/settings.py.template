@@ -49,6 +49,8 @@ INSTALLED_APPS = (
     'django_comments',
     'voting',
     'actstream',
+    'taggit',
+    'taggit_templatetags2',
 )
 
 MIDDLEWARE_CLASSES = (

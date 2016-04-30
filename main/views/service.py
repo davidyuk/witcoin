@@ -12,7 +12,7 @@ from django.contrib.auth.views import redirect_to_login
 
 
 class ServiceCreateView(CreateView):
-    fields = ['title', 'description', 'price', 'published']
+    fields = ['title', 'description', 'tags', 'price', 'published']
     model = Service
     template_name = 'main/edit.html'
 
@@ -26,7 +26,7 @@ class ServiceCreateView(CreateView):
 
 
 class ServiceUpdateView(UpdateView):
-    fields = ['title', 'description', 'price', 'published']
+    fields = ['title', 'description', 'tags', 'price', 'published']
     model = Service
     template_name = 'main/edit.html'
 
@@ -74,4 +74,6 @@ class ServiceListView(ListView):
         f = Q(published=True)
         if self.request.user.is_authenticated():
             f |= Q(author__user=self.request.user)
-        return Service.objects.filter(f)
+        q = super().get_queryset().filter(f)
+        t = self.request.GET.get('tag')
+        return q.filter(tags__slug=t) if t is not None else q

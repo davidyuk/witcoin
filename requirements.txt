@@ -5,3 +5,5 @@ django-contrib-comments
 django-threadedcomments
 git+https://github.com/DenisDavidyuk/django-voting.git#egg=django-voting
 git+https://github.com/DenisDavidyuk/django-activity-stream.git#egg=django-activity-stream
+django-taggit
+django-taggit-templatetags2

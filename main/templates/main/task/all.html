@@ -5,6 +5,7 @@
 {% block content %}
     {% if object_list %}
         <div class="row">
+            <div class="col-sm-10">
             {% for task in object_list %}
                 <div class="col-sm-6 col-md-4">
                     <div class="panel panel-{% if task.status %}default{% else %}success{% endif %}">
@@ -31,6 +32,10 @@
                     </div>
                 </div>
             {% endfor %}
+            </div>
+            <div class="col-sm-2">
+                {% include 'main/common/tags_cloud.html' with model='main.task' %}
+            </div>
         </div>
         {% bootstrap_pagination page_obj %}
     {% else %}

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.core.validators import MinValueValidator, RegexValidator
 from django.core.urlresolvers import reverse
+from taggit.managers import TaggableManager
 from decimal import Decimal
 
 
@@ -79,6 +80,8 @@ class Service(models.Model):
     published = models.BooleanField('опубликовано', default=True)
     price = models.DecimalField('стоимость', null=True, blank=True, max_digits=10, decimal_places=2)
 
+    tags = TaggableManager(blank=True)
+
     def get_absolute_url(self):
         return reverse('service', args=[self.id])
 
@@ -96,6 +99,8 @@ class Task(models.Model):
     description = models.TextField('описание', blank=True, max_length=5000)
     timestamp_create = models.DateTimeField('дата создания', auto_now_add=True)
     status = models.BooleanField('актуально', default=True)
+
+    tags = TaggableManager(blank=True)
 
     def get_absolute_url(self):
         return reverse('task', args=[self.id])
