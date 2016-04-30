@@ -6,3 +6,5 @@ admin.site.register(UserProfile)
 admin.site.register(Group)
 admin.site.register(Transaction)
 
+admin.site.register(Task)
+admin.site.register(Service)
