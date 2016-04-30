@@ -50,6 +50,8 @@ class UserProfile(models.Model):
         verbose_name = 'профиль пользователя'
         verbose_name_plural = 'профили пользователей'
 
+User.get_absolute_url = lambda self: reverse('user', args=[self.username])
+
 
 class Transaction(models.Model):
     user_from = models.ForeignKey(UserProfile, verbose_name='отправитель', related_name='transactions_from')
