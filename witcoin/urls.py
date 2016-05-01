@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^comments/', include('django_comments.urls')),
     url(r'', include('voting.urls')),
     url(r'^activity/', include('actstream.urls')),
+    url(r'^api/', include('api.urls')),
 ]

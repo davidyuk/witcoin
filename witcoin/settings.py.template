@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'actstream',
     'taggit',
     'taggit_templatetags2',
+    'api',
 )
 
 MIDDLEWARE_CLASSES = (

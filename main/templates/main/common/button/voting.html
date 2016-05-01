@@ -1,14 +1,9 @@
 {% load voting_tags %}
+{% load api_extras %}
 {% score_for_object object as score %}
 {% vote_by_user request.user on object as vote %}
-<div class="btn-group" role="group">
-    {% if not vote.vote %}
-        <a href="{% vote_url object up %}" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-up"></span></a>
-    {% endif %}
-    <button class="btn btn-xs btn-default disabled">{{ score.score }}</button>
-    {% if vote.vote == -1 %}
-        <a href="{% vote_url object up %}" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-up"></span></a>
-    {% else %}
-        <a href="{% vote_url object down %}" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-down"></span></a>
-    {% endif %}
+<div class="btn-group" role="group" data-vote data-action="{% api_action object %}" data-id="{% api_id object %}">
+    <a href="{% vote_url object up %}" class="btn btn-xs btn-default" data-up><span class="glyphicon glyphicon-arrow-up"></span></a>
+    <button class="btn btn-xs btn-default disabled" data-score>{{ score.score }}</button>
+    <a href="{% vote_url object down %}" class="btn btn-xs btn-default" data-down><span class="glyphicon glyphicon-arrow-down"></span></a>
 </div>

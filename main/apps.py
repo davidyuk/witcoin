@@ -12,7 +12,14 @@ class MainConfig(AppConfig):
         actstream_registry.register(self.get_model('TaskUser'))
         actstream_registry.register(self.get_model('Transaction'))
         actstream_registry.register(self.get_model('Service'))
+
         from django.contrib.auth.models import User
         actstream_registry.register(User)
+
         from threadedcomments.models import ThreadedComment
         actstream_registry.register(ThreadedComment)
+
+        from api.registry import registry as api_registry
+        api_registry.register(User)
+        api_registry.register(self.get_model('Service'))
+        api_registry.register(self.get_model('Task'))

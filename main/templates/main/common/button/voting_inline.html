@@ -1,12 +1,11 @@
 {% load voting_tags %}
+{% load api_extras %}
 {% score_for_object object as score %}
-{{ score.score }}
-<span class="hover">
-    {% vote_by_user request.user on object as vote %}
-    {% if vote.vote != 1 %}
-        <a href="{% vote_url object up %}" class="text-muted"><span class="glyphicon glyphicon-arrow-up"></span></a>
-    {% endif %}
-    {% if vote.vote != -1 %}
-        <a href="{% vote_url object down %}" class="text-muted"><span class="glyphicon glyphicon-arrow-down"></span></a>
-    {% endif %}
+<span data-vote data-action="{% api_action object %}" data-id="{% api_id object %}">
+    <span data-score>{{ score.score }}</span>
+    <span class="hover">
+        {% vote_by_user request.user on object as vote %}
+        <a href="{% vote_url object up %}" class="text-muted" data-up><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a href="{% vote_url object down %}" class="text-muted" data-down><span class="glyphicon glyphicon-arrow-down"></span></a>
+    </span>
 </span>

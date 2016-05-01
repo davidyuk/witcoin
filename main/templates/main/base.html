@@ -151,6 +151,7 @@
         </footer>
         <script type="text/javascript" src="{% static 'assets/js/jquery-2.1.4.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'api.js' %}"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 $('[data-toggle="tooltip"]').tooltip({ 'delay': 200 });
@@ -206,6 +207,40 @@
                 }
             });
         </script>
-        {% block extra_script %}{% endblock %}
+
+        <script type="text/javascript">
+            Witcoin.ExtendInit(function() {
+                $('[data-vote]').each(function(vote) {
+
+                    var action = $(this).data('action');
+                    var id = $(this).data('id');
+                    if (!action || !id) return;
+
+                    var score = $('[data-score]', this);
+                    function event(directon) {
+                        return function(e) {
+                            e.preventDefault();
+                            var a = (function() { return action; })();
+                            var i = (function() { return id; })();
+                            var s = (function() { return score; })();
+                            Witcoin.Vote(a, i, directon).then(function(err, data) {
+                                if (!err)
+                                    s.text(data.score.score);
+                                else
+                                    console.log(err, data);
+                            });
+                        }
+                    }
+
+                    $('[data-up]', this).on('click', event('up'));
+                    $('[data-down]', this).on('click', event('down'));
+                });
+            });
+        </script>
+
+        <script>
+            Witcoin.Init();
+        </script>
+    {% block extra_script %}{% endblock %}
     </body>
 </html>
