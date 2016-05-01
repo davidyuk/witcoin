@@ -3,7 +3,7 @@
 {% score_for_object object as score %}
 {% vote_by_user request.user on object as vote %}
 <div class="btn-group" role="group" data-vote data-action="{% api_action object %}" data-id="{% api_id object %}">
-    <a href="{% vote_url object up %}" class="btn btn-xs btn-default" data-up><span class="glyphicon glyphicon-arrow-up"></span></a>
+    <a href="{% vote_url object up %}" class="btn btn-xs btn-default {% if vote.vote == 1 %} disabled {% endif %}" data-up><span class="glyphicon glyphicon-arrow-up"></span></a>
     <button class="btn btn-xs btn-default disabled" data-score>{{ score.score }}</button>
-    <a href="{% vote_url object down %}" class="btn btn-xs btn-default" data-down><span class="glyphicon glyphicon-arrow-down"></span></a>
+    <a href="{% vote_url object down %}" class="btn btn-xs btn-default {% if vote.vote == -1 %} disabled {% endif %}" data-down><span class="glyphicon glyphicon-arrow-down"></span></a>
 </div>
