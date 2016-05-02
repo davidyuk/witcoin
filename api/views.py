@@ -1,22 +1,14 @@
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse, JsonResponse
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from voting.models import Vote
 from voting.views import xmlhttprequest_vote_on_object
+from .decorators import api_login_required
 from .registry import registry
+from .utils import *
 
 
 VOTE_DIRECTIONS = dict(up='up', down='down', clear='clear')
-
-
-def json_response(**kwargs) -> JsonResponse:
-    return JsonResponse(kwargs)
-
-
-def json_error_response(message: str) -> JsonResponse:
-    return json_response(success=False, error=message)
-
 
 def get_vote(request: HttpRequest, action: str, id: str) -> JsonResponse:
     if request.method != "GET":
@@ -36,7 +28,7 @@ def get_vote(request: HttpRequest, action: str, id: str) -> JsonResponse:
     return json_response(**score)
 
 
-@login_required
+@api_login_required
 def post_vote(request: HttpRequest, action: str, id: str, direction: str) -> HttpResponse:
     model_cls = registry.get(action)
     return xmlhttprequest_vote_on_object(request, model_cls, VOTE_DIRECTIONS[direction], int(id))

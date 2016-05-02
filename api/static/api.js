@@ -20,30 +20,47 @@ var monster={set:function(a,b,c,d,e){var f=new Date,g="",h=typeof b,i="",j="";if
  * DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
  */
 (function(app) {
-    var init = [];
+    var _init = [];
     var csrftoken = monster.get("csrftoken");
 
-    var WC = function() { this._API_URL = "/api/"; }
-    WC.prototype.ExtendInit = function(fun) { init.push(fun); } 
-    WC.prototype.Init = function () {
-        for (var i = 0; i < init.length; i++)
-            init[i].call(this);
+    var Wc = function() { this._API_URL = "/api/"; }
+    Wc.prototype.extendInit = function() {
+        for (var i = 0; i < arguments.length; i++)
+            if (typeof arguments[i] == "function")
+                _init.push(arguments[i]);
+    }
+    Wc.prototype.init = function () {
+        for (var i = 0; i < _init.length; i++)
+            _init[i].call(this);
     }
 
-    WC.prototype.Vote = function(action, id, direction) {
-        var url = this._API_URL + "vote/" + action + "/" + id + "/" + direction;
+    Wc.prototype.ajax = function(method, url, data) {
         var headers = {
             "Accept": "application/json",
             "X-CSRFToken": csrftoken
         };
+        return method(url, {}, headers);
+    }
+
+    Wc.prototype.getVote = function (action, id) {
+        var url = this._API_URL + "vote/" + action + "/" + id;
         var p = new promise.Promise();
-        promise.post(url, {}, headers).then(function(err, data, xhr) {
+        this.ajax(promise.get, url, {}).then(function(err, data, xhr) {
+            if (err) return p.done(err, null);
+            return p.done(false, JSON.parse(data));
+        });
+    }
+
+    Wc.prototype.vote = function(action, id, direction) {
+        var url = this._API_URL + "vote/" + action + "/" + id + "/" + direction;
+        var p = new promise.Promise();
+        this.ajax(promise.post, url, {}).then(function(err, data, xhr) {
             if (err) return p.done(err, null);
             var response = JSON.parse(data);
-            return p.done(err, response);
+            return p.done(!response["success"], response);
         });
         return p;
     }
 
-    app.Witcoin = new WC();
-})(this);
+    app.Witcoin = new Wc();
+})(window);

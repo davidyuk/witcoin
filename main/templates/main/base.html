@@ -209,7 +209,7 @@
         </script>
 
         <script type="text/javascript">
-            Witcoin.ExtendInit(function() {
+            Witcoin.extendInit(function() {
                 $('[data-vote]').each(function() {
 
                     var buttons = $('[data-up], [data-down]', this);
@@ -222,11 +222,11 @@
                         return function(e) {
                             e.preventDefault();
                             buttons.removeClass('disabled');
-                            var self = $(this);
-                            Witcoin.Vote(action, id, directon).then(function(err, data) {
+                            $(this).addClass('disabled');
+                            var a = (function() { return action; })(), i = (function() { return id; })();
+                            Witcoin.vote(a, i, directon).then(function(err, data) {
                                 if (!err) {
                                     score.text(data.score.score);
-                                    self.addClass('disabled');
                                 } else {
                                     console.log(err, data);
                                 }
@@ -241,7 +241,7 @@
         </script>
 
         <script>
-            Witcoin.Init();
+            Witcoin.init();
         </script>
     {% block extra_script %}{% endblock %}
     </body>
