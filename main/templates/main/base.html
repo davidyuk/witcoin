@@ -212,7 +212,7 @@
             Witcoin.extendInit(function() {
                 $('[data-vote]').each(function() {
 
-                    var buttons = $('[data-up], [data-down]', this);
+                    var buttons = $('[data-up], [data-down], [data-clear]', this);
                     var action = $(this).data('action');
                     var id = $(this).data('id');
                     if (!action || !id) return;
@@ -221,8 +221,8 @@
                     function event(directon) {
                         return function(e) {
                             e.preventDefault();
-                            buttons.removeClass('disabled');
-                            $(this).addClass('disabled');
+                            buttons.removeClass('disabled').removeAttr('disabled');
+                            $(this).addClass('disabled').attr('disabled', 'disabled');
                             var a = (function() { return action; })(), i = (function() { return id; })();
                             Witcoin.vote(a, i, directon).then(function(err, data) {
                                 if (!err) {
@@ -236,6 +236,7 @@
 
                     $('[data-up]', this).on('click', event('up'));
                     $('[data-down]', this).on('click', event('down'));
+                    $('[data-clear]', this).on('click', event('clear'));
                 });
             });
         </script>
