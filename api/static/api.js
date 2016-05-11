@@ -45,7 +45,7 @@ var monster={set:function(a,b,c,d,e){var f=new Date,g="",h=typeof b,i="",j="";if
     Wc.prototype.getVote = function (action, id) {
         var url = this._API_URL + "vote/" + action + "/" + id;
         var p = new promise.Promise();
-        this.ajax(promise.get, url, {}).then(function(err, data, xhr) {
+        this.ajax(promise.get, url, {}).then(function(err, data) {
             if (err) return p.done(err, null);
             return p.done(false, JSON.parse(data));
         });
@@ -54,7 +54,7 @@ var monster={set:function(a,b,c,d,e){var f=new Date,g="",h=typeof b,i="",j="";if
     Wc.prototype.vote = function(action, id, direction) {
         var url = this._API_URL + "vote/" + action + "/" + id + "/" + direction;
         var p = new promise.Promise();
-        this.ajax(promise.post, url, {}).then(function(err, data, xhr) {
+        this.ajax(promise.post, url, {}).then(function(err, data) {
             if (err) return p.done(err, null);
             var response = JSON.parse(data);
             return p.done(!response["success"], response);

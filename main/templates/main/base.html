@@ -211,7 +211,6 @@
         <script type="text/javascript">
             Witcoin.extendInit(function() {
                 $('[data-vote]').each(function() {
-
                     var buttons = $('[data-up], [data-down], [data-clear]', this);
                     var action = $(this).data('action');
                     var id = $(this).data('id');
@@ -219,18 +218,17 @@
 
                     var score = $('[data-score]', this);
                     function event(directon) {
-                        return function(e) {
-                            e.preventDefault();
+                        return function() {
                             buttons.removeClass('disabled').removeAttr('disabled');
                             $(this).addClass('disabled').attr('disabled', 'disabled');
-                            var a = (function() { return action; })(), i = (function() { return id; })();
-                            Witcoin.vote(a, i, directon).then(function(err, data) {
+                            Witcoin.vote(action, id, directon).then(function(err, data) {
                                 if (!err) {
                                     score.text(data.score.score);
                                 } else {
                                     console.log(err, data);
                                 }
                             });
+                            return false;
                         }
                     }
 
