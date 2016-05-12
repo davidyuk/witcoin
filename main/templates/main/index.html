@@ -11,7 +11,6 @@
             <table class="table">
                 <tbody>
                     <tr><td>Всего в системе</td><td>{% coins money_all %}</td></tr>
-                    <tr><td>Средняя стоимость операции</td><td>{% coins money_avg %}</td></tr>
                     <tr><td>Зарегистрированно пользователей</td><td>
                         {% blocktrans count users=users_count %}{{ users }} user{% plural %}{{ users }} users{% endblocktrans %}
                     </td></tr>
@@ -71,14 +70,6 @@
     </div>
     <div class="col-sm-4">
         <div class="panel panel-default">
-            <div class="panel-heading">Лидеры по обороту</div>
-            <ul class="list-group">
-                {% for user in users_top_spend %}
-                    <li class="list-group-item">{% user user %}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="panel panel-default hidden-xs">
             <div class="panel-heading">Лидеры по балансу</div>
             <ul class="list-group">
                 {% for user in users_top_balance %}
