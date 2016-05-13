@@ -143,9 +143,13 @@
         <footer class="container">
             <hr>
             <div class="row">
-                <div class="col-xs-6"><p>2016 {{ site_name }}</p></div>
                 <div class="col-xs-6">
-                    <p class="text-right"><a href="https://github.com/Davidyuk/witcoin/issues">Трекер ошибок</a>, <a href="http://vk.com/witcoin">VK</a></p>
+                    2016 {{ site_name }}<br>
+                    <a href="https://github.com/Davidyuk/witcoin/issues">Трекер ошибок</a>,
+                    <a href="http://vk.com/witcoin">VK</a>
+                </div>
+                <div class="col-xs-6 text-right">
+                    {% include 'main/_informer.html' %}
                 </div>
             </div>
         </footer>
