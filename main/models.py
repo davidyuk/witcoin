@@ -69,8 +69,8 @@ class Transaction(models.Model):
         return '%s → %s, %s кл' % (self.user_from, self.user_to, self.amount)
 
     class Meta:
-        verbose_name = 'транзакция'
-        verbose_name_plural = 'транзакции'
+        verbose_name = 'операция'
+        verbose_name_plural = 'операции'
 
 
 class Service(models.Model):
