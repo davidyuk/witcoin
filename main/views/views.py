@@ -6,7 +6,7 @@ from voting.models import Vote
 def index(request):
     users = UserProfile.objects.all()
 
-    tasks_last = Task.objects.filter(status=True).order_by('-timestamp_create')[:10]
+    tasks_last = Task.objects.filter(status=True, published=True).order_by('-timestamp_create')[:10]
     votes = Vote.objects.get_scores_in_bulk(tasks_last)
     tasks_last = list(filter(lambda x: x.id not in votes or votes[x.id]['score'] > 0, tasks_last))
 

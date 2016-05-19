@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from ..models import Task, TaskUser
 from django.core.urlresolvers import reverse, reverse_lazy
 from ..forms import TaskUserForm
@@ -9,10 +9,11 @@ from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import redirect_to_login
 from django.contrib import messages
+from django.db.models import Q
 
 
 class TaskCreateView(CreateView):
-    fields = ['title', 'description', 'tags']
+    fields = ['title', 'description', 'tags', 'published']
     model = Task
     template_name = 'main/edit.html'
 
@@ -26,7 +27,7 @@ class TaskCreateView(CreateView):
 
 
 class TaskUpdateView(UpdateView):
-    fields = ['title', 'description', 'tags', 'status']
+    fields = ['title', 'description', 'tags', 'status', 'published']
     model = Task
     template_name = 'main/edit.html'
 
@@ -55,6 +56,8 @@ class TaskDeleteView(DeleteView):
 
 def task(request, pk):
     _task = get_object_or_404(Task, pk=pk)
+    if not _task.published and (not request.user.is_authenticated() or _task.author.user != request.user):
+        raise Http404()
     form = None
     if _task.status and hasattr(request.user, 'userprofile'):
         offer = TaskUser.objects.filter(user=request.user.userprofile, task=_task).all()
@@ -82,6 +85,9 @@ class TaskListView(ListView):
     ordering = ['-status', '-timestamp_create']
 
     def get_queryset(self):
-        q = super().get_queryset()
+        f = Q(published=True)
+        if self.request.user.is_authenticated():
+            f |= Q(author__user=self.request.user)
+        q = super().get_queryset().filter(f)
         t = self.request.GET.get('tag')
         return q.filter(tags__slug=t) if t is not None else q

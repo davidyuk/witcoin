@@ -9,7 +9,10 @@
                 <tr><td>{% user task.author %}</td><td>{% task_status task.status show_caption=True %}</td></tr>
                 <tr><td>Дата создания</td><td>{{ task.timestamp_create }}</td></tr>
                 {% ifequal task.author user.userprofile %}
-                    <tr><td></td><td>
+                    <tr><td>
+                        <span class="label label-{% if task.published %}success{% else %}warning{% endif %}">
+                            {% if task.published %}О{% else %}Не о{% endif %}публиковано</span>
+                    </td><td>
                         <a class="btn btn-primary btn-xs" href="{% url 'task_edit' task.pk %}">
                             <span class="glyphicon glyphicon-edit"></span><span class="hidden-sm"> Редактировать</span></a>
                         <a class="btn btn-danger btn-xs" href="{% url 'task_delete' task.pk %}">

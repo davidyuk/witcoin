@@ -101,6 +101,7 @@ class Task(models.Model):
     description = models.TextField('описание', blank=True, max_length=5000)
     timestamp_create = models.DateTimeField('дата создания', auto_now_add=True)
     status = models.BooleanField('актуально', default=True)
+    published = models.BooleanField('опубликовано', default=True)
 
     tags = TaggableManager(blank=True)
 
