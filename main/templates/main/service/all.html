@@ -28,6 +28,7 @@
             {% endfor %}
             </div>
             <div class="col-sm-2">
+                <a class="btn btn-success btn-block" href="{% url 'service_create' %}">Добавить услугу</a>
                 {% include 'main/common/tags_cloud.html' with model='main.service' %}
             </div>
         </div>
