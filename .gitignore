@@ -4,6 +4,7 @@ db.sqlite3
 
 main/migrations/*
 witcoin/settings.py
+witcoin/server.py
 main/fixtures/initial.json
 
 [Oo]bj/
