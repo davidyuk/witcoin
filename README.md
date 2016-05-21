@@ -7,7 +7,6 @@ pip install -r requirements.txt
 ```
 In files
 - `main\fixtures\initial.json.template`
-- `witcoin\settings.py.template`
 - `witcoin\server.py.template`
 
 replace angle brackets with current values, like `<site_domain>` &rarr;
