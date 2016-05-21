@@ -21,7 +21,7 @@
                 {% endifequal %}
                 <tr><td></td><td>{% include 'main/common/toolbar.html' with object=task %}</td></tr>
             </table>
-            {{ task.description }}
+            <div class="user-text">{{ task.description }}</div>
             {% include 'main/common/comments.html' with object=task %}
         </div>
         <div class="col-sm-7 col-md-6">
