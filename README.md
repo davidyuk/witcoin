@@ -3,7 +3,7 @@
 First of all, you should install `git`, `python` (3.5 or newer), and `node.js`.
 Then,
 ```
-git clone https://github.com/DenisDavidyuk/witcoin.git
+git clone https://github.com/davidyuk/witcoin.git
 cd witcoin
 pip install -r requirements.txt
 ```
@@ -12,7 +12,7 @@ In files
 - `witcoin\server.py.template`
 
 replace angle brackets with current values, like `<site_domain>` &rarr;
-`localhost:8000` or [`witcoin.pythonanywhere.com`](http://witcoin.pythonanywhere.com/),
+`localhost:8000` or [`witcoin.ru`](http://witcoin.ru/),
 remove `.template` from file names.
 ```
 npm install bower -g
