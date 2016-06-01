@@ -1,11 +1,19 @@
 {% load taggit_templatetags2_tags %}
-<h3>Метки</h3>
-{% if request.GET.tag %}
-    <a class="label label-success" href="?">Отобразить всё</a>
-{% endif %}
-{% get_taglist as tags for model %}
-{% for tag in tags %}
-    <a class="label label-{% if request.GET.tag == tag.slug %}primary{% else %}info{% endif %}" href="?tag={{ tag.slug }}">{{ tag }}</a>
-{% empty %}
-    <h4>Метки не найдены</h4>
-{% endfor %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Метки
+        {% if request.GET.tag %}
+            <a title="Отобразить всё" href="?" class="btn btn-success btn-xs pull-right">
+                <span class="glyphicon glyphicon-remove"></span>
+            </a>
+        {% endif %}
+    </div>
+    <div class="panel-body">
+        {% get_taglist as tags for model %}
+        {% for tag in tags %}
+            <a class="label label-{% if request.GET.tag == tag.slug %}primary{% else %}info{% endif %}" href="?tag={{ tag.slug }}">{{ tag }}</a>
+        {% empty %}
+            <h4>Метки не найдены</h4>
+        {% endfor %}
+    </div>
+</div>
