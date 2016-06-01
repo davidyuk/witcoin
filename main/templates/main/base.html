@@ -11,7 +11,6 @@
 
         <title>{% block title %}Привет!{% endblock %} — {{ site_name }}</title>
 
-        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
         <style>
             .glyphicon-status { font-size: 22px; vertical-align: middle; }
             textarea { resize: vertical; }
@@ -80,8 +79,6 @@
                 </div>
             </div>
         </footer>
-        <script type="text/javascript" src="{% static 'assets/js/jquery-2.1.4.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'assets/js/bootstrap.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'api.js' %}"></script>
         <script type="text/javascript">
             $(document).ready(function() {
