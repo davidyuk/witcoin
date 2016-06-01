@@ -6,7 +6,22 @@ $font-size-h1: floor(($font-size-base * 2));    /* 2.6 */
 $font-size-h2: floor(($font-size-base * 1.75)); /* 2.15 */
 $font-size-h3: floor(($font-size-base * 1.5));  /* 1.7 */
 
+$border-radius-base:        2px; /* 4px */
+$border-radius-large:       3px; /* 6px */
+$border-radius-small:       2px; /* 3px */
+
+$table-cell-padding:            5px; /* 8px */
+$table-condensed-cell-padding:  3px; /* 5px */
+$alert-padding:                 8px; /* 15px */
+$panel-body-padding:            8px; /* 15px */
+$panel-heading-padding:         5px 8px; /* 10px 15px */
+$panel-footer-padding:          5px 8px;
+
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
+
+.list-group-item {
+  padding: 6px 9px; /* 10px 15px; */
+}
 
 .glyphicon-status {
   font-size: 22px;
