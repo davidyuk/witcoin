@@ -39,7 +39,14 @@ INSTALLED_APPS = [
     'actstream',
     'taggit',
     'taggit_templatetags2',
+    'djangobower',
+    'compressor',
     'api',
+]
+
+BOWER_INSTALLED_APPS = [
+    'bootstrap-sass',
+    'jquery',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -97,8 +104,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-#STATIC_ROOT = '/path/to/static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components')
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'djangobower.finders.BowerFinder',
+    'compressor.finders.CompressorFinder',
+]
+
+COMPRESS_PRECOMPILERS = [
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+]
 
 LOGIN_URL = '/login'
 LOGOUT_URL = '/logout'

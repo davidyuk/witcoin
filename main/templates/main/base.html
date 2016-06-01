@@ -1,4 +1,4 @@
-﻿{% load staticfiles bootstrap3 %}<!DOCTYPE html>
+﻿{% load compress staticfiles bootstrap3 %}<!DOCTYPE html>
 <html lang="ru">
     <head>
         <meta charset="utf-8">
@@ -11,6 +11,9 @@
 
         <title>{% block title %}Привет!{% endblock %} — {{ site_name }}</title>
 
+        {% compress css %}
+            <link rel="stylesheet" type="text/x-scss" href="{% static 'sass/app.scss' %}">
+        {% endcompress %}
         <style>
             .glyphicon-status { font-size: 22px; vertical-align: middle; }
             textarea { resize: vertical; }
@@ -79,6 +82,10 @@
                 </div>
             </div>
         </footer>
+        {% compress js %}
+            <script type="text/javascript" src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+            <script type="text/javascript" src="{% static 'bootstrap-sass/assets/javascripts/bootstrap.min.js' %}"></script>
+        {% endcompress %}
         <script type="text/javascript" src="{% static 'api.js' %}"></script>
         <script type="text/javascript">
             $(document).ready(function() {

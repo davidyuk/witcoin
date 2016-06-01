@@ -1,5 +1,7 @@
 # witcoin
 ## Deploying
+First of all, you should install `git`, `python` (3.5 or newer), and `node.js`.
+Then,
 ```
 git clone https://github.com/DenisDavidyuk/witcoin.git
 cd witcoin
@@ -13,6 +15,8 @@ replace angle brackets with current values, like `<site_domain>` &rarr;
 `localhost:8000` or [`witcoin.pythonanywhere.com`](http://witcoin.pythonanywhere.com/),
 remove `.template` from file names.
 ```
+npm install bower -g
+python manage.py bower install  # or python manage.py bower_install -- --allow-root
 python manage.py makemigrations main
 python manage.py migrate
 python manage.py loaddata initial.json

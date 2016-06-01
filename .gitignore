@@ -1,7 +1,8 @@
 .idea/*
 *.pyc
 db.sqlite3
-
+components
+static/CACHE
 main/migrations/*
 witcoin/server.py
 main/fixtures/initial.json
