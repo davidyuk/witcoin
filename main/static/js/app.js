@@ -52,3 +52,32 @@ $(document).ready(function() {
         });
     }
 });
+
+Witcoin.extendInit(function() {
+    $('[data-vote]').each(function() {
+        var buttons = $('[data-up], [data-down], [data-clear]', this);
+        var action = $(this).data('action');
+        var id = $(this).data('id');
+        if (!action || !id) return;
+        var score = $('[data-score]', this);
+        function event(directon) {
+            return function() {
+                buttons.removeClass('disabled').removeAttr('disabled');
+                $(this).addClass('disabled').attr('disabled', 'disabled');
+                Witcoin.vote(action, id, directon).then(function(err, data) {
+                    if (!err) {
+                        score.text(data.score.score);
+                    } else {
+                        console.log(err, data);
+                    }
+                });
+                return false;
+            }
+        }
+        $('[data-up]', this).on('click', event('up'));
+        $('[data-down]', this).on('click', event('down'));
+        $('[data-clear]', this).on('click', event('clear'));
+    });
+});
+
+Witcoin.init();
