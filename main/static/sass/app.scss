@@ -1,2 +1,47 @@
 $icon-font-path: "../bootstrap-sass/assets/fonts/bootstrap/";
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
+
+.glyphicon-status {
+  font-size: 22px;
+  vertical-align: middle;
+}
+
+textarea { resize: vertical; }
+
+.link-dotted {
+  &:hover {
+    text-decoration: none;
+    border-bottom-style: solid;
+  }
+  border-bottom: 1px dashed #23527C;
+}
+
+.comments {
+  form {
+    background-color: #F5F5F5;
+    padding: 5px;
+    display: none;
+    .form-group { margin-bottom: 5px; }
+    #id_honeypot { display: none; }
+  }
+  .media {
+    margin-top: 5px;
+    .hover { visibility: hidden; }
+    .media {
+      margin-left: 8%;
+      .media .media .media .media { margin-left: 0; }
+    }
+
+  }
+  .media-body:hover > .media-footer .hover { visibility: visible; }
+}
+
+.text-wrapped {
+  word-wrap: break-word;
+  &.forced { word-break: break-all; }
+}
+
+.user-text {
+  white-space: pre-wrap;
+  word-break: break-all;
+}

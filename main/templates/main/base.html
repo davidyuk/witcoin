@@ -14,33 +14,6 @@
         {% compress css %}
             <link rel="stylesheet" type="text/x-scss" href="{% static 'sass/app.scss' %}">
         {% endcompress %}
-        <style>
-            .glyphicon-status { font-size: 22px; vertical-align: middle; }
-            textarea { resize: vertical; }
-            .link-dotted { border-bottom: 1px dashed #23527C; }
-            .link-dotted:hover {
-                text-decoration: none;
-                border-bottom-style: solid;
-            }
-            .comments form {
-                background-color: #F5F5F5;
-                padding: 5px;
-                display: none;
-            }
-            .comments form .form-group { margin-bottom: 5px; }
-            .comments form #id_honeypot { display: none; }
-            .comments .media { margin-top: 5px; }
-            .comments .media .hover { visibility: hidden; }
-            .comments .media-body:hover > .media-footer .hover { visibility: visible; }
-            .comments .media .media { margin-left: 8%; }
-            .comments .media .media .media .media .media .media { margin-left: 0; }
-            .text-wrapped { word-wrap: break-word; }
-            .text-wrapped.forced { word-break: break-all; }
-            .user-text {
-                white-space: pre-wrap;
-                word-break: break-all;
-            }
-        </style>
         {% block extra_head %}{% endblock %}
     </head>
     <body>
