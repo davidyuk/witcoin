@@ -1,4 +1,11 @@
 $icon-font-path: "../bootstrap-sass/assets/fonts/bootstrap/";
+
+@import "bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss";
+
+$font-size-h1: floor(($font-size-base * 2));    /* 2.6 */
+$font-size-h2: floor(($font-size-base * 1.75)); /* 2.15 */
+$font-size-h3: floor(($font-size-base * 1.5));  /* 1.7 */
+
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
 
 .glyphicon-status {
