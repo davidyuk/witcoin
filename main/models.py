@@ -138,6 +138,14 @@ class FefuMail(models.Model):
     user = models.OneToOneField(UserProfile)
     email = models.EmailField()
     status = models.BooleanField('статус', default=False)
-    token = models.CharField('ключ для регистрации', validators=[RegexValidator(regex='^[0-9A-z]{32}$',
-                                                                                message='Неправильный ключ')],
-                             max_length=32, default='0000000000000000000000000000000000000000')
+    token = models.CharField('ключ для регистрации',
+                             validators=[RegexValidator(regex='^[0-9A-z]{32}$', message='Неправильный ключ')],
+                             max_length=32)
+
+    def __str__(self):
+        s = 'подтверждён' if self.status else 'не подтверждён'
+        return '%s - %s (%s)' % (self.user, self.email, s)
+
+    class Meta:
+        verbose_name = 'адрес электронной почты ДВФУ'
+        verbose_name_plural = 'адреса электронной почты ДВФУ'
