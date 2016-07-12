@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'taggit_templatetags2',
     'djangobower',
     'compressor',
+    'captcha',
     'api',
 ]
 
@@ -124,4 +125,8 @@ LOGIN_URL = '/login'
 LOGOUT_URL = '/logout'
 LOGIN_REDIRECT_URL = '/home'
 
+CAPTCHA_FONT_SIZE = 32
+
 from witcoin.server import *
+
+CAPTCHA_TEST_MODE = DEBUG

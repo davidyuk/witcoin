@@ -26,6 +26,8 @@ class RegisterPageTestCase(TestCase):
         'password2': 'Ab26e9rv',
         'about': 'test_about',
         'group': 1,
+        'captcha_0': 'PASSED',
+        'captcha_1': 'PASSED',
     }
     data_user_valid = {
         'username': 'test_username',

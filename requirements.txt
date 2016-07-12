@@ -10,3 +10,4 @@ django-taggit-templatetags2
 django-compressor
 django-bower
 django-libsass
+django-simple-captcha

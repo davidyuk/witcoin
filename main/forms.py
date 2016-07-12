@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import models as auth_models, forms as auth_forms
 from .models import UserProfile, Transaction, FefuMail, TaskUser
 from django.utils import timezone
+from captcha.fields import CaptchaField
 
 
 class UserCreationForm(auth_forms.UserCreationForm):
@@ -27,6 +28,8 @@ class UserCreationForm(auth_forms.UserCreationForm):
 
 
 class UserProfileCreationForm(forms.ModelForm):
+    captcha = CaptchaField(label='Проверочный код')
+
     class Meta:
         model = UserProfile
         fields = ['notify_by_email', 'notify_about_new_tasks', 'notify_about_new_services', 'about', 'group']
