@@ -1,1 +1,0 @@
-{% include 'main/common/action_title.html' with hide_link=True %}
