@@ -1,12 +1,46 @@
 <head>
-  <title>hello</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <title>Привет! - Кленинка</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
-  {{> info}}
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Кленинка</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <!-- include 'main/_menu.html' -->
+        <!-- include 'main/_menu_user.html' -->
+      </div>
+    </div>
+  </nav>
+  <main class="container text-wrapped">
+    <h1>Welcome to Meteor!</h1>
+    {{> hello}}
+    {{> info}}
+  </main>
+  <footer class="container">
+    <hr>
+    <div class="row">
+      <div class="col-xs-6">
+        2016 Кленинка<br>
+        <a href="https://github.com/Davidyuk/witcoin/issues">Трекер ошибок</a>,
+        <a href="http://vk.com/witcoin">VK</a>
+      </div>
+      <div class="col-xs-6 text-right">
+        <!-- informer.html -->
+      </div>
+    </div>
+  </footer>
 </body>
 
 <template name="hello">
