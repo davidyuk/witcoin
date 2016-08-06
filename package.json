@@ -2,9 +2,13 @@
   "name": "witcoin",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run",
+    "postinstall": "node private/postinstall.js"
   },
   "dependencies": {
-    "meteor-node-stubs": "~0.2.0"
+    "bootstrap-sass": "^3.3.7",
+    "fs": "0.0.2",
+    "meteor-node-stubs": "~0.2.0",
+    "ncp": "^2.0.0"
   }
 }
