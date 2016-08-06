@@ -1,5 +1,5 @@
 {
-  "name": "hello",
+  "name": "witcoin",
   "private": true,
   "scripts": {
     "start": "meteor run"
