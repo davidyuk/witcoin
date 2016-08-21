@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
+import UserMenu from '../components/UserMenu';
+
 export default class App extends Component {
   render() {
     return (
@@ -18,6 +20,8 @@ export default class App extends Component {
             <div id="navbar" className="collapse navbar-collapse">
               <ul className="nav navbar-nav">
               </ul>
+
+              <UserMenu user={this.props.user}/>
             </div>
           </div>
         </nav>
