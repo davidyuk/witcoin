@@ -7,27 +7,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/">Кленинка</a>
-      </div>
-      <div id="navbar" class="collapse navbar-collapse">
-        <!-- include 'main/_menu.html' -->
-        <!-- include 'main/_menu_user.html' -->
-      </div>
-    </div>
-  </nav>
-  <main class="container text-wrapped">
-    <h1>Welcome to Meteor!</h1>
-    {{> hello}}
-    {{> info}}
-  </main>
+  <div id="app"></div>
   <footer class="container">
     <hr>
     <div class="row">
@@ -42,18 +22,3 @@
     </div>
   </footer>
 </body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>
-
-<template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
-    <li><a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a></li>
-    <li><a href="http://guide.meteor.com" target="_blank">Follow the Guide</a></li>
-    <li><a href="https://docs.meteor.com" target="_blank">Read the Docs</a></li>
-    <li><a href="https://forums.meteor.com" target="_blank">Discussions</a></li>
-  </ul>
-</template>

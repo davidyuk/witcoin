@@ -52,6 +52,7 @@ observe-sequence@1.0.12
 ordered-dict@1.0.8
 promise@0.8.3
 random@1.0.10
+react-meteor-data@0.2.9
 reactive-var@1.0.10
 reload@1.1.10
 retry@1.0.8
@@ -62,6 +63,7 @@ standard-minifier-css@1.1.8
 standard-minifier-js@1.1.8
 templating@1.1.14
 templating-tools@1.0.4
+tmeasday:check-npm-versions@0.2.0
 tracker@1.1.0
 ui@1.0.11
 underscore@1.0.9
