@@ -25,7 +25,7 @@ export default class App extends Component {
             </div>
           </div>
         </nav>
-        <main className="container text-wrapped">
+        <main className="container">
           {this.props.children}
         </main>
       </div>

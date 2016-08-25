@@ -36,11 +36,6 @@ textarea { resize: vertical; }
   border-bottom: 1px dashed #23527C;
 }
 
-.text-wrapped {
-  word-wrap: break-word;
-  &.forced { word-break: break-all; }
-}
-
 .user-text {
   white-space: pre-wrap;
   word-break: break-all;
