@@ -4,7 +4,8 @@ import { Link } from 'react-router';
 import UserName from './UserName';
 
 export default class UserMenu extends React.Component {
-  logOut() {
+  logOut(e) {
+    e.preventDefault();
     AccountsTemplates.logout();
     this.context.router.push('/');
   }
