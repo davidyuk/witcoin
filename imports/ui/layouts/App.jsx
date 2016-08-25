@@ -28,6 +28,18 @@ export default class App extends Component {
         <main className="container">
           {this.props.children}
         </main>
+        <footer className="container">
+          <div className="row">
+            <div className="col-xs-6">
+              2016 Кленинка<br/>
+              <a href="https://github.com/Davidyuk/witcoin/issues">Трекер ошибок</a>,
+              <a href="http://vk.com/witcoin">VK</a>
+            </div>
+            <div className="col-xs-6 text-right">
+              {/*informer.html*/}
+            </div>
+          </div>
+        </footer>
       </div>
     );
   }

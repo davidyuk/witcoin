@@ -40,3 +40,23 @@ textarea { resize: vertical; }
   white-space: pre-wrap;
   word-break: break-all;
 }
+
+#app {
+  > div {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    > * {
+      flex-shrink: 0;
+      @media only screen and (max-width: $screen-sm-min) {
+        width: 100%;
+      }
+    }
+    > main {
+      flex-grow: 1;
+    }
+    > footer {
+      padding: 15px;
+    }
+  }
+}
