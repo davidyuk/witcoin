@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
@@ -9,6 +10,15 @@ import ChatPageContainer from '../../ui/containers/ChatPageContainer';
 import AccountsPage from '../../ui/pages/AccountsPage';
 import NotFoundPage from '../../ui/pages/NotFoundPage';
 
+function requireAuth(nextState, replace) {
+  if (!Meteor.userId()) {
+    replace({
+      pathname: '/sign-in',
+      state: { nextPathname: nextState.location.pathname },
+    })
+  }
+}
+
 export const renderRoutes = () => (
   <Router history={browserHistory}>
     <Route path="/" component={AppContainer}>
@@ -17,7 +27,7 @@ export const renderRoutes = () => (
       <Route path="sign-up" component={AccountsPage} />
       <Route path="u/:userId" component={UserPageContainer} />
 
-      <Route path="im">
+      <Route path="im" onEnter={requireAuth}>
         <IndexRoute component={ChatPageContainer} />
         <Route path=":chatId" component={ChatPageContainer} />
       </Route>

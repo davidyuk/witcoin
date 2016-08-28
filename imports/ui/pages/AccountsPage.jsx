@@ -24,6 +24,9 @@ export default class AccountsPage extends React.Component {
     });
     AccountsTemplates.state.form.set('state', state);
 
+    AccountsTemplates.state.form.set('error', location.state && location.state.nextPathname ?
+      [AccountsTemplates.texts.errors.mustBeLoggedIn] : null);
+
     return (
       <div className="row">
         <div className="col-md-6 col-md-offset-3">
