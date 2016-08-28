@@ -32,8 +32,9 @@ export default class UserMenu extends React.Component {
   }
 
   renderLoggedOut() {
-    return <ul className="nav navbar-nav navbar-right">
-      <Link to="/accounts" className="btn btn-success navbar-btn">Войти</Link>
+    return <ul className="nav navbar-nav navbar-right">&nbsp;
+      <Link to="/sign-in" className="btn btn-default navbar-btn">Войти</Link>&nbsp;
+      <Link to="/sign-up" className="btn btn-success navbar-btn">Регистрация</Link>
     </ul>;
   }
 
