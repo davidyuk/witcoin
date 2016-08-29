@@ -1,23 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import { Chats, Messages } from '../../api/chats';
 import LinkToUser from './LinkToUser';
 
 export default class Chat extends React.Component {
   sendMessage(event) {
-    const doc = {
-      content: event.target.content.value,
-      author: Meteor.userId(),
-      viewed: false,
-      chatId: this.props.chat._id,
-      createdAt: new Date(),
-    };
-
     event.preventDefault();
     if (!event.target.content.value) return;
-    Messages.insert(doc);
-
-    Chats.update(this.props.chat._id, { $set: { lastMessage: doc } });
+    Meteor.call('message.create', this.props.chat._id, event.target.content.value);
     event.target.content.value = '';
   }
 

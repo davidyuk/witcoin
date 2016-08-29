@@ -27,7 +27,7 @@ export default class ChatPage extends React.Component {
       <div style={{height: 100 + '%', display: 'flex', paddingBottom: 20 + 'px'}}>
         <div className={'list-group ' + listClass} style={{marginBottom: 0, flex: '1 0 250px', display: 'flex', flexDirection: 'column'}}>
           <span className="list-group-item active" style={{flexShrink: 0}}>
-            <string>{this.props.chats.length} диалогов</string>
+            <string>{this.props.chatsCount} диалогов</string>
           </span>
           <div style={{overflow: 'auto', flexGrow: 1}}>
             {this.props.chats.map(chat => (
@@ -54,5 +54,6 @@ export default class ChatPage extends React.Component {
 
 ChatPage.propTypes = {
   chats: React.PropTypes.array,
+  chatsCount: React.PropTypes.number,
   chatId: React.PropTypes.string,
 };
