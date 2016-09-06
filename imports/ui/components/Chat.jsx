@@ -1,13 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import LinkToUser from './LinkToUser';
+import MessageInput from './MessageInput';
 
 export default class Chat extends React.Component {
-  sendMessage(event) {
-    event.preventDefault();
-    if (!event.target.content.value) return;
-    Meteor.call('message.create', this.props.chat._id, event.target.content.value);
-    event.target.content.value = '';
+  sendMessage(message) {
+    Meteor.call('message.create', this.props.chat._id, message);
   }
 
   render() {
@@ -44,12 +42,7 @@ export default class Chat extends React.Component {
             )) : <i>Сообщений нет</i>}
           </div>
         </div>
-        <form onSubmit={this.sendMessage.bind(this)} style={{paddingTop: 5 + 'px', flexShrink: 0}}>
-          <div className="form-group" style={{marginBottom: 5 + 'px'}}>
-            <textarea className="form-control input-sm" name="content" placeholder="Текст сообщения"/>
-          </div>
-          <input type="submit" className="btn btn-primary btn-sm" value="Отправить"/>
-        </form>
+        <MessageInput handler={this.sendMessage.bind(this)} placeholder="Текст сообщения" />
       </div>
     );
   }
