@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
 import NotFoundPage from '../pages/NotFoundPage.jsx';
@@ -16,9 +17,20 @@ export default class UserPage extends React.Component {
       return <NotFoundPage/>;
 
     return (
-      <div>
-        <UserName user={this.props.user}/><br/>
-        <button onClick={this.goToChat.bind(this)}>Написать сообщение</button>
+      <div className="row">
+        <div className="col-md-4">
+          <h3>
+            <UserName user={this.props.user}/>
+          </h3>
+          {this.props.user._id != Meteor.userId() ? (
+            <button className="btn btn-default btn-sm" onClick={this.goToChat.bind(this)}>
+              <span className="glyphicon glyphicon-send"/>&nbsp;
+              Написать сообщение
+            </button>
+          ) : null}
+        </div>
+        <div className="col-md-8">
+        </div>
       </div>
     );
   }
