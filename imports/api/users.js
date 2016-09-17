@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
+import faker from 'faker';
 
 Meteor.users.publicFields = {
   createdAt: 1,
@@ -26,3 +27,16 @@ if (Meteor.isServer) {
     });
   });
 }
+
+Factory.define('user', Meteor.users, {
+  emails: () => [{
+    address: faker.internet.email(),
+    verified: false,
+  }],
+  createdAt: () => faker.date.past(),
+  profile: () => { return {
+    name: faker.name.findName()
+  }}
+}).after(user => {
+  Accounts.setPassword(user._id, 'password');
+});

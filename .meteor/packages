@@ -31,3 +31,5 @@ accounts-facebook@1.0.10
 accounts-google@1.0.10
 fortawesome:fontawesome
 shell-server
+xolvio:cleaner
+dburles:factory
