@@ -123,6 +123,36 @@ export const methods = {
       content,
     });
   },
+
+  'message.edit' (messageId, content) {
+    check(messageId, String);
+    check(content, String);
+    check(content, Match.Where(a => a.length));
+
+    if (!this.userId)
+      throw new Meteor.Error('not-authorized');
+    const message = Messages.findOne(messageId);
+    if (!message)
+      throw new Meteor.Error('message-not-found');
+    if (message.userId != this.userId)
+      throw new Meteor.Error('forbidden');
+
+    Messages.update(messageId, {$set: { content }});
+  },
+
+  'message.remove' (messageId) {
+    check(messageId, String);
+
+    if (!this.userId)
+      throw new Meteor.Error('not-authorized');
+    const message = Messages.findOne(messageId);
+    if (!message)
+      throw new Meteor.Error('message-not-found');
+    if (message.userId != this.userId)
+      throw new Meteor.Error('forbidden');
+
+    Messages.update(messageId, {$set: { deletedAt: new Date() }});
+  },
 };
 
 Meteor.methods(methods);

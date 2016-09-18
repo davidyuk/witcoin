@@ -105,6 +105,65 @@ if (Meteor.isServer) {
           expect(messages[0].content).to.equal(testMessage);
         });
       });
+
+      describe('message.edit', () => {
+        const editMessage = methods['message.edit'];
+
+        it('fail when current user not logged in', () => {
+          assert.throws(() => editMessage.call({}, Factory.create('message')._id, testMessage)
+            , Meteor.Error, 'not-authorized');
+        });
+
+        it('fail when edit not exist message', () => {
+          const userId = Factory.create('user')._id;
+          assert.throws(() => editMessage.call({userId}, Random.id(), testMessage)
+            , Meteor.Error, 'message-not-found');
+        });
+
+        it('fail when edit not own message', () => {
+          const messageId = Factory.create('message')._id;
+          const userId = Factory.create('user')._id;
+          assert.throws(() => editMessage.call({userId}, messageId, testMessage)
+            , Meteor.Error, 'forbidden');
+        });
+
+        it('edit', () => {
+          const userId = Factory.create('user')._id;
+          const messageId = Factory.create('message', {userId})._id;
+          editMessage.call({userId}, messageId, testMessage);
+          expect(Messages.findOne(messageId).content).to.equal(testMessage);
+        });
+      });
+
+      describe('message.remove', () => {
+        const removeMessage = methods['message.remove'];
+
+        it('fail when current user not logged in', () => {
+          assert.throws(() => removeMessage.call({}, Factory.create('message')._id)
+            , Meteor.Error, 'not-authorized');
+        });
+
+        it('fail when edit not exist message', () => {
+          const userId = Factory.create('user')._id;
+          assert.throws(() => removeMessage.call({userId}, Random.id())
+            , Meteor.Error, 'message-not-found');
+        });
+
+        it('fail when edit not own message', () => {
+          const messageId = Factory.create('message')._id;
+          const userId = Factory.create('user')._id;
+          assert.throws(() => removeMessage.call({userId}, messageId)
+            , Meteor.Error, 'forbidden');
+        });
+
+        it('remove', () => {
+          const userId = Factory.create('user')._id;
+          const messageId = Factory.create('message', {userId})._id;
+          expect(Messages.findOne(messageId).deletedAt).to.equal(undefined);
+          removeMessage.call({userId}, messageId);
+          expect(Messages.findOne(messageId).deletedAt).not.to.equal(undefined);
+        });
+      });
     });
   });
 }
