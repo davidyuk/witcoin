@@ -87,7 +87,7 @@ if (Meteor.isServer) {
   });
 }
 
-Meteor.methods({
+export const methods = {
   'chat.get' (pairIds) {
     check(pairIds, [String]);
     check(pairIds, Match.Where(a => a.length));
@@ -123,7 +123,9 @@ Meteor.methods({
       content,
     });
   },
-});
+};
+
+Meteor.methods(methods);
 
 Factory.define('chat', Chats, {
   userIds: [Factory.get('user'), Factory.get('user')],
