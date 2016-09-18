@@ -65,6 +65,11 @@ oauth@1.1.11
 oauth2@1.1.10
 observe-sequence@1.0.12
 ordered-dict@1.0.8
+practicalmeteor:chai@2.1.0_1
+practicalmeteor:loglevel@1.2.0_2
+practicalmeteor:mocha@2.4.5_6
+practicalmeteor:mocha-core@1.0.1
+practicalmeteor:sinon@1.14.1_2
 promise@0.8.4
 random@1.0.10
 rate-limit@1.0.5
@@ -88,6 +93,7 @@ templating@1.2.14
 templating-tools@1.0.4
 tmeasday:check-npm-versions@0.3.1
 tmeasday:publish-counts@0.7.3
+tmeasday:test-reporter-helpers@0.2.1
 tracker@1.1.0
 ui@1.0.11
 underscore@1.0.9

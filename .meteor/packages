@@ -33,3 +33,5 @@ fortawesome:fontawesome
 shell-server
 xolvio:cleaner
 dburles:factory
+practicalmeteor:mocha
+practicalmeteor:chai
