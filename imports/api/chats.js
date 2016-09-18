@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 import { Match, check } from 'meteor/check';
 
 import { SchemaHelpers } from './common';
+import faker from 'faker';
 
 export const Chats = new Mongo.Collection('chats');
 
@@ -121,5 +122,25 @@ Meteor.methods({
       userId: this.userId,
       content,
     });
+  },
+});
+
+Factory.define('chat', Chats, {
+  userIds: [Factory.get('user'), Factory.get('user')],
+});
+
+Factory.define('message', Messages, {
+  chatId: function() {
+    return Meteor.users.findOne(this.userId)
+      ? Factory.create('chat', {userIds: [this.userId, Factory.get('user')]})._id
+      : Factory.get('chat');
+  },
+  content: () => faker.lorem.sentences(faker.random.number(8) + 1),
+  createdAt: () => faker.date.past(),
+  userId: function() {
+    const chat = Chats.findOne(this.chatId);
+    return chat
+      ? chat.userIds[faker.random.number(chat.userIds.length - 1)]
+      : Factory.get('user');
   },
 });
