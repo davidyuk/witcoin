@@ -2,16 +2,43 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Match, check } from 'meteor/check';
 
+import { SchemaHelpers } from './common';
+
 export const Chats = new Mongo.Collection('chats');
+
+Chats.schema = new SimpleSchema({
+  _id: { type: String, regEx: SimpleSchema.RegEx.Id },
+  userIds: { type: [String], minCount: 1 },
+  'userIds.$': { type: String, regEx: SimpleSchema.RegEx.Id },
+  lastMessage: { type: Object, blackbox: true, optional: true },
+});
+
+Chats.attachSchema(Chats.schema);
 
 class MessagesCollection extends Mongo.Collection {
   insert(message, callback) {
-    Chats.update(message.chatId, { $set: { lastMessage: message } });
-    return super.insert(message, callback);
+    function callbackWrap(err, recordId) {
+      if (!err)
+        Chats.update(message.chatId, { $set: { lastMessage: Messages.findOne(recordId) } });
+      if (callback) callback.apply(this, arguments);
+    }
+    return super.insert(message, callbackWrap);
   }
 }
 
 export const Messages = new MessagesCollection('messages');
+
+Messages.schema = new SimpleSchema({
+  _id: { type: String, regEx: SimpleSchema.RegEx.Id },
+  chatId: { type: String, regEx: SimpleSchema.RegEx.Id },
+  userId: { type: String, regEx: SimpleSchema.RegEx.Id },
+  content: { type: String },
+  createdAt: SchemaHelpers.createdAt,
+  updatedAt: SchemaHelpers.updatedAt,
+  deletedAt: SchemaHelpers.deletedAt,
+});
+
+Messages.attachSchema(Messages.schema);
 
 if (Meteor.isServer) {
   Meteor.publishComposite('chats', function(limit) {
@@ -92,7 +119,6 @@ Meteor.methods({
     Messages.insert({
       chatId,
       userId: this.userId,
-      createdAt: new Date(),
       content,
     });
   },
