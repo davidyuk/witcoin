@@ -18,7 +18,7 @@ export default class Chat extends React.Component {
 
     if (!this.props.chat)
       return <div style={rootStyle}>
-        <div style={{margin: 'auto'}}>
+        <div style={{margin: 'auto', textAlign: 'center'}}>
           Выберите диалог
         </div>
       </div>;
