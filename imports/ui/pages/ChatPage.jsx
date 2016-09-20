@@ -44,7 +44,7 @@ export default class ChatPage extends React.Component {
             ))}
           </div>
         </div>
-        <div className={chatClass} style={{flexGrow: 10000}}>
+        <div className={chatClass} style={{width: 100 + '%', flexGrow: 10000}}>
           <ChatContainer params={{chatId: this.props.chatId}} />
         </div>
       </div>
