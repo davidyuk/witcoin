@@ -4,6 +4,7 @@ import { resetDatabase } from 'meteor/xolvio:cleaner';
 
 import './users';
 import { methods } from './chats';
+import { Actions } from './actions';
 
 if (Meteor.isDevelopment) {
   faker.locale = 'ru';
@@ -12,6 +13,7 @@ if (Meteor.isDevelopment) {
     'reset.database': resetDatabase,
     'generate.users': generateUsers,
     'generate.messages': generateMessages,
+    'generate.actions': generateActions,
   });
 }
 
@@ -31,5 +33,14 @@ function generateMessages() {
       for (let i = 0; i < faker.random.number(100); i++)
         Factory.create('message', { chatId });
     }
+  });
+}
+
+function generateActions() {
+  Actions.remove();
+  let users = Meteor.users.find();
+  users.forEach(function(user) {
+    for (let i = 0; i < faker.random.number(100) + 100; i++)
+      Factory.create('action', { userId: user._id });
   });
 }
