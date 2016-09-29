@@ -63,6 +63,33 @@ if (Meteor.isServer) {
           expect(Actions.find({userId: userId}).count()).to.equal(0);
         });
       });
+
+      describe('action.subscribe', () => {
+        const subscribeAction = methods['action.subscribe'];
+
+        it('fail when current user not logged in', () => {
+          assert.throws(() => subscribeAction.call({}, Factory.create('user')._id)
+            , Meteor.Error, 'not-authorized');
+        });
+
+        it('fail when subscribe uncreated user', () => {
+          const userId = Factory.create('user')._id;
+          assert.throws(() => subscribeAction.call({userId: userId}, Random.id())
+            , Meteor.Error, 'user-not-found');
+        });
+
+        it('subscribe', () => {
+          const userId = Factory.create('user')._id;
+          const objectId = Factory.create('user')._id;
+
+          const doc = { type: Actions.types.SUBSCRIBE, userId, objectId };
+          expect(Actions.find(doc).count()).to.equal(0);
+          subscribeAction.call({ userId }, objectId);
+          expect(Actions.find(doc).count()).to.equal(1);
+          subscribeAction.call({ userId }, objectId);
+          expect(Actions.find(doc).count()).to.equal(0);
+        });
+      });
     });
   });
 }

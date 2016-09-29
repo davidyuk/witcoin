@@ -11,12 +11,14 @@ export const Actions = new Mongo.Collection('actions');
 
 Actions.types = {
   DEFAULT: 'default',
+  SUBSCRIBE: 'subscribe',
 };
 
 Actions.schema = new SimpleSchema({
   _id: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
   userId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
-  description: { type: String },
+  objectId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true, optional: true },
+  description: { type: String, optional: true },
   type: { type: String, defaultValue: Actions.types.DEFAULT, denyUpdate: true },
   createdAt: SchemaHelpers.createdAt,
   updatedAt: SchemaHelpers.updatedAt,
@@ -26,15 +28,24 @@ Actions.schema = new SimpleSchema({
 Actions.attachSchema(Actions.schema);
 
 if (Meteor.isServer) {
-  Meteor.publish('actions', function (selector, limit) {
+  export const actionChildrenCursors = [{
+    find: action => {
+      const userIds = [action.userId];
+      if (action.type == Actions.types.SUBSCRIBE)
+        userIds.push(action.objectId);
+      return Meteor.users.find({ _id: { $in: userIds } });
+    }
+  }];
+
+  Meteor.publishComposite('actions', function (selector, limit) {
     check(selector, Object);
     check(limit, Match.Integer);
 
     Counts.publish(this, 'actions', Actions.find(selector));
-    return Actions.find(selector, {
-      sort: {createdAt: -1},
-      limit: limit,
-    });
+    return {
+      find: () => Actions.find(selector, { sort: {createdAt: -1}, limit: limit }),
+      children: actionChildrenCursors,
+    };
   });
 }
 
@@ -66,6 +77,25 @@ export const methods = {
       throw new Meteor.Error('forbidden');
 
     Actions.remove(actionId);
+  },
+
+  'action.subscribe' (userId) {
+    check(userId, String);
+
+    if (!this.userId)
+      throw new Meteor.Error('not-authorized');
+    const user = Meteor.users.findOne(userId);
+    if (!user)
+      throw new Meteor.Error('user-not-found');
+
+    const doc = {
+      type: Actions.types.SUBSCRIBE,
+      objectId: userId,
+      userId: this.userId,
+    };
+    const subscription = Actions.findOne(doc);
+    if (subscription) Actions.remove(subscription._id);
+    else Actions.insert(doc);
   },
 };
 
