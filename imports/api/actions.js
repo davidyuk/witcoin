@@ -6,8 +6,63 @@ import faker from 'faker';
 
 import { SchemaHelpers } from './common';
 import './users';
+import { NewsItems, NotifyItems } from './feeds';
 
-export const Actions = new Mongo.Collection('actions');
+class ActionsCollection extends Mongo.Collection {
+  insert(doc, callback) {
+    const docId = super.insert(doc, callback);
+    const action = Actions.findOne(docId);
+
+    Actions
+      .find({ type: Actions.types.SUBSCRIBE, objectId: action.userId })
+      .forEach(subscription =>
+        NewsItems.insert({
+          userId: subscription.userId,
+          actionId: action._id,
+          authorId: action.userId,
+          createdAt: action.createdAt,
+        })
+      );
+
+    switch (action.type) {
+      case Actions.types.SUBSCRIBE:
+        Actions
+          .find({ userId: action.objectId })
+          .forEach(act =>
+            NewsItems.insert({
+              userId: action.userId,
+              actionId: act._id,
+              authorId: act.userId,
+              createdAt: act.createdAt,
+            })
+          );
+
+        NotifyItems.insert({
+          userId: action.objectId,
+          actionId: action._id,
+          createdAt: action.createdAt,
+        });
+        break;
+    }
+    return docId;
+  }
+
+  remove(selector, callback) {
+    Actions.find(selector).forEach(action => {
+      NewsItems.remove({ actionId: action._id });
+      NotifyItems.remove({ actionId: action._id });
+
+      switch (action.type) {
+        case Actions.types.SUBSCRIBE:
+          NewsItems.remove({ userId: action.userId, authorId: action.objectId });
+          break;
+      }
+    });
+    return super.remove(selector, callback);
+  }
+}
+
+export const Actions = new ActionsCollection('actions');
 
 Actions.types = {
   DEFAULT: 'default',
