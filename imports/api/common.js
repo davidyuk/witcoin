@@ -1,7 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+
 export const SchemaHelpers = {
   createdAt: {
     type: Date,
     autoValue: function() {
+      if (this.isInsert && this.isSet && Meteor.isDevelopment) return;
       if (this.isInsert) {
         return new Date();
       } else if (this.isUpsert) {
