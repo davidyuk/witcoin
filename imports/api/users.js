@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
 import faker from 'faker';
 
 Meteor.users.publicFields = {
@@ -13,16 +12,6 @@ if (Meteor.isServer) {
     return Meteor.users.find({}, {
       sort: {createdAt: -1},
       limit: 5,
-      fields: Meteor.users.publicFields,
-    });
-  });
-
-  Meteor.publish('user', function (userId) {
-    check(userId, String);
-
-    return Meteor.users.find({
-      _id: userId,
-    }, {
       fields: Meteor.users.publicFields,
     });
   });

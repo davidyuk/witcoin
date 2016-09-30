@@ -4,6 +4,7 @@ import '../imports/api/users';
 import '../imports/api/chats';
 import '../imports/api/actions';
 import '../imports/api/feeds';
+import '../imports/api/userpage';
 
 import '../imports/api/testData';
 
