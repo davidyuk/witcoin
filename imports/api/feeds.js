@@ -1,5 +1,9 @@
+import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { check } from 'meteor/check';
+
+import { Actions, actionChildrenCursors } from './actions';
 
 const feedItemSchema = {
   _id: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
@@ -25,3 +29,36 @@ NotifyItems.schema = new SimpleSchema({
 });
 
 NotifyItems.attachSchema(NotifyItems.schema);
+
+if (Meteor.isServer) {
+  Meteor.publishComposite('news', function(limit) {
+    check(limit, Number);
+
+    if (!this.userId)
+      return this.ready();
+
+    return {
+      find: () => NewsItems.find({ userId: this.userId }, { sort: { createdAt: -1 }, limit: limit }),
+      children: [{
+        find: newsItem => Actions.find(newsItem.actionId),
+        children: actionChildrenCursors,
+      }],
+    };
+  });
+
+  Meteor.publishComposite('notifications', function(limit) {
+      check(limit, Number);
+
+      if (!this.userId)
+        return this.ready();
+
+      return {
+        find: () => NotifyItems.find({ userId: this.userId }, { sort: { createdAt: -1 }, limit: limit }),
+        children: [{
+          find: notifyItem => Actions.find(notifyItem.actionId),
+          children: actionChildrenCursors,
+        }],
+      };
+    }
+  );
+}
