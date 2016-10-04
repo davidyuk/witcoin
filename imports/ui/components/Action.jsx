@@ -1,12 +1,31 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
+import '../../api/users';
 import LinkToUser from './LinkToUser';
+import { Actions } from '../../api/actions';
 
 export default class Action extends React.Component {
   removeAction(event) {
     event.preventDefault();
     Meteor.call('action.remove', this.props.action._id);
+  }
+
+  isMale(user) {
+    return !user.profile || user.profile.gender != Meteor.users.genderTypes.FEMALE;
+  }
+
+  renderSubscribe() {
+    let action = this.props.action;
+    if (action.type != Actions.types.SUBSCRIBE) return null;
+
+    return (
+      <span> подписал{this.isMale(action.user) ? 'ся' : 'ась'} на
+        {this.props.isNotification
+          ? ' Ваши обновления'
+          : <span> обновления <LinkToUser user={action.object} inflection={LinkToUser.inflections.GENITIVE} /></span>}
+      </span>
+    );
   }
 
   render() {
@@ -21,7 +40,8 @@ export default class Action extends React.Component {
             </a>
             : null}
         </div>
-        <LinkToUser user={Meteor.users.findOne(action.userId)} />
+        <LinkToUser user={action.user} />
+        {this.renderSubscribe()}
         <div>{action.description}</div>
         <div>
           <small>
@@ -35,4 +55,5 @@ export default class Action extends React.Component {
 
 Action.propTypes = {
   action: React.PropTypes.object.isRequired,
+  isNotification: React.PropTypes.bool,
 };

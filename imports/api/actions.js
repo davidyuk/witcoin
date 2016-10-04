@@ -104,6 +104,19 @@ if (Meteor.isServer) {
   });
 }
 
+if (Meteor.isClient) {
+  export const joinAction = action => {
+    if (!action) return null;
+    let valid;
+    action.user = Meteor.users.findOne(action.userId) || (valid = null);
+    if (action.type == Actions.types.SUBSCRIBE)
+      action.object = Meteor.users.findOne(action.objectId) || (valid = null);
+
+    if (valid === null) return null;
+    return action;
+  };
+}
+
 export const methods = {
   'action.create' (description, type = Actions.types.DEFAULT) {
     check(description, String);
