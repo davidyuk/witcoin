@@ -3,7 +3,14 @@ import faker from 'faker';
 
 Meteor.users.publicFields = {
   createdAt: 1,
-  'profile.name': 1,
+  'profile.firstName': 1,
+  'profile.lastName': 1,
+  'profile.gender': 1,
+};
+
+Meteor.users.genderTypes = {
+  MALE: 'male',
+  FEMALE: 'female',
 };
 
 if (Meteor.isServer) {
@@ -23,9 +30,14 @@ Factory.define('user', Meteor.users, {
     verified: false,
   }],
   createdAt: () => faker.date.past(),
-  profile: () => { return {
-    name: faker.name.findName()
-  }}
+  profile: (api, userOptions) => {
+    const gender = userOptions.gender || Meteor.users.genderTypes[Math.random() >= 0.5 ? 'MALE' : 'FEMALE'];
+    return {
+      gender,
+      firstName: faker.name.firstName(+ (gender == Meteor.users.genderTypes.FEMALE)),
+      lastName: faker.name.lastName(+ (gender == Meteor.users.genderTypes.FEMALE)),
+    };
+  }
 }).after(user => {
   Accounts.setPassword(user._id, 'password');
 });
