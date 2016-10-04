@@ -23,7 +23,6 @@ export default class ActionList extends React.Component {
 
 ActionList.propTypes = {
   actions: React.PropTypes.array,
-  actionsCount: React.PropTypes.number,
   actionsLoading: React.PropTypes.bool.isRequired,
   isNotifications: React.PropTypes.bool,
 };

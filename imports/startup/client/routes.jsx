@@ -9,6 +9,8 @@ import ChatPageContainer from '../../ui/containers/ChatPageContainer';
 
 import AccountsPage from '../../ui/pages/AccountsPage';
 import NotFoundPage from '../../ui/pages/NotFoundPage';
+import NewsPage from '../../ui/pages/NewsPage';
+import NotificationPage from '../../ui/pages/NotificationPage';
 
 function requireAuth(nextState, replace) {
   if (!Meteor.userId()) {
@@ -31,6 +33,8 @@ export const renderRoutes = () => (
         <IndexRoute component={ChatPageContainer} />
         <Route path=":chatId" component={ChatPageContainer} />
       </Route>
+      <Route path="feed" component={NewsPage} onEnter={requireAuth} />
+      <Route path="notifications" component={NotificationPage} onEnter={requireAuth} />
 
       <Route path="*" component={NotFoundPage} />
     </Route>

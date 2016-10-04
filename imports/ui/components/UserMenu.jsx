@@ -23,6 +23,8 @@ export default class UserMenu extends React.Component {
         </a>
         <ul className="dropdown-menu">
           <li className={router.isActive(userPagePath) ? 'active' : ''}><Link to={userPagePath}>Моя страница</Link></li>
+          <li className={router.isActive('/feed') ? 'active' : ''}><Link to={'/feed'}>Новости</Link></li>
+          <li className={router.isActive('/notifications') ? 'active' : ''}><Link to={'/notifications'}>Уведомления</Link></li>
           <li className={router.isActive('/im') ? 'active' : ''}><Link to={'/im'}>Сообщения</Link></li>
           <li className="divider"/>
           <li><a onClick={this.logOut.bind(this)} href="#">Выход</a></li>
