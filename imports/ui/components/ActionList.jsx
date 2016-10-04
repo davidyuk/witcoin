@@ -3,26 +3,6 @@ import React from 'react';
 import Action from './Action';
 
 export default class ActionList extends React.Component {
-  componentDidMount() {
-    this.onScroll = this.onScroll.bind(this);
-    window.addEventListener('scroll', this.onScroll);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.onScroll);
-  }
-
-  onScroll() {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    if (scrollTop + document.body.clientHeight > document.body.scrollHeight - 250)
-      this.props.loadMore();
-  }
-
-  componentDidUpdate() {
-    if (document.body.clientHeight >= document.body.scrollHeight)
-      this.props.loadMore();
-  }
-
   render() {
     const actions = this.props.actions;
 
@@ -46,5 +26,4 @@ ActionList.propTypes = {
   actionsCount: React.PropTypes.number,
   actionsLoading: React.PropTypes.bool.isRequired,
   isNotifications: React.PropTypes.bool,
-  loadMore: React.PropTypes.func.isRequired,
 };

@@ -6,6 +6,7 @@ import UserName from '../components/UserName';
 import ActionListContainer from '../containers/ActionListContainer';
 import MessageInput from '../components/MessageInput';
 import UserList from '../components/UserList';
+import InfiniteScroll from '../components/InfiniteScroll';
 
 export default class UserPage extends React.Component {
   goToChat() {
@@ -55,7 +56,9 @@ export default class UserPage extends React.Component {
           { this.props.user._id == Meteor.userId() ?
             <MessageInput handler={this.createAction} placeholder="Текст записи" />
           : null }
-          <ActionListContainer selector={{ userId: this.props.user._id }}/>
+          <InfiniteScroll>
+            <ActionListContainer selector={{ userId: this.props.user._id }} />
+          </InfiniteScroll>
         </div>
       </div>
     );
