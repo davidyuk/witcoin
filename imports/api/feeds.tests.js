@@ -88,5 +88,32 @@ if (Meteor.isServer) {
         });
       });
     });
+
+    const commentAction = Meteor.server.method_handlers['action.comment'];
+    const rateAction = Meteor.server.method_handlers['action.rate'];
+    const shareAction = Meteor.server.method_handlers['action.share'];
+
+    it('show/hide notification on share, comment, rate', () => {
+      const actionUserId = Factory.create('user')._id;
+      const userId = Factory.create('user')._id;
+      const assertNotifyCount = c =>
+        expect(NotifyItems.find({userId: actionUserId}).count()).to.equal(c);
+      [
+        (userId, actionId) => commentAction.call({ userId }, actionId, 'test'),
+        (userId, actionId) => rateAction.call({ userId }, actionId, 1),
+        (userId, actionId) => shareAction.call({ userId }, actionId),
+      ].forEach(f => {
+        const actionId = createAction.call({userId: actionUserId}, 'test');
+        assertNotifyCount(0);
+        const childActionId = f(userId, actionId);
+        assertNotifyCount(1);
+        removeAction.call({ userId }, childActionId);
+        assertNotifyCount(0);
+        f(userId, actionId);
+        assertNotifyCount(1);
+        removeAction.call({userId: actionUserId}, actionId);
+        assertNotifyCount(0);
+      });
+    });
   });
 }

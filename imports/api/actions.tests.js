@@ -90,6 +90,96 @@ if (Meteor.isServer) {
           expect(Actions.find(doc).count()).to.equal(0);
         });
       });
+
+      describe('action.rate', () => {
+        const rateAction = Meteor.server.method_handlers['action.rate'];
+
+        it('fail when current user not logged in', () => {
+          const actionId = Factory.create('action')._id;
+          assert.throws(() => {
+            rateAction.call({}, actionId, 1);
+          }, Meteor.Error, 'not-authorized');
+        });
+
+        it('rate', () => {
+          const user1Id = Factory.create('user')._id;
+          const user2Id = Factory.create('user')._id;
+          const actionId = Factory.create('action')._id;
+          const assertRates = (up, down) => {
+            const action = Actions.findOne(actionId);
+            expect(action.rates.up).to.equal(up);
+            expect(action.rates.down).to.equal(down);
+          };
+
+          rateAction.call({userId: user1Id}, actionId, 1);
+          assertRates(1, 0);
+
+          rateAction.call({userId: user2Id}, actionId, 1);
+          assertRates(2, 0);
+          rateAction.call({userId: user2Id}, actionId, -1);
+          assertRates(1, 1);
+          rateAction.call({userId: user2Id}, actionId, 0);
+          assertRates(1, 0);
+
+          const o = {objectId: actionId, type: Actions.types.RATE};
+          expect(Actions.find(o).count()).to.equal(1);
+          expect(Actions.findOne({...o, userId: user1Id}).rate).to.equal(1);
+        });
+      });
+
+      describe('action.comment', () => {
+        const commentAction = Meteor.server.method_handlers['action.comment'];
+        const testComment = 'Test comment.';
+
+        it('fail when current user not logged in', () => {
+          const actionId = Factory.create('action')._id;
+          assert.throws(() => {
+            commentAction.call({}, actionId, testComment);
+          }, Meteor.Error, 'not-authorized');
+        });
+
+        it('comment', () => {
+          const user1Id = Factory.create('user')._id;
+          const user2Id = Factory.create('user')._id;
+          const actionId = Factory.create('action')._id;
+
+          commentAction.call({ userId: user1Id }, actionId, testComment);
+          commentAction.call({ userId: user2Id }, actionId, testComment);
+          commentAction.call({ userId: user1Id }, actionId, 'Hello');
+
+          const action = Actions.findOne(actionId);
+          expect(action.commentsCount).to.equal(3);
+          expect(Actions.find({objectId: actionId}).count()).to.equal(3);
+          const comments = Actions.find({objectId: actionId, userId: user1Id}).fetch();
+          expect(comments.length).to.equal(2);
+          expect(comments[0].description).to.equal(testComment);
+          expect(comments[1].description).to.equal('Hello');
+        });
+      });
+
+      describe('action.share', () => {
+        const shareAction = Meteor.server.method_handlers['action.share'];
+
+        it('fail when current user not logged in', () => {
+          const actionId = Factory.create('action')._id;
+          assert.throws(() => {
+            shareAction.call({}, actionId, 'test');
+          }, Meteor.Error, 'not-authorized');
+        });
+
+        it('share', () => {
+          const actionId = Factory.create('action')._id;
+          const userId = Factory.create('user')._id;
+
+          shareAction.call({ userId }, actionId, 'test');
+          const action = Actions.findOne(actionId);
+          expect(action.sharesCount).to.equal(1);
+          expect(Actions.find({objectId: actionId}).count()).to.equal(1);
+          const shares = Actions.find({objectId: actionId, userId }).fetch();
+          expect(shares.length).to.equal(1);
+          expect(shares[0].description).to.equal('test');
+        });
+      });
     });
   });
 }

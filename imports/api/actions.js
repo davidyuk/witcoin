@@ -24,6 +24,16 @@ class ActionsCollection extends Mongo.Collection {
         })
       );
 
+    if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].indexOf(action.type) >= 0) {
+      const parentAction = Actions.findOne(action.objectId);
+
+      NotifyItems.insert({
+        userId: parentAction.userId,
+        actionId: action._id,
+        createdAt: action.createdAt,
+      });
+    }
+
     switch (action.type) {
       case Actions.types.SUBSCRIBE:
         Actions
@@ -43,6 +53,15 @@ class ActionsCollection extends Mongo.Collection {
           createdAt: action.createdAt,
         });
         break;
+      case Actions.types.COMMENT:
+        Actions.update(action.objectId, {$inc: {commentsCount: 1}});
+        break;
+      case Actions.types.RATE:
+        action.rate && Actions.update(action.objectId, {$inc: {['rates.' + (action.rate == 1 ? 'up' : 'down')]: 1}});
+        break;
+      case Actions.types.SHARE:
+        Actions.update(action.objectId, {$inc: {sharesCount: 1}});
+        break;
     }
     return docId;
   }
@@ -51,10 +70,20 @@ class ActionsCollection extends Mongo.Collection {
     Actions.find(selector).forEach(action => {
       NewsItems.remove({ actionId: action._id });
       NotifyItems.remove({ actionId: action._id });
+      Actions.remove({ objectId: action._id });
 
       switch (action.type) {
         case Actions.types.SUBSCRIBE:
           NewsItems.remove({ userId: action.userId, authorId: action.objectId });
+          break;
+        case Actions.types.COMMENT:
+          Actions.update(action.objectId, {$inc: {commentsCount: -1}});
+          break;
+        case Actions.types.RATE:
+          action.rate && Actions.update(action.objectId, {$inc: {['rates.' + (action.rate == 1 ? 'up' : 'down')]: -1}});
+          break;
+        case Actions.types.SHARE:
+          Actions.update(action.objectId, {$inc: {sharesCount: -1}});
           break;
       }
     });
@@ -67,6 +96,9 @@ export const Actions = new ActionsCollection('actions');
 Actions.types = {
   DEFAULT: 'default',
   SUBSCRIBE: 'subscribe',
+  COMMENT: 'comment',
+  RATE: 'rate',
+  SHARE: 'share',
 };
 
 Actions.schema = new SimpleSchema({
@@ -75,6 +107,16 @@ Actions.schema = new SimpleSchema({
   objectId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true, optional: true },
   description: { type: String, optional: true },
   type: { type: String, defaultValue: Actions.types.DEFAULT, denyUpdate: true },
+
+  commentsCount: { type: Number, defaultValue: 0, optional: true },
+
+  rates: { type: Object, optional: true },
+  'rates.up': { type: Number, defaultValue: 0 },
+  'rates.down': { type: Number, defaultValue: 0 },
+  rate: { type: Number, optional: true, denyUpdate: true },
+
+  sharesCount: { type: Number, defaultValue: 0, optional: true },
+
   createdAt: SchemaHelpers.createdAt,
   updatedAt: SchemaHelpers.updatedAt,
   deletedAt: SchemaHelpers.deletedAt,
@@ -164,6 +206,61 @@ Meteor.methods({
     const subscription = Actions.findOne(doc);
     if (subscription) Actions.remove(subscription._id);
     else Actions.insert(doc);
+  },
+
+  'action.comment' (actionId, description) {
+    check(actionId, String);
+    check(description, String);
+    check(description, Match.Where(a => a.length));
+
+    if (!this.userId)
+      throw new Meteor.Error('not-authorized');
+    if (!Actions.findOne(actionId))
+      throw new Meteor.Error('action-not-found');
+
+    return Actions.insert({
+      type: Actions.types.COMMENT,
+      objectId: actionId,
+      description,
+      userId: this.userId,
+    });
+  },
+
+  'action.rate' (actionId, rateValue) {
+    check(actionId, String);
+    check(rateValue, Match.Integer);
+    check(rateValue, Match.Where(a => Math.abs(a) <= 1));
+
+    if (!this.userId)
+      throw new Meteor.Error('not-authorized');
+    if (!Actions.findOne(actionId))
+      throw new Meteor.Error('action-not-found');
+
+    Actions.remove({type: Actions.types.RATE, objectId: actionId, userId: this.userId});
+    if (rateValue)
+      return Actions.insert({
+        type: Actions.types.RATE,
+        userId: this.userId,
+        objectId: actionId,
+        rate: rateValue,
+      });
+  },
+
+  'action.share' (actionId, description = '') {
+    check(actionId, String);
+    check(description, String);
+
+    if (!this.userId)
+      throw new Meteor.Error('not-authorized');
+    if (!Actions.findOne(actionId))
+      throw new Meteor.Error('action-not-found');
+
+    return Actions.insert({
+      type: Actions.types.SHARE,
+      objectId: actionId,
+      userId: this.userId,
+      description,
+    });
   },
 });
 
