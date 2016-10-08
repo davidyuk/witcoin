@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import faker from 'faker';
-import { resetDatabase } from 'meteor/xolvio:cleaner';
 
 import './users';
 import { methods } from './chats';
@@ -10,7 +9,6 @@ if (Meteor.isDevelopment) {
   faker.locale = 'ru';
 
   Meteor.methods({
-    'reset.database': resetDatabase,
     'generate.users': generateUsers,
     'generate.messages': generateMessages,
     'generate.actions': generateActions,
