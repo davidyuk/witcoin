@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import { expect, assert } from 'meteor/practicalmeteor:chai';
 
-import { Actions, methods } from './actions';
+import { Actions } from './actions';
 import './users';
 
 if (Meteor.isServer) {
@@ -16,7 +16,7 @@ if (Meteor.isServer) {
 
     describe('methods', () => {
       describe('action.create', () => {
-        const createAction = methods['action.create'];
+        const createAction = Meteor.server.method_handlers['action.create'];
         const testAction = 'Test action.';
 
         it('fail when current user not logged in', () => {
@@ -35,7 +35,7 @@ if (Meteor.isServer) {
       });
 
       describe('action.remove', () => {
-        const removeAction = methods['action.remove'];
+        const removeAction = Meteor.server.method_handlers['action.remove'];
 
         it('fail when current user not logged in', () => {
           assert.throws(() => removeAction.call({}, Factory.create('action')._id)
@@ -65,7 +65,7 @@ if (Meteor.isServer) {
       });
 
       describe('action.subscribe', () => {
-        const subscribeAction = methods['action.subscribe'];
+        const subscribeAction = Meteor.server.method_handlers['action.subscribe'];
 
         it('fail when current user not logged in', () => {
           assert.throws(() => subscribeAction.call({}, Factory.create('user')._id)

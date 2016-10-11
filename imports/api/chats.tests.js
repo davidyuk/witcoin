@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import { expect, assert } from 'meteor/practicalmeteor:chai';
 
-import { Messages, Chats, methods } from './chats';
+import { Messages, Chats } from './chats';
 import './users';
 
 if (Meteor.isServer) {
@@ -21,7 +21,7 @@ if (Meteor.isServer) {
 
     describe('methods', () => {
       describe('chat.get', () => {
-        const getChat = methods['chat.get'];
+        const getChat = Meteor.server.method_handlers['chat.get'];
 
         it('fail when current user not logged in', () => {
           const user = Factory.create('user');
@@ -76,7 +76,7 @@ if (Meteor.isServer) {
 
       const testMessage = 'Test message.';
       describe('message.create', () => {
-        const createMessage = methods['message.create'];
+        const createMessage = Meteor.server.method_handlers['message.create'];
 
         it('fail when current user not logged in', () => {
           assert.throws(() => createMessage.call({}, Factory.create('chat')._id, testMessage)
@@ -107,7 +107,7 @@ if (Meteor.isServer) {
       });
 
       describe('message.edit', () => {
-        const editMessage = methods['message.edit'];
+        const editMessage = Meteor.server.method_handlers['message.edit'];
 
         it('fail when current user not logged in', () => {
           assert.throws(() => editMessage.call({}, Factory.create('message')._id, testMessage)
@@ -136,7 +136,7 @@ if (Meteor.isServer) {
       });
 
       describe('message.remove', () => {
-        const removeMessage = methods['message.remove'];
+        const removeMessage = Meteor.server.method_handlers['message.remove'];
 
         it('fail when current user not logged in', () => {
           assert.throws(() => removeMessage.call({}, Factory.create('message')._id)

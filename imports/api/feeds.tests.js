@@ -3,14 +3,14 @@ import { Random } from 'meteor/random';
 import { expect } from 'meteor/practicalmeteor:chai';
 
 import { NewsItems, NotifyItems } from './feeds';
-import { Actions, methods } from './actions';
+import { Actions } from './actions';
 import './users';
 
 if (Meteor.isServer) {
   describe('feeds', () => {
-    const subscribeAction = methods['action.subscribe'];
-    const createAction = methods['action.create'];
-    const removeAction = methods['action.remove'];
+    const subscribeAction = Meteor.server.method_handlers['action.subscribe'];
+    const createAction = Meteor.server.method_handlers['action.create'];
+    const removeAction = Meteor.server.method_handlers['action.remove'];
 
     it('news', () => {
       const userId = Factory.create('user')._id;

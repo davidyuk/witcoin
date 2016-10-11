@@ -117,7 +117,7 @@ if (Meteor.isClient) {
   };
 }
 
-export const methods = {
+Meteor.methods({
   'action.create' (description, type = Actions.types.DEFAULT) {
     check(description, String);
     check(description, Match.Where(a => a.length));
@@ -165,9 +165,7 @@ export const methods = {
     if (subscription) Actions.remove(subscription._id);
     else Actions.insert(doc);
   },
-};
-
-Meteor.methods(methods);
+});
 
 Factory.define('action', Actions, {
   userId: Factory.get('user'),

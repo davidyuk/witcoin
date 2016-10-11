@@ -87,7 +87,7 @@ if (Meteor.isServer) {
   });
 }
 
-export const methods = {
+Meteor.methods({
   'chat.get' (pairIds) {
     check(pairIds, [String]);
     check(pairIds, Match.Where(a => a.length));
@@ -153,9 +153,7 @@ export const methods = {
 
     Messages.update(messageId, {$set: { deletedAt: new Date() }});
   },
-};
-
-Meteor.methods(methods);
+});
 
 Factory.define('chat', Chats, {
   userIds: [Factory.get('user'), Factory.get('user')],
