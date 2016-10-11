@@ -13,7 +13,7 @@ export default class ActionList extends React.Component {
             <Action action={item} key={item._id} isNotification={this.props.isNotifications} />
           ) : <i>Нет {this.props.isNotifications ? 'уведомлений' : 'действий'}</i>}
         </div>
-        <div className="progress" style={{display: this.props.actionsLoading ? 'block' : 'none'}}>
+        <div className="progress" style={{visibility: this.props.actionsLoading ? 'visible' : 'hidden'}}>
           <div className="progress-bar progress-bar-striped active" style={{width: '100%'}} />
         </div>
       </div>
