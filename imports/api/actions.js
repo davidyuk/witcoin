@@ -266,6 +266,36 @@ Meteor.methods({
 
 Factory.define('action', Actions, {
   userId: Factory.get('user'),
-  description: () => faker.lorem.sentences(faker.random.number(8) + 1),
+  commentsCount: 0,
+  rates: { up: 0, down: 0 },
+  sharesCount: 0,
   createdAt: () => faker.date.past(),
 });
+
+Factory.define('action.default', Actions, Factory.extend('action', {
+  type: Actions.types.DEFAULT,
+  description: () => faker.lorem.sentences(faker.random.number(8) + 1),
+}));
+
+Factory.define('action.subscribe', Actions, Factory.extend('action', {
+  objectId: Factory.get('user'),
+  type: Actions.types.SUBSCRIBE,
+}));
+
+Factory.define('action.comment', Actions, Factory.extend('action', {
+  objectId: Factory.get('action'),
+  type: Actions.types.COMMENT,
+  description: () => faker.lorem.sentences(faker.random.number(8) + 1),
+}));
+
+Factory.define('action.rate', Actions, Factory.extend('action', {
+  objectId: Factory.get('action'),
+  type: Actions.types.RATE,
+  rate: () => Math.random() >= 0.5 ? 1 : -1,
+}));
+
+Factory.define('action.share', Actions, Factory.extend('action', {
+  objectId: Factory.get('action'),
+  type: Actions.types.SHARE,
+  description: () => faker.lorem.sentences(faker.random.number(8) + 1),
+}));

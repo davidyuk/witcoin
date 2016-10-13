@@ -38,6 +38,6 @@ function generateActions() {
   let users = Meteor.users.find();
   users.forEach(function(user) {
     for (let i = 0; i < faker.random.number(100) + 100; i++)
-      Factory.create('action', { userId: user._id });
+      Factory.create('action.default', { userId: user._id });
   });
 }
