@@ -11,6 +11,7 @@ if (Meteor.isDevelopment) {
     'generate.users': generateUsers,
     'generate.messages': generateMessages,
     'generate.actions': generateActions,
+    'generate.actions.possible': generateAllPossibleActions,
   });
 }
 
@@ -40,4 +41,25 @@ function generateActions() {
     for (let i = 0; i < faker.random.number(100) + 100; i++)
       Factory.create('action.default', { userId: user._id });
   });
+}
+
+function generateAllPossibleActions(n) {
+  let c = 0;
+  const users = [ Factory.create('user', {emails: [{address: `user${++c}@example.com`}]}) ];
+  const actions = [ Factory.create('action.default', { userId: users[0]._id }) ];
+
+  const addLayer = () => {
+    const user = Factory.create('user', {emails: [{address: `user${++c}@example.com`}]});
+    actions.forEach(a => {
+      actions.push(Factory.create('action.comment', { userId: user._id, objectId: a._id }));
+      actions.push(Factory.create('action.rate',    { userId: user._id, objectId: a._id }));
+      actions.push(Factory.create('action.share',   { userId: user._id, objectId: a._id }));
+    });
+    users.forEach(u =>
+      actions.push(Factory.create('action.subscribe', { userId: user._id, objectId: u._id }))
+    );
+    users.push(user);
+  };
+
+  while (n--) addLayer();
 }
