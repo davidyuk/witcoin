@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { check } from 'meteor/check';
+import faker from 'faker';
 
 import { Actions, actionChildrenCursors } from './actions';
 
@@ -62,3 +63,23 @@ if (Meteor.isServer) {
     }
   );
 }
+
+Meteor.methods({
+  'notification.remove' (actionId) {
+    check(actionId, String);
+
+    if (!this.userId)
+      throw new Meteor.Error('not-authorized');
+    const notification = NotifyItems.findOne({ userId: this.userId, actionId });
+    if (!notification)
+      throw new Meteor.Error('notification-not-found');
+
+    NotifyItems.remove({ userId: this.userId, actionId });
+  },
+});
+
+Factory.define('notification', NotifyItems, {
+  userId: Factory.get('user'),
+  actionId: () => Factory.get('action.default'), // TODO: remove circular dependency
+  createdAt: () => faker.date.past(),
+});
