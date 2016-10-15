@@ -4,9 +4,9 @@ import React from 'react';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 import UserName from '../components/UserName';
 import ActionListContainer from '../containers/ActionListContainer';
-import MessageInput from '../components/MessageInput';
 import UserList from '../components/UserList';
 import InfiniteScroll from '../components/InfiniteScroll';
+import ActionCreator from '../components/ActionCreator';
 
 export default class UserPage extends React.Component {
   goToChat() {
@@ -14,10 +14,6 @@ export default class UserPage extends React.Component {
       if (err || !chatId) alert(err || 'Неизвестная ошибка');
       else this.context.router.push('/im/' + chatId);
     });
-  }
-
-  createAction(content) {
-    Meteor.call('action.create', content);
   }
 
   subscribe() {
@@ -54,7 +50,7 @@ export default class UserPage extends React.Component {
         </div>
         <div className="col-md-8">
           { this.props.user._id == Meteor.userId() ?
-            <MessageInput handler={this.createAction} placeholder="Текст записи" />
+            <ActionCreator />
           : null }
           <InfiniteScroll>
             <ActionListContainer selector={{ userId: this.props.user._id }} />
