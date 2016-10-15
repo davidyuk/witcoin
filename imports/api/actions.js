@@ -125,14 +125,46 @@ Actions.schema = new SimpleSchema({
 Actions.attachSchema(Actions.schema);
 
 if (Meteor.isServer) {
-  export const actionChildrenCursors = [{
+  const actionUsersCursor = {
     find: action => {
       const userIds = [action.userId];
       if (action.type == Actions.types.SUBSCRIBE)
         userIds.push(action.objectId);
       return Meteor.users.find({ _id: { $in: userIds } });
     }
-  }];
+  };
+
+  const actionUserReactionCursor = {
+    find: function(action) {
+      return Actions.find({
+        type: {$in: [Actions.types.RATE, Actions.types.SHARE]},
+        objectId: action._id, userId: this.userId
+      })
+    }
+  };
+
+  const actionCommentsCursor = {
+    find: action => Actions.find({
+      type: Actions.types.COMMENT, objectId: action._id,
+    }),
+    children: [actionUsersCursor, actionUserReactionCursor],
+  };
+
+  const actionParentCursor = {
+    find: action => {
+      if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(action.type))
+        return Actions.find(action.objectId);
+    },
+    children: [actionUsersCursor],
+  };
+  actionParentCursor.children.push(actionParentCursor);
+
+  export const actionChildrenCursors = [
+    actionUsersCursor,
+    actionUserReactionCursor,
+    actionCommentsCursor,
+    actionParentCursor,
+  ];
 
   Meteor.publishComposite('actions', function (selector, limit) {
     check(selector, Object);
@@ -147,15 +179,52 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  export const joinAction = action => {
-    if (!action) return null;
-    let valid;
-    action.user = Meteor.users.findOne(action.userId) || (valid = null);
-    if (action.type == Actions.types.SUBSCRIBE)
-      action.object = Meteor.users.findOne(action.objectId) || (valid = null);
-
-    if (valid === null) return null;
+  const joinActionUsers = action => {
+    action.user = Meteor.users.findOne(action.userId);
+    if (!action.user) return null;
+    if (action.type == Actions.types.SUBSCRIBE) {
+      action.object = Meteor.users.findOne(action.objectId);
+      if (!action.object) return null;
+    }
     return action;
+  };
+
+  const joinActionUserReaction = action => {
+    const rateAction = Actions.findOne({
+      type: Actions.types.RATE,
+      objectId: action._id, userId: Meteor.userId()
+    });
+    if (rateAction) action.currentUserRate = rateAction.rate;
+    const shareAction = Actions.findOne({
+      type: Actions.types.SHARE,
+      objectId: action._id, userId: Meteor.userId()
+    });
+    action.currentUserShared = !!shareAction;
+    return action;
+  };
+
+  const joinActionComments = action => {
+    action.comments = Actions.find({
+      type: Actions.types.COMMENT, objectId: action._id
+    }, {sort: {createdAt: 1}}).fetch().filter(joinActionUsers);
+    action.comments.forEach(joinActionUserReaction);
+    return action;
+  };
+
+  const joinActionParent = action => {
+    if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(action.type)) {
+      action.object = Actions.findOne(action.objectId);
+      const valid = [joinActionUsers, joinActionParent]
+        .reduce((p, join) => p && join(action.object), !!action.object);
+      if (!valid) return null;
+    }
+    return action;
+  };
+
+  export const joinAction = action => {
+    const valid = [joinActionUsers, joinActionUserReaction, joinActionComments, joinActionParent]
+      .reduce((p, join) => p && join(action), !!action);
+    return valid ? action : null;
   };
 }
 
