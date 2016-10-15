@@ -4,6 +4,8 @@ import React from 'react';
 import '../../api/users';
 import LinkToUser from './LinkToUser';
 import { Actions } from '../../api/actions';
+import VoteButton from './VoteButton';
+import ShareButton from './ShareButton';
 
 export default class Action extends React.Component {
   removeAction(event) {
@@ -44,6 +46,10 @@ export default class Action extends React.Component {
         {this.renderSubscribe()}
         <div>{action.description}</div>
         <div>
+          <div className="pull-right">
+            <ShareButton action={this.props.action}/>&nbsp;
+            <VoteButton action={this.props.action}/>
+          </div>
           <small>
             {action.createdAt.toLocaleString('ru')}
           </small>
