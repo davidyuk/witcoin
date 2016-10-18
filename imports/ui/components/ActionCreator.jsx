@@ -14,7 +14,7 @@ const ActionCreator = () => {
   ];
 
   return (
-    <div className="panel panel-default panel-body">
+    <div className="panel panel-default panel-body" style={{marginBottom: '10px'}}>
       <ul className="nav nav-tabs">
         {creators.map(({type, title}, i) =>
           <li className={i ? '' : 'active'} key={i}>
