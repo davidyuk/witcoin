@@ -32,8 +32,8 @@ export default class App extends Component {
           <div className="row">
             <div className="col-xs-6">
               2016 Кленинка<br/>
-              <a href="https://github.com/Davidyuk/witcoin/issues">Трекер ошибок</a>,
-              <a href="http://vk.com/witcoin">VK</a>
+              <a href="https://github.com/Davidyuk/witcoin/issues">Трекер ошибок</a>
+              , <a href="http://vk.com/witcoin">VK</a>
             </div>
             <div className="col-xs-6 text-right">
               {/*informer.html*/}
