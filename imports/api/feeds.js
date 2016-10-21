@@ -13,6 +13,7 @@ FeedItems.schema = new SimpleSchema({
   userId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
   actionId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
   authorId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
+  type: { type: String, denyUpdate: true },
   createdAt: { type: Date, denyUpdate: true },
   isNotification: { type: Boolean, defaultValue: false, denyUpdate: true },
 });
@@ -23,6 +24,7 @@ if (Meteor.isServer) {
   const getActionFields = action => ({
     actionId: action._id,
     authorId: action.userId,
+    type: action.type,
     createdAt: action.createdAt,
   });
 
@@ -112,6 +114,10 @@ Factory.define('notification', FeedItems, {
   authorId: function() {
     const action = Actions.findOne(this.actionId);
     return action ? action.userId : Factory.get('user');
+  },
+  type: function() {
+    const action = Actions.findOne(this.actionId);
+    return action ? action.type : Actions.types.DEFAULT;
   },
   createdAt: function() {
     const action = Actions.findOne(this.actionId);
