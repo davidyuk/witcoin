@@ -7,7 +7,7 @@ export default class NewsPage extends React.Component {
   render() {
     return (
       <InfiniteScroll>
-        <NewsListContainer />
+        <NewsListContainer onEmptyMessage="Нет новостей" />
       </InfiniteScroll>
     );
   }

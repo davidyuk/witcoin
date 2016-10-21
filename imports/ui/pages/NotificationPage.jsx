@@ -7,7 +7,7 @@ export default class NotificationPage extends React.Component {
   render() {
     return (
       <InfiniteScroll>
-        <NotificationListContainer />
+        <NotificationListContainer onEmptyMessage="Нет уведомлений" />
       </InfiniteScroll>
     );
   }
