@@ -6,53 +6,13 @@ import faker from 'faker';
 
 import { SchemaHelpers } from './common';
 import './users';
-import { NewsItems, NotifyItems } from './feeds';
 
 class ActionsCollection extends Mongo.Collection {
   insert(doc, callback) {
     const docId = super.insert(doc, callback);
     const action = Actions.findOne(docId);
 
-    Actions
-      .find({ type: Actions.types.SUBSCRIBE, objectId: action.userId })
-      .forEach(subscription =>
-        NewsItems.insert({
-          userId: subscription.userId,
-          actionId: action._id,
-          authorId: action.userId,
-          createdAt: action.createdAt,
-        })
-      );
-
-    if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].indexOf(action.type) >= 0) {
-      const parentAction = Actions.findOne(action.objectId);
-
-      NotifyItems.insert({
-        userId: parentAction.userId,
-        actionId: action._id,
-        createdAt: action.createdAt,
-      });
-    }
-
     switch (action.type) {
-      case Actions.types.SUBSCRIBE:
-        Actions
-          .find({ userId: action.objectId })
-          .forEach(act =>
-            NewsItems.insert({
-              userId: action.userId,
-              actionId: act._id,
-              authorId: act.userId,
-              createdAt: act.createdAt,
-            })
-          );
-
-        NotifyItems.insert({
-          userId: action.objectId,
-          actionId: action._id,
-          createdAt: action.createdAt,
-        });
-        break;
       case Actions.types.COMMENT:
         Actions.update(action.objectId, {$inc: {commentsCount: 1}});
         break;
@@ -68,14 +28,9 @@ class ActionsCollection extends Mongo.Collection {
 
   remove(selector, callback) {
     Actions.find(selector).forEach(action => {
-      NewsItems.remove({ actionId: action._id });
-      NotifyItems.remove({ actionId: action._id });
       Actions.remove({ objectId: action._id });
 
       switch (action.type) {
-        case Actions.types.SUBSCRIBE:
-          NewsItems.remove({ userId: action.userId, authorId: action.objectId });
-          break;
         case Actions.types.COMMENT:
           Actions.update(action.objectId, {$inc: {commentsCount: -1}});
           break;

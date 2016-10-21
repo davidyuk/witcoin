@@ -32,6 +32,55 @@ NotifyItems.schema = new SimpleSchema({
 NotifyItems.attachSchema(NotifyItems.schema);
 
 if (Meteor.isServer) {
+  Actions.after.insert((userId, doc) => {
+    Actions
+      .find({type: Actions.types.SUBSCRIBE, objectId: doc.userId})
+      .forEach(subscription =>
+        NewsItems.insert({
+          userId: subscription.userId,
+          actionId: doc._id,
+          authorId: doc.userId,
+          createdAt: doc.createdAt,
+        })
+      );
+
+    if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(doc.type)) {
+      NotifyItems.insert({
+        userId: Actions.findOne(doc.objectId).userId,
+        actionId: doc._id,
+        createdAt: doc.createdAt,
+      });
+    }
+
+    if (doc.type == Actions.types.SUBSCRIBE) {
+      Actions
+        .find({userId: doc.objectId})
+        .forEach(act =>
+          NewsItems.insert({
+            userId: doc.userId,
+            actionId: act._id,
+            authorId: act.userId,
+            createdAt: act.createdAt,
+          })
+        );
+
+      NotifyItems.insert({
+        userId: doc.objectId,
+        actionId: doc._id,
+        createdAt: doc.createdAt,
+      });
+    }
+  });
+
+  Actions.after.remove((userId, doc) => {
+    NewsItems.remove({actionId: doc._id});
+    NotifyItems.remove({actionId: doc._id});
+
+    if (doc.type == Actions.types.SUBSCRIBE) {
+      NewsItems.remove({userId: doc.userId, authorId: doc.objectId});
+    }
+  });
+
   Meteor.publishComposite('news', function(limit) {
     check(limit, Number);
 
@@ -80,6 +129,6 @@ Meteor.methods({
 
 Factory.define('notification', NotifyItems, {
   userId: Factory.get('user'),
-  actionId: () => Factory.get('action.default'), // TODO: remove circular dependency
+  actionId: Factory.get('action.default'),
   createdAt: () => faker.date.past(),
 });
