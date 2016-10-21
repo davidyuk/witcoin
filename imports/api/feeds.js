@@ -120,3 +120,7 @@ Factory.define('notification', FeedItems, {
   userId: Factory.get('user'),
   isNotification: true,
 });
+
+Factory.define('newsItem', FeedItems, Factory.extend('notification', {
+  isNotification: false,
+}));
