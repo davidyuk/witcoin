@@ -10,7 +10,11 @@ export default FeedListContainer = createContainer(({ selector, limit, countCall
 
   const actions = FeedItems
     .find({userId: Meteor.userId()}, {sort: {createdAt: -1}})
-    .map(feedItem => Actions.findOne(feedItem.actionId))
+    .map(feedItem => {
+      const action = Actions.findOne(feedItem.actionId);
+      if (action) action.feedItemId = feedItem._id;
+      return action;
+    })
     .filter(joinAction);
 
   countCallback && countCallback(actions.length);
@@ -19,5 +23,6 @@ export default FeedListContainer = createContainer(({ selector, limit, countCall
     actions,
     actionsLoading: !handle.ready(),
     isNotifications: selector.isNotification,
+    isNews: !selector.isNotification,
   };
 }, ActionList);

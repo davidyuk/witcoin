@@ -78,4 +78,5 @@ Action.propTypes = {
   action: React.PropTypes.object.isRequired,
   isShared: React.PropTypes.bool,
   isNotification: React.PropTypes.bool,
+  isNewsItem: React.PropTypes.bool,
 };

@@ -7,20 +7,23 @@ export default class RemoveButton extends React.Component {
     Meteor.call('action.remove', this.props.action._id);
   }
 
-  removeNotification(event) {
+  removeFeedItem(event) {
     event.preventDefault();
-    Meteor.call('notification.remove', this.props.action._id);
+    Meteor.call('feedItem.remove', this.props.action.feedItemId);
   }
 
   getHandler() {
     if (this.props.isShared) return null;
-    if (this.props.isNotification) return this.removeNotification.bind(this);
+    if (this.props.isNotification || this.props.isNewsItem) return this.removeFeedItem.bind(this);
     if (this.props.action.userId == Meteor.userId()) return this.removeAction.bind(this);
   }
 
   render() {
     const onClick = this.getHandler();
-    const title = this.props.isNotification ? 'Удалить уведомление' : 'Отменить действие';
+    const title =
+      this.props.isNotification && 'Удалить уведомление' ||
+      this.props.isNewsItem && 'Скрыть новость' ||
+      'Отменить действие';
 
     if (!onClick) return null;
     return (
@@ -35,4 +38,5 @@ RemoveButton.propTypes = {
   action: React.PropTypes.object.isRequired,
   isShared: React.PropTypes.bool,
   isNotification: React.PropTypes.bool,
+  isNewsItem: React.PropTypes.bool,
 };

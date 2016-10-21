@@ -5,12 +5,16 @@ import Action from './Action';
 export default class ActionList extends React.Component {
   render() {
     const actions = this.props.actions;
+    const commonProps = {
+      isNotification: this.props.isNotifications,
+      isNewsItem: this.props.isNews,
+    };
 
     return (
       <div>
         <div className="list-group">
           {actions && actions.length ? actions.map(item =>
-            <Action action={item} key={item._id} isNotification={this.props.isNotifications} />
+            <Action action={item} key={item._id} {...commonProps} />
           ) : <i>{this.props.onEmptyMessage}</i>}
         </div>
         <div className="progress" style={{visibility: this.props.actionsLoading ? 'visible' : 'hidden'}}>
@@ -25,6 +29,7 @@ ActionList.propTypes = {
   actions: React.PropTypes.array,
   actionsLoading: React.PropTypes.bool.isRequired,
   isNotifications: React.PropTypes.bool,
+  isNews: React.PropTypes.bool,
   onEmptyMessage: React.PropTypes.string,
 };
 

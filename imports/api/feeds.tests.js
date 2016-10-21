@@ -58,32 +58,32 @@ if (Meteor.isServer) {
     });
 
     describe('methods', () => {
-      describe('notification.remove', () => {
-        const removeNotification = Meteor.server.method_handlers['notification.remove'];
+      describe('feedItem.remove', () => {
+        const removeFeedItem = Meteor.server.method_handlers['feedItem.remove'];
 
         it('fail when current user not logged in', () => {
-          assert.throws(() => removeNotification.call({}, Factory.create('notification').actionId)
+          assert.throws(() => removeFeedItem.call({}, Factory.create('notification')._id)
             , Meteor.Error, 'not-authorized');
         });
 
-        it('fail when remove uncreated notification', () => {
+        it('fail when remove uncreated feed item', () => {
           const userId = Factory.create('user')._id;
-          assert.throws(() => removeNotification.call({ userId }, Random.id())
-            , Meteor.Error, 'notification-not-found');
+          assert.throws(() => removeFeedItem.call({ userId }, Random.id())
+            , Meteor.Error, 'feed-item-not-found');
         });
 
-        it('fail when remove notification of another user', () => {
-          const actionId = Factory.create('notification').actionId;
+        it('fail when remove feed item of another user', () => {
+          const feedItemId = Factory.create('notification')._id;
           const userId = Factory.create('user')._id;
-          assert.throws(() => removeNotification.call({ userId }, actionId)
-            , Meteor.Error, 'notification-not-found');
+          assert.throws(() => removeFeedItem.call({ userId }, feedItemId)
+            , Meteor.Error, 'forbidden');
         });
 
         it('remove', () => {
-          const notification = Factory.create('notification');
-          const userId = notification.userId;
+          const feedItem = Factory.create('notification');
+          const userId = feedItem.userId;
           expect(FeedItems.find({userId, isNotification: true}).count()).to.equal(1);
-          removeNotification.call({ userId }, notification.actionId);
+          removeFeedItem.call({ userId }, feedItem._id);
           expect(FeedItems.find({userId, isNotification: true}).count()).to.equal(0);
         });
       });

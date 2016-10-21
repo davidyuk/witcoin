@@ -92,16 +92,18 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'notification.remove' (actionId) {
-    check(actionId, String);
+  'feedItem.remove' (feedItemId) {
+    check(feedItemId, String);
 
     if (!this.userId)
       throw new Meteor.Error('not-authorized');
-    const notification = FeedItems.findOne({userId: this.userId, actionId, isNotification: true});
-    if (!notification)
-      throw new Meteor.Error('notification-not-found');
+    const feedItem = FeedItems.findOne(feedItemId);
+    if (!feedItem)
+      throw new Meteor.Error('feed-item-not-found');
+    if (feedItem.userId != this.userId)
+      throw new Meteor.Error('forbidden');
 
-    FeedItems.remove(notification._id);
+    FeedItems.remove(feedItemId);
   },
 });
 
