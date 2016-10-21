@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import { expect } from 'meteor/practicalmeteor:chai';
 
-import { NewsItems, NotifyItems } from './feeds';
+import { FeedItems } from './feeds';
 import { Actions } from './actions';
 import './users';
 
@@ -16,14 +16,14 @@ if (Meteor.isServer) {
       const userId = Factory.create('user')._id;
       const newsSourceId = Factory.create('user')._id;
       const assertNewsCount = (c) =>
-        expect(NewsItems.find({ userId }).count()).to.equal(c);
+        expect(FeedItems.find({userId, isNotification: false}).count()).to.equal(c);
 
       const actionId = createAction.call({ userId: newsSourceId }, 'test action');
       assertNewsCount(0);
       subscribeAction.call({ userId }, newsSourceId);
       assertNewsCount(1);
 
-      const newsItem = NewsItems.findOne({ userId });
+      const newsItem = FeedItems.findOne({userId, isNotification: false});
       expect(newsItem.actionId).to.equal(actionId);
       const action = Actions.findOne(actionId);
       expect(newsItem.createdAt).to.eql(action.createdAt);
@@ -41,7 +41,7 @@ if (Meteor.isServer) {
       const subscriberId = Factory.create('user')._id;
       const userId = Factory.create('user')._id;
       const assertNotificationCount = (c) =>
-        expect(NotifyItems.find({ userId }).count()).to.equal(c);
+        expect(FeedItems.find({userId, isNotification: true}).count()).to.equal(c);
 
       assertNotificationCount(0);
       subscribeAction.call({ userId: subscriberId }, userId);
@@ -53,7 +53,7 @@ if (Meteor.isServer) {
     describe('factory', () => {
       it('notification', () => {
         const notification = Factory.create('notification');
-        expect(NotifyItems.findOne(notification._id)).is.an('object');
+        expect(FeedItems.findOne({_id: notification._id, isNotification: true})).is.an('object');
       });
     });
 
@@ -82,9 +82,9 @@ if (Meteor.isServer) {
         it('remove', () => {
           const notification = Factory.create('notification');
           const userId = notification.userId;
-          expect(NotifyItems.find({ userId }).count()).to.equal(1);
+          expect(FeedItems.find({userId, isNotification: true}).count()).to.equal(1);
           removeNotification.call({ userId }, notification.actionId);
-          expect(NotifyItems.find({ userId }).count()).to.equal(0);
+          expect(FeedItems.find({userId, isNotification: true}).count()).to.equal(0);
         });
       });
     });
@@ -97,7 +97,7 @@ if (Meteor.isServer) {
       const actionUserId = Factory.create('user')._id;
       const userId = Factory.create('user')._id;
       const assertNotifyCount = c =>
-        expect(NotifyItems.find({userId: actionUserId}).count()).to.equal(c);
+        expect(FeedItems.find({userId: actionUserId, isNotification: true}).count()).to.equal(c);
       [
         (userId, actionId) => commentAction.call({ userId }, actionId, 'test'),
         (userId, actionId) => rateAction.call({ userId }, actionId, 1),
