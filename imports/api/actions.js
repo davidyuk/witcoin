@@ -7,46 +7,27 @@ import faker from 'faker';
 import { SchemaHelpers } from './common';
 import './users';
 
-class ActionsCollection extends Mongo.Collection {
-  insert(doc, callback) {
-    const docId = super.insert(doc, callback);
-    const action = Actions.findOne(docId);
+export const Actions = new Mongo.Collection('actions');
 
-    switch (action.type) {
-      case Actions.types.COMMENT:
-        Actions.update(action.objectId, {$inc: {commentsCount: 1}});
-        break;
-      case Actions.types.RATE:
-        action.rate && Actions.update(action.objectId, {$inc: {['rates.' + (action.rate == 1 ? 'up' : 'down')]: 1}});
-        break;
-      case Actions.types.SHARE:
-        Actions.update(action.objectId, {$inc: {sharesCount: 1}});
-        break;
-    }
-    return docId;
+Actions.after.remove((userId, doc) => Actions.remove({ objectId: doc._id }));
+
+const updateParentActionCounter = isInc => (_, action) => {
+  const d = isInc ? 1 : -1;
+  switch (action.type) {
+    case Actions.types.COMMENT:
+      Actions.update(action.objectId, {$inc: {commentsCount: d}});
+      break;
+    case Actions.types.RATE:
+      action.rate && Actions.update(action.objectId, {$inc: {['rates.' + (action.rate == 1 ? 'up' : 'down')]: d}});
+      break;
+    case Actions.types.SHARE:
+      Actions.update(action.objectId, {$inc: {sharesCount: d}});
+      break;
   }
+};
 
-  remove(selector, callback) {
-    Actions.find(selector).forEach(action => {
-      Actions.remove({ objectId: action._id });
-
-      switch (action.type) {
-        case Actions.types.COMMENT:
-          Actions.update(action.objectId, {$inc: {commentsCount: -1}});
-          break;
-        case Actions.types.RATE:
-          action.rate && Actions.update(action.objectId, {$inc: {['rates.' + (action.rate == 1 ? 'up' : 'down')]: -1}});
-          break;
-        case Actions.types.SHARE:
-          Actions.update(action.objectId, {$inc: {sharesCount: -1}});
-          break;
-      }
-    });
-    return super.remove(selector, callback);
-  }
-}
-
-export const Actions = new ActionsCollection('actions');
+Actions.after.insert(updateParentActionCounter(true));
+Actions.after.remove(updateParentActionCounter(false));
 
 Actions.types = {
   DEFAULT: 'default',
