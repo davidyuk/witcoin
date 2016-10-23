@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedPlural } from 'react-intl';
 
 import UserList from '../components/UserList';
 
@@ -12,7 +13,12 @@ export default class HomePage extends React.Component {
             <table className="table">
               <tbody>
               <tr><td>Зарегистрировано пользователей</td><td>
-                {this.props.usersCount}
+                {this.props.usersCount}&nbsp;
+                <FormattedPlural value={this.props.usersCount}
+                                 one="пользователь"
+                                 few="пользователя"
+                                 many="пользователей"
+                                 other="пользователей" />
               </td></tr>
               </tbody>
             </table>

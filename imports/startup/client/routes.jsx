@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { IntlProvider } from 'react-intl';
 
 import AppContainer from '../../ui/containers/AppContainer';
 import HomePageContainer from '../../ui/containers/HomePageContainer';
@@ -22,21 +23,23 @@ function requireAuth(nextState, replace) {
 }
 
 export const renderRoutes = () => (
-  <Router history={browserHistory}>
-    <Route path="/" component={AppContainer}>
-      <IndexRoute component={HomePageContainer} />
-      <Route path="sign-in" component={AccountsPage} />
-      <Route path="sign-up" component={AccountsPage} />
-      <Route path="u/:userId" component={UserPageContainer} />
+  <IntlProvider locale="ru">
+    <Router history={browserHistory}>
+      <Route path="/" component={AppContainer}>
+        <IndexRoute component={HomePageContainer} />
+        <Route path="sign-in" component={AccountsPage} />
+        <Route path="sign-up" component={AccountsPage} />
+        <Route path="u/:userId" component={UserPageContainer} />
 
-      <Route path="im" onEnter={requireAuth}>
-        <IndexRoute component={ChatPageContainer} />
-        <Route path=":chatId" component={ChatPageContainer} />
+        <Route path="im" onEnter={requireAuth}>
+          <IndexRoute component={ChatPageContainer} />
+          <Route path=":chatId" component={ChatPageContainer} />
+        </Route>
+        <Route path="feed" component={NewsPage} onEnter={requireAuth} />
+        <Route path="notifications" component={NotificationPage} onEnter={requireAuth} />
+
+        <Route path="*" component={NotFoundPage} />
       </Route>
-      <Route path="feed" component={NewsPage} onEnter={requireAuth} />
-      <Route path="notifications" component={NotificationPage} onEnter={requireAuth} />
-
-      <Route path="*" component={NotFoundPage} />
-    </Route>
-  </Router>
+    </Router>
+  </IntlProvider>
 );
