@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import LinkToUser from './LinkToUser';
 import MessageInput from './MessageInput';
+import Date from './Date';
 
 export default class Chat extends React.Component {
   sendMessage(message) {
@@ -33,7 +34,9 @@ export default class Chat extends React.Component {
             {this.props.messages.length ? this.props.messages.map(message => (
               <div className="media" key={message._id} style={{flexShrink: 0}}>
                 <div className="media-body">
-                  <div className="pull-right text-muted">{message.createdAt.toLocaleString('ru')}</div>
+                  <div className="pull-right text-muted">
+                    <Date value={message.createdAt} />
+                  </div>
                   <LinkToUser user={users[message.userId]}/>
                   <br/>
                   {message.content}

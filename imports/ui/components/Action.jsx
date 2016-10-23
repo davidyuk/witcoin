@@ -7,6 +7,7 @@ import VoteButton from './VoteButton';
 import ShareButton from './ShareButton';
 import CommentList from './CommentList';
 import RemoveButton from './RemoveButton';
+import Date from './Date';
 
 export default class Action extends React.Component {
   isMale(user) {
@@ -24,7 +25,7 @@ export default class Action extends React.Component {
             &nbsp;<VoteButton action={this.props.action} />
           </div>
           <small>
-            {action.createdAt.toLocaleString('ru')}
+            <Date value={action.createdAt} isRelative={true} />
           </small>
         </div>
         {!this.props.isNotification ? <CommentList comments={action.comments} actionId={action._id} /> : null}

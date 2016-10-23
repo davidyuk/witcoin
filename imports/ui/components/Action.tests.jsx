@@ -1,8 +1,8 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import { expect, assert } from 'meteor/practicalmeteor:chai';
 import faker from 'faker';
 
+import { mountWithIntl } from '../../helpers/intl-enzyme-test-helper';
 import Action from './Action';
 
 if (Meteor.isClient) {
@@ -24,7 +24,7 @@ if (Meteor.isClient) {
       });
 
       it('render', () => {
-        const item = shallow(<Action action={action} />).render();
+        const item = mountWithIntl(<Action action={action} />).render();
 
         assert(hasCommentList(item));
         assert(hasRateButton(item));
@@ -33,7 +33,7 @@ if (Meteor.isClient) {
       });
 
       it('render shared', () => {
-        const item = shallow(<Action action={action} isShared={true} />).render();
+        const item = mountWithIntl(<Action action={action} isShared={true} />).render();
 
         assert(!hasCommentList(item));
         assert(!hasRateButton(item));
@@ -55,7 +55,7 @@ if (Meteor.isClient) {
           'profile.firstName': 'Пётр',
           'profile.lastName': 'Петров',
         }, {gender: Meteor.users.genderTypes.MALE});
-        const item = shallow(<Action action={action} />).render();
+        const item = mountWithIntl(<Action action={action} />).render();
 
         assert(hasCommentList(item));
         assert(hasRateButton(item));
@@ -66,7 +66,7 @@ if (Meteor.isClient) {
       it('render female', () => {
         action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.FEMALE});
         action.object = Factory.build('user');
-        const item = shallow(<Action action={action} />).render();
+        const item = mountWithIntl(<Action action={action} />).render();
 
         expect(item.text()).string('подписалась');
       });
@@ -74,7 +74,7 @@ if (Meteor.isClient) {
       it('render notification', () => {
         action.user = Factory.build('user');
         action.object = Factory.build('user');
-        const item = shallow(<Action action={action} isNotification={true} />).render();
+        const item = mountWithIntl(<Action action={action} isNotification={true} />).render();
 
         expect(item.text()).string('Ваш').not.string(getFullName(action.object));
       });
@@ -91,7 +91,7 @@ if (Meteor.isClient) {
 
       it('render', () => {
         action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.MALE});
-        const item = shallow(<Action action={action} />).render();
+        const item = mountWithIntl(<Action action={action} />).render();
 
         assert(hasCommentList(item));
         assert(hasRateButton(item));
@@ -102,14 +102,14 @@ if (Meteor.isClient) {
 
       it('render female', () => {
         action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.FEMALE});
-        const item = shallow(<Action action={action} />).render();
+        const item = mountWithIntl(<Action action={action} />).render();
 
         expect(item.text()).string('прокомментировала');
       });
 
       it('render notification', () => {
         action.user = Factory.build('user');
-        const item = shallow(<Action action={action} isNotification={true} />).render();
+        const item = mountWithIntl(<Action action={action} isNotification={true} />).render();
 
         expect(item.text()).string('Ваш');
       });
@@ -130,7 +130,7 @@ if (Meteor.isClient) {
           'profile.lastName': 'Петров',
         }, {gender: Meteor.users.genderTypes.MALE});
         action.rate = 1;
-        const item = shallow(<Action action={action} />).render();
+        const item = mountWithIntl(<Action action={action} />).render();
 
         assert(hasCommentList(item));
         assert(hasRateButton(item));
@@ -141,14 +141,14 @@ if (Meteor.isClient) {
       it('render dislike', () => {
         action.user = Factory.build('user');
         action.rate = -1;
-        const item = shallow(<Action action={action} />).render();
+        const item = mountWithIntl(<Action action={action} />).render();
 
         expect(item.text()).string('не понравилась');
       });
 
       it('render notification', () => {
         action.user = Factory.build('user');
-        const item = shallow(<Action action={action} isNotification={true} />).render();
+        const item = mountWithIntl(<Action action={action} isNotification={true} />).render();
 
         expect(item.text()).string('Ваш');
       });
@@ -163,7 +163,7 @@ if (Meteor.isClient) {
         action.user = Factory.build('user');
         action.object = Factory.build('action.default');
         action.object.user = Factory.build('user');
-        const item = shallow(<Action action={action} />).render();
+        const item = mountWithIntl(<Action action={action} />).render();
 
         assert(hasCommentList(item));
         assert(hasRateButton(item));
@@ -190,7 +190,7 @@ if (Meteor.isClient) {
         const c = 8;
         for (let i = c; i > 0; --i) action = generateAction(action);
         action.comments = [];
-        const item = shallow(<Action action={action} />).render();
+        const item = mountWithIntl(<Action action={action} />).render();
         const itemText = item.text();
         for (let i = c; i > 0; --i) action = assertAction(action);
       });
@@ -205,14 +205,14 @@ if (Meteor.isClient) {
 
         it('render', () => {
           action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.MALE});
-          const item = shallow(<Action action={action} isNotification={true}/>).render();
+          const item = mountWithIntl(<Action action={action} isNotification={true}/>).render();
 
           expect(item.text()).string('поделился').string('Ваш');
         });
 
         it('render female', () => {
           action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.FEMALE});
-          const item = shallow(<Action action={action} isNotification={true}/>).render();
+          const item = mountWithIntl(<Action action={action} isNotification={true}/>).render();
 
           expect(item.text()).string('поделилась');
         });

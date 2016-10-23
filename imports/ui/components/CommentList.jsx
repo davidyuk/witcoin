@@ -4,6 +4,7 @@ import LinkToUser from './LinkToUser';
 import VoteButton from './VoteButton';
 import RemoveButton from './RemoveButton';
 import MessageInput from './MessageInput';
+import Date from './Date';
 
 export default class CommentList extends React.Component {
   addComment(comment) {
@@ -27,7 +28,7 @@ export default class CommentList extends React.Component {
             <VoteButton action={comment} />
           </div>
           <small>
-            {comment.createdAt.toLocaleString('ru')}
+            <Date value={comment.createdAt} isRelative={true} />
           </small>
         </div>
       </div>
