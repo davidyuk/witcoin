@@ -3,7 +3,7 @@ import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { IntlProvider } from 'react-intl';
 
-import AppContainer from '../../ui/containers/AppContainer';
+import App from '../../ui/layouts/App';
 import HomePageContainer from '../../ui/containers/HomePageContainer';
 import UserPageContainer from '../../ui/containers/UserPageContainer';
 import ChatPageContainer from '../../ui/containers/ChatPageContainer';
@@ -25,7 +25,7 @@ function requireAuth(nextState, replace) {
 export const renderRoutes = () => (
   <IntlProvider locale="ru">
     <Router history={browserHistory}>
-      <Route path="/" component={AppContainer}>
+      <Route path="/" component={App}>
         <IndexRoute component={HomePageContainer} />
         <Route path="sign-in" component={AccountsPage} />
         <Route path="sign-up" component={AccountsPage} />

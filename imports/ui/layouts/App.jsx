@@ -21,7 +21,7 @@ export default class App extends Component {
               <ul className="nav navbar-nav">
               </ul>
 
-              <UserMenu user={this.props.user}/>
+              <UserMenu />
             </div>
           </div>
         </nav>

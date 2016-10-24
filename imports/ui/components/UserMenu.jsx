@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import UserName from './UserName';
+import { injectUser } from '../injectors';
 
-export default class UserMenu extends React.Component {
+class UserMenu extends React.Component {
   logOut(e) {
     e.preventDefault();
     AccountsTemplates.logout();
@@ -52,3 +53,5 @@ UserMenu.propTypes = {
 UserMenu.contextTypes = {
   router: React.PropTypes.object.isRequired,
 };
+
+export default injectUser(UserMenu);
