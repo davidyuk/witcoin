@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Link } from 'react-router';
+import { FormattedPlural } from 'react-intl';
+
 import UserName from '../components/UserName';
 import TruncateText from '../components/TruncateText';
 import ChatContainer from '../containers/ChatContainer';
@@ -27,7 +29,14 @@ export default class ChatPage extends React.Component {
       <div style={{height: 100 + '%', display: 'flex', paddingBottom: 20 + 'px'}}>
         <div className={'list-group ' + listClass} style={{marginBottom: 0, flex: '1 0 250px', display: 'flex', flexDirection: 'column'}}>
           <span className="list-group-item active" style={{flexShrink: 0}}>
-            <string>{this.props.chatsCount} диалогов</string>
+            <string>
+              {this.props.chatsCount}&nbsp;
+              <FormattedPlural value={this.props.chatsCount}
+                               one="диалог"
+                               few="диалога"
+                               many="диалогов"
+                               other="диалогов" />
+            </string>
           </span>
           <div style={{overflow: 'auto', flexGrow: 1}}>
             {this.props.chats.map(chat => (
