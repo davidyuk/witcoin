@@ -12,6 +12,7 @@ import AccountsPage from '../../ui/pages/AccountsPage';
 import NotFoundPage from '../../ui/pages/NotFoundPage';
 import NewsPage from '../../ui/pages/NewsPage';
 import NotificationPage from '../../ui/pages/NotificationPage';
+import SettingsPage from '../../ui/pages/SettingsPage';
 
 function requireAuth(nextState, replace) {
   if (!Meteor.userId()) {
@@ -30,6 +31,8 @@ export const renderRoutes = () => (
         <Route path="sign-in" component={AccountsPage} />
         <Route path="sign-up" component={AccountsPage} />
         <Route path="u/:userId" component={UserPageContainer} />
+
+        <Route path="settings" component={SettingsPage} onEnter={requireAuth} />
 
         <Route path="im" onEnter={requireAuth}>
           <IndexRoute component={ChatPageContainer} />

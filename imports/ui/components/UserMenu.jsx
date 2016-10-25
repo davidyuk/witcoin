@@ -17,6 +17,7 @@ const UserMenu = ({ user }) => {
           <LinkMenu to="/feed">Новости</LinkMenu>
           <LinkMenu to="/notifications">Уведомления</LinkMenu>
           <LinkMenu to="/im">Сообщения</LinkMenu>
+          <LinkMenu to="/settings">Настройки</LinkMenu>
           <li className="divider"/>
           <li><Link onClick={() => AccountsTemplates.logout()} to="/">Выход</Link></li>
         </ul>
