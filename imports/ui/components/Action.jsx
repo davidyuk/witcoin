@@ -10,10 +10,6 @@ import RemoveButton from './RemoveButton';
 import Date from './Date';
 
 export default class Action extends React.Component {
-  isMale(user) {
-    return !user.profile || user.profile.gender != Meteor.users.genderTypes.FEMALE;
-  }
-
   renderBottom() {
     const action = this.props.action;
     if (this.props.isShared) return null;
@@ -36,13 +32,13 @@ export default class Action extends React.Component {
   getMessage() {
     const action = this.props.action;
     const isN = this.props.isNotification;
-    const v1 = ['ся', 'ась'][+!this.isMale(action.user)];
-    const v2 = ['', 'а'][+!this.isMale(action.user)];
+    const v1 = ['ся', 'ась'][+!action.user.isMale()];
+    const v2 = ['', 'а'][+!action.user.isMale()];
     switch (action.type) {
       case Actions.types.SUBSCRIBE:
         return <span>
           подписал{v1} на {isN ? 'Ваши' : ''} обновления
-          {' '}{isN ? null : <LinkToUser user={action.object} inflection={LinkToUser.inflections.GENITIVE} />}
+          {' '}{isN ? null : <LinkToUser user={action.object} inflection={Meteor.users.inflectionTypes.GENITIVE} />}
           </span>;
       case Actions.types.COMMENT:
         return `прокомментировал${v2} ${isN ? 'Вашу' : ''} запись`;
@@ -56,7 +52,7 @@ export default class Action extends React.Component {
 
   render() {
     const action = this.props.action;
-    const inflection = action.type == Actions.types.RATE ? LinkToUser.inflections.DATIVE : null;
+    const inflection = action.type == Actions.types.RATE ? Meteor.users.inflectionTypes.DATIVE : null;
     const hasParentRecord = [Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(action.type);
     const style = !this.props.isShared ? {}
       : { borderTop: 'none', borderRight: 'none', borderBottom: 'none', padding: '0 5px', margin: '5px' };

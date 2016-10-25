@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import faker from 'faker';
+import petrovich from 'petrovich';
 
 Meteor.users.publicFields = {
   createdAt: 1,
@@ -13,6 +14,15 @@ Meteor.users.genderTypes = {
   FEMALE: 'female',
 };
 
+Meteor.users.inflectionTypes = {
+  NOMINATIVE: 'nominative',
+  GENITIVE: 'genitive',
+  DATIVE: 'dative',
+  ACCUSATIVE: 'accusative',
+  INSTRUMENTAL: 'instrumental',
+  PREPOSITIONAL: 'prepositional',
+};
+
 if (Meteor.isServer) {
   Meteor.publish('users.last', function () {
     Counts.publish(this, 'users', Meteor.users.find());
@@ -23,6 +33,24 @@ if (Meteor.isServer) {
     });
   });
 }
+
+Meteor.users.helpers({
+  isMale() {
+    return this.profile.gender != Meteor.users.genderTypes.FEMALE;
+  },
+  getFullName(inflection = null) {
+    if (inflection) {
+      let u = {
+        first: this.profile.firstName,
+        last: this.profile.lastName,
+        gender: this.isMale() ? 'male' : 'female',
+      };
+      u = petrovich(u, inflection);
+      return [u.first, u.last].join(' ');
+    }
+    return [this.profile.firstName, this.profile.lastName].join(' ');
+  },
+});
 
 Factory.define('user', Meteor.users, {
   emails: () => [{

@@ -38,3 +38,4 @@ practicalmeteor:chai
 aldeed:simple-schema
 aldeed:collection2
 matb33:collection-hooks
+dburles:collection-helpers

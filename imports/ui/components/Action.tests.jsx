@@ -8,7 +8,10 @@ import Action from './Action';
 if (Meteor.isClient) {
   faker.locale = 'ru';
   Meteor.userId = () => null;
-  const getFullName = user => user.profile.firstName + ' ' + user.profile.lastName;
+
+  function buildUser() {
+    return Meteor.users._transform(Factory.build.apply(Factory, arguments));
+  }
 
   describe('Action', () => {
     const hasCommentList = node => node.find('div.list-group').length == 1;
@@ -20,7 +23,7 @@ if (Meteor.isClient) {
       beforeEach(() => {
         action = Factory.build('action.default');
         action.comments = [];
-        action.user = Factory.build('user');
+        action.user = buildUser('user');
       });
 
       it('render', () => {
@@ -29,7 +32,7 @@ if (Meteor.isClient) {
         assert(hasCommentList(item));
         assert(hasRateButton(item));
         assert(hasShareButton(item));
-        expect(item.text()).string(getFullName(action.user)).string(action.description);
+        expect(item.text()).string(action.user.getFullName()).string(action.description);
       });
 
       it('render shared', () => {
@@ -38,7 +41,7 @@ if (Meteor.isClient) {
         assert(!hasCommentList(item));
         assert(!hasRateButton(item));
         assert(!hasShareButton(item));
-        expect(item.text()).string(getFullName(action.user)).string(action.description);
+        expect(item.text()).string(action.user.getFullName()).string(action.description);
       });
     });
 
@@ -50,8 +53,8 @@ if (Meteor.isClient) {
       });
 
       it('render', () => {
-        action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.MALE});
-        action.object = Factory.build('user', {
+        action.user = buildUser('user', {}, {gender: Meteor.users.genderTypes.MALE});
+        action.object = buildUser('user', {
           'profile.firstName': 'Пётр',
           'profile.lastName': 'Петров',
         }, {gender: Meteor.users.genderTypes.MALE});
@@ -60,23 +63,23 @@ if (Meteor.isClient) {
         assert(hasCommentList(item));
         assert(hasRateButton(item));
         assert(hasShareButton(item));
-        expect(item.text()).string(getFullName(action.user)).string('подписался').string('Петра Петрова');
+        expect(item.text()).string(action.user.getFullName()).string('подписался').string('Петра Петрова');
       });
 
       it('render female', () => {
-        action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.FEMALE});
-        action.object = Factory.build('user');
+        action.user = buildUser('user', {}, {gender: Meteor.users.genderTypes.FEMALE});
+        action.object = buildUser('user');
         const item = mountWithIntl(<Action action={action} />).render();
 
         expect(item.text()).string('подписалась');
       });
 
       it('render notification', () => {
-        action.user = Factory.build('user');
-        action.object = Factory.build('user');
+        action.user = buildUser('user');
+        action.object = buildUser('user');
         const item = mountWithIntl(<Action action={action} isNotification={true} />).render();
 
-        expect(item.text()).string('Ваш').not.string(getFullName(action.object));
+        expect(item.text()).string('Ваш').not.string(action.object.getFullName());
       });
     });
 
@@ -86,29 +89,29 @@ if (Meteor.isClient) {
         action = Factory.build('action.comment');
         action.comments = [];
         action.object = Factory.build('action.default');
-        action.object.user = Factory.build('user');
+        action.object.user = buildUser('user');
       });
 
       it('render', () => {
-        action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.MALE});
+        action.user = buildUser('user', {}, {gender: Meteor.users.genderTypes.MALE});
         const item = mountWithIntl(<Action action={action} />).render();
 
         assert(hasCommentList(item));
         assert(hasRateButton(item));
         assert(hasShareButton(item));
-        expect(item.text()).string(getFullName(action.user)).string('прокомментировал').string(action.description)
-          .string(getFullName(action.object.user));
+        expect(item.text()).string(action.user.getFullName()).string('прокомментировал').string(action.description)
+          .string(action.object.user.getFullName());
       });
 
       it('render female', () => {
-        action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.FEMALE});
+        action.user = buildUser('user', {}, {gender: Meteor.users.genderTypes.FEMALE});
         const item = mountWithIntl(<Action action={action} />).render();
 
         expect(item.text()).string('прокомментировала');
       });
 
       it('render notification', () => {
-        action.user = Factory.build('user');
+        action.user = buildUser('user');
         const item = mountWithIntl(<Action action={action} isNotification={true} />).render();
 
         expect(item.text()).string('Ваш');
@@ -121,11 +124,11 @@ if (Meteor.isClient) {
         action = Factory.build('action.rate');
         action.comments = [];
         action.object = Factory.build('action.default');
-        action.object.user = Factory.build('user');
+        action.object.user = buildUser('user');
       });
 
       it('render', () => {
-        action.user = Factory.build('user', {
+        action.user = buildUser('user', {
           'profile.firstName': 'Пётр',
           'profile.lastName': 'Петров',
         }, {gender: Meteor.users.genderTypes.MALE});
@@ -139,7 +142,7 @@ if (Meteor.isClient) {
       });
 
       it('render dislike', () => {
-        action.user = Factory.build('user');
+        action.user = buildUser('user');
         action.rate = -1;
         const item = mountWithIntl(<Action action={action} />).render();
 
@@ -147,7 +150,7 @@ if (Meteor.isClient) {
       });
 
       it('render notification', () => {
-        action.user = Factory.build('user');
+        action.user = buildUser('user');
         const item = mountWithIntl(<Action action={action} isNotification={true} />).render();
 
         expect(item.text()).string('Ваш');
@@ -160,9 +163,9 @@ if (Meteor.isClient) {
       it('render', () => {
         action = Factory.build('action.share');
         action.comments = [];
-        action.user = Factory.build('user');
+        action.user = buildUser('user');
         action.object = Factory.build('action.default');
-        action.object.user = Factory.build('user');
+        action.object.user = buildUser('user');
         const item = mountWithIntl(<Action action={action} />).render();
 
         assert(hasCommentList(item));
@@ -171,19 +174,19 @@ if (Meteor.isClient) {
         expect(item.text())
           .string(action.description)
           .string(action.object.description)
-          .string(getFullName(action.user))
-          .string(getFullName(action.object.user));
+          .string(action.user.getFullName())
+          .string(action.object.user.getFullName());
       });
 
       it('render multiple shares', () => {
         const generateAction = action => {
           const a = Factory.build('action.' + (action ? 'share' : 'default'));
           if (action) a.object = action;
-          a.user = Factory.build('user');
+          a.user = buildUser('user');
           return a;
         };
         const assertAction = action => {
-          expect(itemText).string(action.description).string(getFullName(action.user));
+          expect(itemText).string(action.description).string(action.user.getFullName());
           return action.object;
         };
 
@@ -200,18 +203,18 @@ if (Meteor.isClient) {
           action = Factory.build('action.share');
           action.comments = [];
           action.object = Factory.build('action.default');
-          action.object.user = Factory.build('user');
+          action.object.user = buildUser('user');
         });
 
         it('render', () => {
-          action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.MALE});
+          action.user = buildUser('user', {}, {gender: Meteor.users.genderTypes.MALE});
           const item = mountWithIntl(<Action action={action} isNotification={true}/>).render();
 
           expect(item.text()).string('поделился').string('Ваш');
         });
 
         it('render female', () => {
-          action.user = Factory.build('user', {}, {gender: Meteor.users.genderTypes.FEMALE});
+          action.user = buildUser('user', {}, {gender: Meteor.users.genderTypes.FEMALE});
           const item = mountWithIntl(<Action action={action} isNotification={true}/>).render();
 
           expect(item.text()).string('поделилась');

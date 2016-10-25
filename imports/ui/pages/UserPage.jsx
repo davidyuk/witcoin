@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
 import NotFoundPage from '../pages/NotFoundPage.jsx';
-import UserName from '../components/UserName';
 import ActionListContainer from '../containers/ActionListContainer';
 import UserList from '../components/UserList';
 import InfiniteScroll from '../components/InfiniteScroll';
@@ -31,7 +30,7 @@ export default class UserPage extends React.Component {
       <div className="row">
         <div className="col-md-4">
           <h3>
-            <UserName user={this.props.user}/>
+            {this.props.user.getFullName()}
           </h3>
           { this.props.user._id != Meteor.userId() ?
             <div className="btn-group" style={{ marginBottom: 20 + 'px' }}>

@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import { FormattedPlural } from 'react-intl';
 
-import UserName from '../components/UserName';
 import TruncateText from '../components/TruncateText';
 import ChatContainer from '../containers/ChatContainer';
 
@@ -42,9 +41,7 @@ export default class ChatPage extends React.Component {
             {this.props.chats.map(chat => (
               <Link to={'/im/' + chat._id} key={chat._id} className="list-group-item" activeClassName="active">
                 <b className="list-group-item-heading">
-                  {this.getUsers(chat).map(user => (
-                    <UserName key={user._id} user={user}/>
-                  ))}
+                  {this.getUsers(chat).map(user => user.getFullName())}
                 </b>
                 <p className="list-group-item-text">
                   <TruncateText content={chat.lastMessage.content} length={60} />
