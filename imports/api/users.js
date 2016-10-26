@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
 import faker from 'faker';
 import petrovich from 'petrovich';
 
@@ -49,6 +50,15 @@ Meteor.users.helpers({
       return [u.first, u.last].join(' ');
     }
     return [this.profile.firstName, this.profile.lastName].join(' ');
+  },
+});
+
+Meteor.methods({
+  'user.email.add' (email) {
+    if (Meteor.isServer) Accounts.addEmail(this.userId, email);
+  },
+  'user.email.remove' (email) {
+    if (Meteor.isServer) Accounts.removeEmail(this.userId, email);
   },
 });
 

@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { expect } from 'meteor/practicalmeteor:chai';
+import faker from 'faker';
 
 import './users';
 
@@ -41,6 +42,32 @@ if (Meteor.isServer) {
           })
         )
       })
+    });
+
+    describe('methods', () => {
+      describe('user.email.add', () => {
+        const addEmail = Meteor.server.method_handlers['user.email.add'];
+        it('allow to add email', () => {
+          const userId = Factory.create('user', {emails: []})._id;
+          const email = faker.internet.email();
+          addEmail.call({userId}, email);
+
+          const emailRecord = Meteor.users.findOne(userId).emails[0];
+          expect(emailRecord.address).to.equal(email);
+          expect(emailRecord.verified).to.equal(false);
+        });
+      });
+
+      describe('user.email.remove', () => {
+        const removeEmail = Meteor.server.method_handlers['user.email.remove'];
+        it('allow to remove email', () => {
+          const email = faker.internet.email();
+          const userId = Factory.create('user', {emails: [{address: email}]})._id;
+          removeEmail.call({userId}, email);
+
+          expect(Meteor.users.findOne(userId).emails.length).to.equal(0);
+        });
+      });
     });
   });
 }

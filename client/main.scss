@@ -43,6 +43,10 @@ textarea { resize: vertical; }
   word-break: break-all;
 }
 
+.table-noTopBorder tr:first-child td {
+  border-top: none;
+}
+
 #app {
   > div {
     display: flex;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 
+import EmailSettings from '../components/EmailSettings';
 import { injectUser } from '../injectors';
 
 const SettingsPage = ({ user }) => {
@@ -53,6 +54,7 @@ const SettingsPage = ({ user }) => {
         </div>
       </div>
     </form>
+    <EmailSettings user={user} />
   </div>;
 };
 
