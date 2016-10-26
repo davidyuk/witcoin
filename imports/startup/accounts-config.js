@@ -29,3 +29,16 @@ AccountsTemplates.configure({
     browserHistory.push('/u/' + Meteor.userId());
   },
 });
+
+
+const _oauthServices = AccountsTemplates.oauthServices;
+
+AccountsTemplates.oauthServices = function () {
+  const services = _oauthServices.apply(this, arguments);
+
+  const vkServiceIndex = services.reduce((prev, next, i) => next._id == 'vk' ? i : prev, -1);
+  if (vkServiceIndex != -1)
+    services.splice(0, 0, services.splice(vkServiceIndex, 1)[0]);
+
+  return services;
+};
