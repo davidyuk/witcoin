@@ -25,6 +25,16 @@ Meteor.users.inflectionTypes = {
 };
 
 if (Meteor.isServer) {
+  Meteor.publish(null, function() {
+    const serviceFields = ['name', 'first_name', 'given_name', 'last_name', 'family_name', 'email'];
+    const services = AccountsTemplates.oauthServices();
+    if (!services.length) return this.ready();
+    return Meteor.users.find(this.userId, {fields: services.reduce((p, service) => {
+      serviceFields.forEach(serviceField => p[`services.${service._id}.${serviceField}`] = 1);
+      return p;
+    }, {})});
+  });
+
   Meteor.publish('users.last', function () {
     Counts.publish(this, 'users', Meteor.users.find());
     return Meteor.users.find({}, {
@@ -59,6 +69,9 @@ Meteor.methods({
   },
   'user.email.remove' (email) {
     if (Meteor.isServer) Accounts.removeEmail(this.userId, email);
+  },
+  'user.service.remove' (serviceName) {
+    if (Meteor.isServer) Accounts.unlinkService(this.userId, serviceName);
   },
 });
 

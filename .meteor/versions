@@ -18,6 +18,7 @@ blaze@2.1.9
 blaze-html-templates@1.0.5
 blaze-tools@1.0.10
 boilerplate-generator@1.0.10
+bozhao:link-accounts@1.2.9
 caching-compiler@1.1.7_1
 caching-html-compiler@1.0.7
 callback-hook@1.0.9
