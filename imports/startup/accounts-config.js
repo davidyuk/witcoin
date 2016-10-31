@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { browserHistory } from 'react-router';
 
+import { capitalize } from '../helpers/capitalize';
+
 T9n.setLanguage('ru');
 
 AccountsTemplates.routes = {
@@ -42,3 +44,22 @@ AccountsTemplates.oauthServices = function () {
 
   return services;
 };
+
+if (Meteor.isClient) {
+  AccountsTemplates.getServiceVerboseName = serviceName => {
+    serviceName = capitalize(serviceName);
+    return serviceName == 'Vk' ? 'ВКонтакте' : serviceName;
+  };
+
+  const _buttonText = AccountsTemplates.atSocialHelpers.buttonText;
+
+  AccountsTemplates.atSocialHelpers.buttonText = function () {
+    const arr = _buttonText.apply(this, arguments).split(' ');
+    arr.push(AccountsTemplates.getServiceVerboseName(arr.pop()));
+    return arr.join(' ');
+  };
+
+  Template.atSocial.helpers({
+    buttonText: AccountsTemplates.atSocialHelpers.buttonText,
+  });
+}
