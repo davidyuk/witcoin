@@ -8,6 +8,7 @@ T9n.setLanguage('ru');
 AccountsTemplates.routes = {
   signIn: {path: '/sign-in'},
   signUp: {path: '/sign-up'},
+  changePwd: {path: '/change-password'},
 };
 
 AccountsTemplates.getRoutePath = function(route) {
@@ -26,9 +27,10 @@ AccountsTemplates.linkClick = function(route) {
 };
 
 AccountsTemplates.configure({
+  enablePasswordChange: true,
   onSubmitHook: function(error, state) {
-    if (error || !Meteor.userId()) return;
-    browserHistory.push('/u/' + Meteor.userId());
+    if (!error && Meteor.userId() && ['signIn', 'signUp'].includes(state))
+      browserHistory.push('/u/' + Meteor.userId());
   },
 });
 

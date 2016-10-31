@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Meteor } from 'meteor/meteor';
 
 import EmailSettings from '../components/EmailSettings';
@@ -57,6 +58,8 @@ const SettingsPage = ({ user }) => {
     </form>
     <EmailSettings user={user} />
     <ServiceSettings user={user} />
+    <h2>Пароль</h2>
+    <Link to="/change-password">Сменить пароль</Link>
   </div>;
 };
 

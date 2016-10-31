@@ -28,8 +28,11 @@ export const renderRoutes = () => (
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={HomePageContainer} />
+
         <Route path="sign-in" component={AccountsPage} />
         <Route path="sign-up" component={AccountsPage} />
+        <Route path="change-password" component={AccountsPage} />
+
         <Route path="u/:userId" component={UserPageContainer} />
 
         <Route path="settings" component={SettingsPage} onEnter={requireAuth} />
