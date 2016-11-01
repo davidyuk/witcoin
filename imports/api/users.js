@@ -70,6 +70,10 @@ Meteor.methods({
   'user.email.remove' (email) {
     if (Meteor.isServer) Accounts.removeEmail(this.userId, email);
   },
+  'user.email.sendVerification' (email) {
+    if (Meteor.isServer) Accounts.sendVerificationEmail(this.userId, email);
+    Meteor.users.update({_id: this.userId, 'emails.address': email}, {$set: {'emails.$.verifyEmailSend': true}});
+  },
   'user.service.remove' (serviceName) {
     if (Meteor.isServer) Accounts.unlinkService(this.userId, serviceName);
   },

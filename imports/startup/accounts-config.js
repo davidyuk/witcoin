@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router';
 import { capitalize } from '../helpers/capitalize';
 import {
   resetPasswordSubject, resetPasswordHtmlTemplate,
+  verifyEmailSubject, verifyEmailHtmlTemplate
 } from '../mails/templates';
 
 T9n.setLanguage('ru');
@@ -15,6 +16,7 @@ AccountsTemplates.routes = {
   changePwd: {path: '/change-password'},
   forgotPwd: {path: '/forgot-password'},
   resetPwd: {path: '/reset-password'},
+  verifyEmail: {path: '/verify-email'},
 };
 
 AccountsTemplates.getRoutePath = function(route) {
@@ -76,12 +78,20 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Accounts.urls.resetPassword = token => Meteor.absoluteUrl('reset-password/' + token);
 
+  Accounts.urls.verifyEmail = token => Meteor.absoluteUrl('verify-email/' + token);
+
   Object.assign(Accounts.emailTemplates, {
     from: 'Кленинка <no-reply@witcoin.ru>',
 
     resetPassword: {
       subject: () => resetPasswordSubject,
       html: (user, url) => resetPasswordHtmlTemplate(
+        user.getFullName(), Meteor.absoluteUrl(), url),
+    },
+
+    verifyEmail: {
+      subject: () => verifyEmailSubject,
+      html: (user, url) => verifyEmailHtmlTemplate(
         user.getFullName(), Meteor.absoluteUrl(), url),
     },
   });

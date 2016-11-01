@@ -28,6 +28,15 @@ export default class AccountsPage extends React.Component {
 
     AccountsTemplates.getparamToken = () => this.props.params.token;
 
+    if (state == 'verifyEmail' && Meteor.isClient) {
+      Accounts.verifyEmail(this.props.params.token, function(error) {
+        AccountsTemplates.setDisabled(false);
+        AccountsTemplates.submitCallback(error, state, () =>
+          AccountsTemplates.state.form.set("result", AccountsTemplates.texts.info.emailVerified)
+        );
+      });
+    }
+
     return (
       <div className="row">
         <div className="col-md-6 col-md-offset-3">

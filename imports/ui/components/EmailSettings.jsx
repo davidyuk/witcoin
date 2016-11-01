@@ -29,6 +29,15 @@ export default class EmailSettings extends React.Component {
     }
   }
 
+  renderEmailAction(email) {
+    return <span>
+      {email.verifyEmailSend ? 'Письмо отправленно. ' : null}
+      <a onClick={this.genHandler('user.email.sendVerification', email.address)} href="#">
+        {email.verifyEmailSend ? 'Переотправить' : 'Отправить письмо'}
+      </a>
+    </span>;
+  }
+
   render() {
     const user = this.props.user;
 
@@ -41,8 +50,11 @@ export default class EmailSettings extends React.Component {
           <tr key={email.address}>
             <td>
               {email.address}
+              &nbsp;
+              {email.verified ? null : <span className="label label-default">Не подтверждён</span>}
             </td>
             <td style={{textAlign: 'right'}}>
+              {this.renderEmailAction(email)}&nbsp;
               <a onClick={this.genHandler('user.email.remove', email.address)} href="#" title="Удалить email">
                 <span className="glyphicon glyphicon-remove text-danger"/>
               </a>

@@ -34,6 +34,7 @@ export const renderRoutes = () => (
         <Route path="change-password" component={AccountsPage} />
         <Route path="forgot-password" component={AccountsPage} />
         <Route path="reset-password/:token" component={AccountsPage} />
+        <Route path="verify-email/:token" component={AccountsPage} />
 
         <Route path="u/:userId" component={UserPageContainer} />
 
