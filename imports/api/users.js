@@ -74,6 +74,11 @@ Meteor.methods({
     if (Meteor.isServer) Accounts.sendVerificationEmail(this.userId, email);
     Meteor.users.update({_id: this.userId, 'emails.address': email}, {$set: {'emails.$.verifyEmailSend': true}});
   },
+  'user.email.markAsPrimary' (email) {
+    Meteor.users.update({_id: this.userId, 'emails.primary': true}, {$set: {'emails.$.primary': false}});
+    Meteor.users.update({_id: this.userId, emails: {$elemMatch: {address: email, verified: true}}},
+      {$set: {'emails.$.primary': true}});
+  },
   'user.service.remove' (serviceName) {
     if (Meteor.isServer) Accounts.unlinkService(this.userId, serviceName);
   },

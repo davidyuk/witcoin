@@ -30,6 +30,12 @@ export default class EmailSettings extends React.Component {
   }
 
   renderEmailAction(email) {
+    if (email.verified && email.primary) return null;
+    if (email.verified) return (
+      <a onClick={this.genHandler('user.email.markAsPrimary', email.address)} href="#">
+        Отметить как основной
+      </a>
+    );
     return <span>
       {email.verifyEmailSend ? 'Письмо отправленно. ' : null}
       <a onClick={this.genHandler('user.email.sendVerification', email.address)} href="#">
@@ -52,6 +58,7 @@ export default class EmailSettings extends React.Component {
               {email.address}
               &nbsp;
               {email.verified ? null : <span className="label label-default">Не подтверждён</span>}
+              {email.primary ? <span className="label label-success">Основной</span> : null}
             </td>
             <td style={{textAlign: 'right'}}>
               {this.renderEmailAction(email)}&nbsp;
