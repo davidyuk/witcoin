@@ -1,7 +1,11 @@
 import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
 import { browserHistory } from 'react-router';
 
 import { capitalize } from '../helpers/capitalize';
+import {
+  resetPasswordSubject, resetPasswordHtmlTemplate,
+} from '../mails/templates';
 
 T9n.setLanguage('ru');
 
@@ -9,6 +13,8 @@ AccountsTemplates.routes = {
   signIn: {path: '/sign-in'},
   signUp: {path: '/sign-up'},
   changePwd: {path: '/change-password'},
+  forgotPwd: {path: '/forgot-password'},
+  resetPwd: {path: '/reset-password'},
 };
 
 AccountsTemplates.getRoutePath = function(route) {
@@ -28,6 +34,7 @@ AccountsTemplates.linkClick = function(route) {
 
 AccountsTemplates.configure({
   enablePasswordChange: true,
+  showForgotPasswordLink: true,
   onSubmitHook: function(error, state) {
     if (!error && Meteor.userId() && ['signIn', 'signUp'].includes(state))
       browserHistory.push('/u/' + Meteor.userId());
@@ -63,5 +70,19 @@ if (Meteor.isClient) {
 
   Template.atSocial.helpers({
     buttonText: AccountsTemplates.atSocialHelpers.buttonText,
+  });
+}
+
+if (Meteor.isServer) {
+  Accounts.urls.resetPassword = token => Meteor.absoluteUrl('reset-password/' + token);
+
+  Object.assign(Accounts.emailTemplates, {
+    from: 'Кленинка <no-reply@witcoin.ru>',
+
+    resetPassword: {
+      subject: () => resetPasswordSubject,
+      html: (user, url) => resetPasswordHtmlTemplate(
+        user.getFullName(), Meteor.absoluteUrl(), url),
+    },
   });
 }
