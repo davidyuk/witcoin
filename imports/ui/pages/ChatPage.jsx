@@ -27,7 +27,7 @@ export default class ChatPage extends React.Component {
     return (
       <div style={{height: 100 + '%', display: 'flex', paddingBottom: 20 + 'px'}}>
         <div className={'list-group ' + listClass} style={{marginBottom: 0, flex: '1 0 250px', display: 'flex', flexDirection: 'column'}}>
-          <span className="list-group-item active" style={{flexShrink: 0}}>
+          <span className="list-group-item" style={{flexShrink: 0}}>
             <string>
               {this.props.chatsCount}&nbsp;
               <FormattedPlural value={this.props.chatsCount}
