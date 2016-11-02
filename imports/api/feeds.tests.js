@@ -115,5 +115,16 @@ if (Meteor.isServer) {
         assertNotifyCount(0);
       });
     });
+
+    it('don\'t send notifications to yourself', () => {
+      const userId = Factory.create('user')._id;
+      const assertNotifyCount = c =>
+        expect(FeedItems.find({userId: userId, isNotification: true}).count()).to.equal(c);
+
+      const actionId = createAction.call({ userId }, 'test');
+      assertNotifyCount(0);
+      rateAction.call({ userId }, actionId, 1);
+      assertNotifyCount(0);
+    });
   });
 }

@@ -6,7 +6,14 @@ import faker from 'faker';
 
 import { Actions, actionChildrenCursors } from './actions';
 
-export const FeedItems = new Mongo.Collection('feeds');
+class FeedItemsCollection extends Mongo.Collection {
+  insert(doc, callback) {
+    if (doc.userId == doc.authorId) return null;
+    return super.insert(doc, callback);
+  }
+}
+
+export const FeedItems = new FeedItemsCollection('feeds');
 
 FeedItems.schema = new SimpleSchema({
   _id: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
