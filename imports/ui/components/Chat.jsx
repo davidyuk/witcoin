@@ -32,7 +32,7 @@ export default class Chat extends React.Component {
         <div ref={el => el ? el.scrollTop = el.scrollHeight : null } style={{flexGrow: 1, overflowY: 'auto'}}>
           <div style={{display: 'flex', flexDirection: 'column-reverse', minHeight: 100 + '%', paddingRight: 10 + 'px'}}>
             {this.props.messages.length ? this.props.messages.map(message => (
-              <div className="media" key={message._id} style={{flexShrink: 0}}>
+              <div className="media" key={message._id} style={{flexShrink: 0, margin: '5px 0'}}>
                 <div className="media-body">
                   <div className="pull-right text-muted">
                     <Date value={message.createdAt} />
