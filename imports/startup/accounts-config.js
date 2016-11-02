@@ -7,6 +7,9 @@ import {
   resetPasswordSubject, resetPasswordHtmlTemplate,
   verifyEmailSubject, verifyEmailHtmlTemplate
 } from '../mails/templates';
+import '../api/users';
+
+const GT = Meteor.users.genderTypes;
 
 T9n.setLanguage('ru');
 
@@ -95,4 +98,47 @@ if (Meteor.isServer) {
         user.getFullName(), Meteor.absoluteUrl(), url),
     },
   });
+
+  Accounts.onCreateUser(function(options, user) {
+    const allServices = AccountsTemplates.oauthServices().map(s => s._id);
+    const servicesData = {};
+    Object.keys(user.services).forEach(k => allServices.includes(k) && Object.assign(servicesData, user.services[k]));
+
+    const p = user.profile = options.profile || user.profile || {};
+    p.firstName = p.firstName || servicesData.first_name || servicesData.given_name;
+    p.lastName = p.lastName || servicesData.last_name || servicesData.family_name;
+    p.gender = p.gender ||
+      servicesData.gender && (servicesData.gender == 'male' ? GT.MALE : GT.FEMALE) ||
+      servicesData.sex && (servicesData.sex == 2 ? GT.MALE : GT.FEMALE);
+
+    return user;
+  });
 }
+
+AccountsTemplates.addFields([
+  {
+    _id: 'firstName',
+    displayName: 'Имя',
+    placeholder: 'Имя',
+    type: 'text',
+    required: true,
+  }, {
+    _id: 'lastName',
+    displayName: 'Фамилия',
+    placeholder: 'Фамилия',
+    type: 'text',
+    required: true,
+  }, {
+    _id: 'gender',
+    displayName: 'Ваш пол',
+    type: 'radio',
+    required: true,
+    select: [{
+      text: "мужской",
+      value: GT.MALE,
+    }, {
+      text: "женский",
+      value: GT.FEMALE,
+    }],
+  }
+]);
