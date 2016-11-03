@@ -42,6 +42,8 @@ export default class ChatPage extends React.Component {
               <Link to={'/im/' + chat._id} key={chat._id} className="list-group-item" activeClassName="active">
                 <b className="list-group-item-heading">
                   {this.getUsers(chat).map(user => user.getFullName())}
+                  {chat.unreadMessagesCount ?
+                    <span className="badge pull-right">{chat.unreadMessagesCount}</span> : null}
                 </b>
                 <p className="list-group-item-text">
                   <TruncateText content={chat.lastMessage.content} length={60} />

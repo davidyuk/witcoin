@@ -7,6 +7,7 @@ export default ChatPageContainer = createContainer(({ params: { chatId } }) => {
   Meteor.subscribe('chats', 100);
   const chats = Chats.find({ userIds: Meteor.userId(), lastMessage: { $exists: true } },
     {sort: {'lastMessage.createdAt': -1}}).fetch();
+  chats.forEach(c => c.unreadMessagesCount = Counts.get('chats.' + c._id));
   const chatsCount = Counts.get('chats');
 
   return {

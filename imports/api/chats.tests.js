@@ -175,6 +175,79 @@ if (Meteor.isServer) {
           expect(Messages.findOne(messageId).deletedAt).not.to.equal(undefined);
         });
       });
+
+      describe('message.markAsRead', () => {
+        const markAsRead = Meteor.server.method_handlers['message.markAsRead'];
+
+        it('fail when current user not logged in', () => {
+          const message = Factory.create('message');
+          assert.throws(() => {
+            markAsRead.call({}, message.chatId, [message._id]);
+          }, Meteor.Error, 'not-authorized');
+        });
+
+        it('fail when chat don\'t exist', () => {
+          const message = Factory.create('message');
+          const userId = Chats.findOne(message.chatId).userIds[0];
+          assert.throws(() => {
+            markAsRead.call({userId}, Random.id(), [message._id]);
+          }, Meteor.Error, 'chat-not-found');
+        });
+
+        it('fail when current user not a chat member', () => {
+          const userId = Factory.create('user')._id;
+          const message = Factory.create('message');
+          assert.throws(() => {
+            markAsRead.call({userId}, message.chatId, [message._id]);
+          }, Meteor.Error, 'forbidden');
+        });
+
+        let chatId, messageId;
+        const expectLastMessageIsRead = isRead => {
+          expect(Messages.findOne(messageId).isRead).eq(isRead);
+          expect(Chats.findOne(chatId).lastMessage.isRead).eq(isRead);
+        };
+
+        it('marks as read', () => {
+          const user1Id = Factory.create('user')._id;
+          const user2Id = Factory.create('user')._id;
+          chatId = Factory.create('chat', {userIds: [user1Id, user2Id].sort()})._id;
+          messageId = Factory.create('message', {chatId, userId: user1Id})._id;
+
+          expectLastMessageIsRead(false);
+          markAsRead.call({userId: user2Id}, chatId, [messageId]);
+          expectLastMessageIsRead(true);
+        });
+
+        it('marks several unread messages', () => {
+          const user1Id = Factory.create('user')._id;
+          const user2Id = Factory.create('user')._id;
+          const chatId = Factory.create('chat', {userIds: [user1Id, user2Id].sort()})._id;
+          const messageIds = [];
+          for (let i = 0; i < 2; i++)
+            messageIds.push(Factory.create('message', {chatId, userId: user1Id})._id);
+
+          markAsRead.call({userId: user2Id}, chatId, messageIds);
+          expect(Messages.find({_id: {$in: messageIds}, isRead: true}).count()).eq(messageIds.length);
+        });
+
+        it('don\'t marks messages of current user as read', () => {
+          const userId = Factory.create('user')._id;
+          chatId = Factory.create('chat', {userIds: [userId]})._id;
+          messageId = Factory.create('message', {chatId, userId})._id;
+
+          markAsRead.call({userId}, chatId, [messageId]);
+          expectLastMessageIsRead(false);
+        });
+
+        it('don\'t marks messages in separate chat as read', () => {
+          const userId = Factory.create('user')._id;
+          ({chatId, _id: messageId} = Factory.create('message'));
+
+          markAsRead.call({userId}, Factory.create('chat', {userIds: [userId]})._id, [messageId]);
+          expectLastMessageIsRead(false);
+        });
+      });
     });
   });
 }

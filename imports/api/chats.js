@@ -31,6 +31,7 @@ Messages.schema = new SimpleSchema({
   chatId: { type: String, regEx: SimpleSchema.RegEx.Id },
   userId: { type: String, regEx: SimpleSchema.RegEx.Id },
   content: { type: String },
+  isRead: { type: Boolean, defaultValue: false },
   createdAt: SchemaHelpers.createdAt,
   updatedAt: SchemaHelpers.updatedAt,
   deletedAt: SchemaHelpers.deletedAt,
@@ -57,6 +58,11 @@ if (Meteor.isServer) {
       }),
       children: [
         { find: chat => Meteor.users.find({ _id: { $in: chat.userIds } }) },
+        { find: chat => {
+          Counts.publish(this, 'chats.' + chat._id,
+            Messages.find({chatId: chat._id, userId: {$ne: this.userId}, isRead: false}));
+          return null;
+        } },
       ],
     };
   });
@@ -149,6 +155,28 @@ Meteor.methods({
       throw new Meteor.Error('forbidden');
 
     Messages.update(messageId, {$set: { deletedAt: new Date() }});
+  },
+
+  'message.markAsRead' (chatId, messageIds) {
+    check(chatId, String);
+    check(messageIds, [String]);
+
+    if (!this.userId)
+      throw new Meteor.Error('not-authorized');
+    const chat = Chats.findOne(chatId);
+    if (!chat)
+      throw new Meteor.Error('chat-not-found');
+    if (!chat.userIds.includes(this.userId))
+      throw new Meteor.Error('forbidden');
+
+    Messages.update(
+      {_id: {$in: messageIds}, userId: {$ne: this.userId}, chatId},
+      {$set: {isRead: true}}, {multi: true}
+    );
+    Chats.update(
+      {_id: chatId, 'lastMessage._id': {$in: messageIds}, 'lastMessage.userId': {$ne: this.userId}},
+      {$set: {'lastMessage.isRead': true}}
+    );
   },
 });
 
