@@ -24,5 +24,9 @@ export default FeedListContainer = createContainer(({ selector, limit, countCall
     actionsLoading: !handle.ready(),
     isNotifications: selector.isNotification,
     isNews: !selector.isNotification,
+    onUserActive: () => {
+      const unreadFeedItemIds = FeedItems.find({isRead: false, userId: Meteor.userId()}).map(f => f._id);
+      if (unreadFeedItemIds.length) Meteor.call('feedItem.markAsRead', unreadFeedItemIds);
+    },
   };
 }, ActionList);

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Action from './Action';
+import OnUserActive from './OnUserActive';
 
 export default class ActionList extends React.Component {
   render() {
@@ -9,9 +10,11 @@ export default class ActionList extends React.Component {
       isNotification: this.props.isNotifications,
       isNewsItem: this.props.isNews,
     };
+    const onUserActive = this.props.onUserActive;
 
     return (
       <div>
+        {onUserActive ? <OnUserActive handler={onUserActive} /> : null}
         <div className="list-group">
           {actions && actions.length ? actions.map(item =>
             <Action action={item} key={item._id} {...commonProps} />
@@ -31,6 +34,7 @@ ActionList.propTypes = {
   isNotifications: React.PropTypes.bool,
   isNews: React.PropTypes.bool,
   onEmptyMessage: React.PropTypes.string,
+  onUserActive: React.PropTypes.func,
 };
 
 ActionList.defaultProps = {

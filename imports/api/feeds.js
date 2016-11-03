@@ -23,6 +23,7 @@ FeedItems.schema = new SimpleSchema({
   type: { type: String, denyUpdate: true },
   createdAt: { type: Date, denyUpdate: true },
   isNotification: { type: Boolean, defaultValue: false, denyUpdate: true },
+  isRead: { type: Boolean, defaultValue: false },
 });
 
 FeedItems.attachSchema(FeedItems.schema);
@@ -62,6 +63,7 @@ if (Meteor.isServer) {
           FeedItems.insert({
             ...getActionFields(act),
             userId: doc.userId,
+            isRead: true,
           })
         );
 
@@ -98,6 +100,17 @@ if (Meteor.isServer) {
       }],
     };
   });
+
+  Meteor.publish('notifications.unread', function() {
+    if (!this.userId) return this.ready();
+
+    Counts.publish(this, 'notifications.unread', FeedItems.find({
+      isNotification: true,
+      userId: this.userId,
+      isRead: false,
+    }));
+    return this.ready();
+  });
 }
 
 Meteor.methods({
@@ -113,6 +126,15 @@ Meteor.methods({
       throw new Meteor.Error('forbidden');
 
     FeedItems.remove(feedItemId);
+  },
+
+  'feedItem.markAsRead' (feedItemIds) {
+    check(feedItemIds, [String]);
+
+    if (!this.userId)
+      throw new Meteor.Error('not-authorized');
+
+    FeedItems.update({_id: {$in: feedItemIds}, userId: this.userId}, {$set: {isRead: true}}, {multi: true});
   },
 });
 
