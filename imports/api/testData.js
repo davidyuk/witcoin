@@ -3,6 +3,7 @@ import faker from 'faker';
 
 import './users';
 import { Actions } from './actions';
+import { Chats, Messages } from './chats';
 
 if (Meteor.isDevelopment) {
   faker.locale = 'ru';
@@ -22,7 +23,8 @@ function generateUsers() {
 }
 
 function generateMessages() {
-  let users = Meteor.users.find().fetch();
+  const users = Meteor.users.find().fetch();
+  const chats = new Set();
   users.forEach(function(user) {
     for (let i = 0; i < 20; i++) {
       const user2Id = users[faker.random.number(users.length - 1)]._id;
@@ -30,8 +32,12 @@ function generateMessages() {
       const chatId = Meteor.server.method_handlers['chat.get'].call({userId: user._id}, [user2Id]);
       for (let i = 0; i < faker.random.number(100); i++)
         Factory.create('message', { chatId });
+      chats.add(chatId);
     }
   });
+  chats.forEach(chatId =>
+    Chats.update(chatId, {$set: {lastMessage: Messages.findOne({chatId}, {sort: {createdAt: -1}})}})
+  );
 }
 
 function generateActions() {
