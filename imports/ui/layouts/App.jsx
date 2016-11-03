@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import UserMenu from '../components/UserMenu';
+import UserMenu from '../containers/UserMenuContainer';
 
 const App = ({ children }) =>
   <div>

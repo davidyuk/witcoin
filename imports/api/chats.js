@@ -88,6 +88,17 @@ if (Meteor.isServer) {
       ]
     };
   });
+
+  Meteor.publish('chats.unread', function() {
+    if (!this.userId) return this.ready();
+
+    Counts.publish(this, 'chats.unread', Chats.find({
+      userIds: this.userId,
+      'lastMessage.userId': {$ne: this.userId},
+      'lastMessage.isRead': false,
+    }));
+    return this.ready();
+  });
 }
 
 Meteor.methods({
