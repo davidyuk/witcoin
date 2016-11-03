@@ -46,6 +46,7 @@ export default class ChatPage extends React.Component {
                     <span className="badge pull-right">{chat.unreadMessagesCount}</span> : null}
                 </b>
                 <p className="list-group-item-text">
+                  {chat.lastMessage.userId == Meteor.userId() ? <i>Вы: </i> : null}
                   <TruncateText content={chat.lastMessage.content} length={60} />
                 </p>
               </Link>
