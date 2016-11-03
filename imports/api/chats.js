@@ -17,13 +17,10 @@ Chats.schema = new SimpleSchema({
 Chats.attachSchema(Chats.schema);
 
 class MessagesCollection extends Mongo.Collection {
-  insert(message, callback) {
-    function callbackWrap(err, recordId) {
-      if (!err)
-        Chats.update(message.chatId, { $set: { lastMessage: Messages.findOne(recordId) } });
-      if (callback) callback.apply(this, arguments);
-    }
-    return super.insert(message, callbackWrap);
+  insert(doc, callback) {
+    const message = Messages.findOne(super.insert(doc, callback));
+    Chats.update(message.chatId, {$set: {lastMessage: message}});
+    return message._id;
   }
 }
 

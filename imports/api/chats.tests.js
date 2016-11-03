@@ -14,8 +14,19 @@ if (Meteor.isServer) {
       });
 
       it('message', () => {
-        const message = Factory.create('message');
-        expect(Messages.findOne(message._id)).is.an('object');
+        const messageId = Factory.create('message')._id;
+        const message = Messages.findOne(messageId);
+        expect(message).is.an('object');
+        expect(Chats.findOne(message.chatId).lastMessage).is.eql(message);
+      });
+
+      it('message in chat', () => {
+        const userId = Factory.create('user')._id;
+        const chat = Factory.create('chat', {userIds: [userId]});
+        const message = Factory.create('message', {chatId: chat._id, userId});
+        expect(message.chatId).eq(chat._id);
+        expect(message.userId).eq(userId);
+        expect(message.userId).eq(chat.userIds[0]);
       });
     });
 
