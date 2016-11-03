@@ -16,9 +16,9 @@ if (Meteor.isDevelopment) {
   });
 }
 
-function generateUsers() {
+function generateUsers(n = 20) {
   const f = Meteor.users.find().count() + 1;
-  for (let i = f; i < f + 20; i++)
+  for (let i = f; i < f + n; i++)
     Factory.create('user', {emails: [{address: `user${i}@example.com`}]});
 }
 
