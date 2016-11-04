@@ -15,6 +15,31 @@ Meteor.users.genderTypes = {
   FEMALE: 'female',
 };
 
+Meteor.users.schema = new SimpleSchema({
+  emails: {type: Array, defaultValue: []},
+  'emails.$': {type: Object},
+  'emails.$.address': {type: String, regEx: SimpleSchema.RegEx.Email},
+  'emails.$.verified': {type: Boolean, defaultValue: false},
+  'emails.$.primary': {type: Boolean, optional: true},
+  'emails.$.verifyEmailSend': {type: Boolean, optional: true},
+  createdAt: {type: Date},
+  profile: {
+    type: new SimpleSchema({
+      firstName: {type: String, defaultValue: 'Имя'},
+      lastName: {type: String, defaultValue: 'Фамилия'},
+      gender: {
+        type: String,
+        allowedValues: [Meteor.users.genderTypes.MALE, Meteor.users.genderTypes.FEMALE],
+        defaultValue: Meteor.users.genderTypes.MALE,
+      },
+    }),
+  },
+  services: {type: Object, optional: true, blackbox: true},
+  heartbeat: {type: Date, optional: true},
+});
+
+Meteor.users.attachSchema(Meteor.users.schema);
+
 Meteor.users.inflectionTypes = {
   NOMINATIVE: 'nominative',
   GENITIVE: 'genitive',
@@ -87,7 +112,6 @@ Meteor.methods({
 Factory.define('user', Meteor.users, {
   emails: () => [{
     address: faker.internet.email(),
-    verified: false,
   }],
   createdAt: () => faker.date.past(),
   profile: (api, userOptions) => {
