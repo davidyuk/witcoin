@@ -66,7 +66,7 @@ if (Meteor.isServer) {
       const userIds = [action.userId];
       if (action.type == Actions.types.SUBSCRIBE)
         userIds.push(action.objectId);
-      return Meteor.users.find({ _id: { $in: userIds } });
+      return Meteor.users.find({_id: {$in: userIds}}, {fields: Meteor.users.publicFields});
     }
   };
 

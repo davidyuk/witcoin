@@ -9,12 +9,12 @@ if (Meteor.isServer) {
 
     Counts.publish(this, 'subscribers', Actions.find({ type: Actions.types.SUBSCRIBE, objectId: userId }));
     return {
-      find: () => Meteor.users.find(userId, { fields: Meteor.users.publicFields }),
+      find: () => Meteor.users.find(userId, {fields: {...Meteor.users.publicFields, createdAt: 1} }),
       children: [
         { find: user => Actions.find({ type: Actions.types.SUBSCRIBE, objectId: userId, userId: this.userId }) },
         {
           find: user => Actions.find({ type: Actions.types.SUBSCRIBE, objectId: userId }, { limit: 10 }),
-          children: [{ find: action => Meteor.users.find(action.userId) }]
+          children: [{ find: action => Meteor.users.find(action.userId, {fields: Meteor.users.publicFields}) }]
         },
       ],
     };

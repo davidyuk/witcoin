@@ -4,7 +4,6 @@ import faker from 'faker';
 import petrovich from 'petrovich';
 
 Meteor.users.publicFields = {
-  createdAt: 1,
   'profile.firstName': 1,
   'profile.lastName': 1,
   'profile.gender': 1,
@@ -65,7 +64,7 @@ if (Meteor.isServer) {
     return Meteor.users.find({}, {
       sort: {createdAt: -1},
       limit: 5,
-      fields: Meteor.users.publicFields,
+      fields: {...Meteor.users.publicFields, createdAt: 1},
     });
   });
 }

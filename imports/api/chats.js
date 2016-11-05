@@ -40,6 +40,8 @@ Messages.schema = new SimpleSchema({
 Messages.attachSchema(Messages.schema);
 
 if (Meteor.isServer) {
+  const getChatUsersCursor = chat => Meteor.users.find({_id: {$in: chat.userIds}}, {fields: Meteor.users.publicFields});
+
   Meteor.publishComposite('chats', function(limit) {
     check(limit, Number);
 
@@ -57,7 +59,7 @@ if (Meteor.isServer) {
         limit: limit,
       }),
       children: [
-        { find: chat => Meteor.users.find({ _id: { $in: chat.userIds } }) },
+        { find: getChatUsersCursor },
         { find: chat => {
           Counts.publish(this, 'chats.' + chat._id,
             Messages.find({chatId: chat._id, userId: {$ne: this.userId}, isRead: false}));
@@ -83,7 +85,7 @@ if (Meteor.isServer) {
         userIds: this.userId,
       }),
       children: [
-        { find: chat => Meteor.users.find({ _id: { $in: chat.userIds } }) },
+        { find: getChatUsersCursor },
         { find: chat => Messages.find({ chatId: chat._id }, { sort: {createdAt: -1}, limit: limit }) },
       ]
     };
