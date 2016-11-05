@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import faker from 'faker';
 import petrovich from 'petrovich';
+import { EasySearch } from 'meteor/easysearch:core';
 
 Meteor.users.publicFields = {
   'profile.firstName': 1,
@@ -47,6 +48,15 @@ Meteor.users.inflectionTypes = {
   INSTRUMENTAL: 'instrumental',
   PREPOSITIONAL: 'prepositional',
 };
+
+Meteor.users.index = new EasySearch.Index({
+  collection: Meteor.users,
+  fields: ['profile.firstName', 'profile.lastName'],
+  engine: new EasySearch.MongoDB({
+    transform: doc => Meteor.users._transform(doc),
+    fields: () => Meteor.users.publicFields,
+  }),
+});
 
 if (Meteor.isServer) {
   Meteor.publish(null, function() {

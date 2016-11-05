@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import UserMenu from '../containers/UserMenuContainer';
+import UserSearch from '../components/UserSearch';
 
 const App = ({ children }) =>
   <div>
@@ -19,6 +20,7 @@ const App = ({ children }) =>
           <ul className="nav navbar-nav">
           </ul>
 
+          <UserSearch />
           <UserMenu />
         </div>
       </div>
