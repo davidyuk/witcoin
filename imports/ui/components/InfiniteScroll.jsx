@@ -40,7 +40,8 @@ export default class InfiniteScroll extends React.Component {
   render() {
     return React.cloneElement(this.props.children, {
       limit: this._requestedCount,
-      countCallback: this.countCallback
+      countCallback: this.countCallback,
+      showProgressBarPermanently: true,
     });
   }
 }
