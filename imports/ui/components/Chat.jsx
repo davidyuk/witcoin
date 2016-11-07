@@ -1,10 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
-import LinkToUser from './LinkToUser';
 import MessageInput from './MessageInput';
-import Date from './Date';
 import OnUserActive from './OnUserActive';
+import Message from './Message';
 
 export default class Chat extends React.Component {
   markAsRead() {
@@ -31,34 +30,15 @@ export default class Chat extends React.Component {
         </div>
       </div>;
 
-    let users = {};
-    this.props.users.forEach((user) => { users[user._id] = user });
-
-    const renderMessageTools = (message) => {
-      if (message.userId != Meteor.userId()) return;
-      return <div className="pull-right text-muted">
-        <span title={'Сообщение ' + (message.isRead ? '' : 'не ') + 'доставлено'}
-              className={'glyphicon glyphicon-' + (message.isRead ? 'ok' : 'time')} />
-      </div>
-    };
+    const messages = this.props.messages;
 
     return (
       <div style={rootStyle}>
         <OnUserActive handler={this.markAsRead.bind(this)} />
         <div ref={el => el ? el.scrollTop = el.scrollHeight : null } style={{flexGrow: 1, overflowY: 'auto'}}>
           <div style={{display: 'flex', flexDirection: 'column-reverse', minHeight: 100 + '%', paddingRight: 10 + 'px'}}>
-            {this.props.messages.length ? this.props.messages.map(message => (
-              <div className="media" key={message._id} style={{flexShrink: 0, margin: '5px 0'}}>
-                <div className="media-body">
-                  <div className="pull-right text-muted">
-                    <Date value={message.createdAt} />
-                  </div>
-                  <LinkToUser user={users[message.userId]}/>
-                  <br/>
-                  {message.content}
-                  {renderMessageTools(message)}
-                </div>
-              </div>
+            {messages && messages.length ? this.props.messages.map(message => (
+              <Message key={message._id} message={message} />
             )) : <i>Сообщений нет</i>}
           </div>
         </div>
@@ -71,5 +51,4 @@ export default class Chat extends React.Component {
 Chat.propTypes = {
   chat: React.PropTypes.object,
   messages: React.PropTypes.array,
-  users: React.PropTypes.array,
 };
