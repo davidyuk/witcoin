@@ -23,6 +23,7 @@ Messages.schema = new SimpleSchema({
   userId: { type: String, regEx: SimpleSchema.RegEx.Id },
   content: { type: String },
   isRead: { type: Boolean, defaultValue: false },
+  isMailed: { type: Boolean, defaultValue: false },
   createdAt: SchemaHelpers.createdAt,
   updatedAt: SchemaHelpers.updatedAt,
   deletedAt: SchemaHelpers.deletedAt,

@@ -24,6 +24,7 @@ FeedItems.schema = new SimpleSchema({
   createdAt: { type: Date, denyUpdate: true },
   isNotification: { type: Boolean, defaultValue: false, denyUpdate: true },
   isRead: { type: Boolean, defaultValue: false },
+  isMailed: { type: Boolean, defaultValue: false },
 });
 
 FeedItems.attachSchema(FeedItems.schema);

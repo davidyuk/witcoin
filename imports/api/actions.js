@@ -116,55 +116,54 @@ if (Meteor.isServer) {
   });
 }
 
-if (Meteor.isClient) {
-  const joinActionUsers = action => {
-    action.user = Meteor.users.findOne(action.userId);
-    if (!action.user) return null;
-    if (action.type == Actions.types.SUBSCRIBE) {
-      action.object = Meteor.users.findOne(action.objectId);
-      if (!action.object) return null;
-    }
-    return action;
-  };
+const joinActionUsers = action => {
+  action.user = Meteor.users.findOne(action.userId);
+  if (!action.user) return null;
+  if (action.type == Actions.types.SUBSCRIBE) {
+    action.object = Meteor.users.findOne(action.objectId);
+    if (!action.object) return null;
+  }
+  return action;
+};
 
-  const joinActionUserReaction = action => {
-    const rateAction = Actions.findOne({
-      type: Actions.types.RATE,
-      objectId: action._id, userId: Meteor.userId()
-    });
-    if (rateAction) action.currentUserRate = rateAction.rate;
-    const shareAction = Actions.findOne({
-      type: Actions.types.SHARE,
-      objectId: action._id, userId: Meteor.userId()
-    });
-    action.currentUserShared = !!shareAction;
-    return action;
-  };
+const joinActionUserReaction = action => {
+  if (Meteor.isServer) return action;
+  const rateAction = Actions.findOne({
+    type: Actions.types.RATE,
+    objectId: action._id, userId: Meteor.userId()
+  });
+  if (rateAction) action.currentUserRate = rateAction.rate;
+  const shareAction = Actions.findOne({
+    type: Actions.types.SHARE,
+    objectId: action._id, userId: Meteor.userId()
+  });
+  action.currentUserShared = !!shareAction;
+  return action;
+};
 
-  const joinActionComments = action => {
-    action.comments = Actions.find({
-      type: Actions.types.COMMENT, objectId: action._id
-    }, {sort: {createdAt: 1}}).fetch().filter(joinActionUsers);
-    action.comments.forEach(joinActionUserReaction);
-    return action;
-  };
+const joinActionComments = action => {
+  action.comments = Actions.find({
+    type: Actions.types.COMMENT, objectId: action._id
+  }, {sort: {createdAt: 1}}).fetch().filter(joinActionUsers);
+  action.comments.forEach(joinActionUserReaction);
+  return action;
+};
 
-  const joinActionParent = action => {
-    if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(action.type)) {
-      action.object = Actions.findOne(action.objectId);
-      const valid = [joinActionUsers, joinActionParent]
-        .reduce((p, join) => p && join(action.object), !!action.object);
-      if (!valid) return null;
-    }
-    return action;
-  };
+const joinActionParent = action => {
+  if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(action.type)) {
+    action.object = Actions.findOne(action.objectId);
+    const valid = [joinActionUsers, joinActionParent]
+      .reduce((p, join) => p && join(action.object), !!action.object);
+    if (!valid) return null;
+  }
+  return action;
+};
 
-  export const joinAction = action => {
-    const valid = [joinActionUsers, joinActionUserReaction, joinActionComments, joinActionParent]
-      .reduce((p, join) => p && join(action), !!action);
-    return valid ? action : null;
-  };
-}
+export const joinAction = action => {
+  const valid = [joinActionUsers, joinActionUserReaction, joinActionComments, joinActionParent]
+    .reduce((p, join) => p && join(action), !!action);
+  return valid ? action : null;
+};
 
 Meteor.methods({
   'action.create' (description, type = Actions.types.DEFAULT) {

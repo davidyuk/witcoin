@@ -74,13 +74,19 @@ export default class Action extends React.Component {
 
     return (
       <div className="list-group-item" style={style}>
-        <div className="pull-right">
-          <RemoveButton {...this.props} />
-        </div>
+        {!this.props.isMail ? (
+          <div className="pull-right">
+            <RemoveButton {...this.props} />
+          </div>
+        ) : null}
+
         <LinkToUser user={action.user} inflection={inflection} /> {this.getMessage()}
         <div>{action.description}</div>
         {hasParentRecord ? <Action action={action.object} isShared={true} /> : null}
-        {this.renderBottom()}
+
+        {this.props.isMail
+          ? <small><Date value={action.createdAt} /></small>
+          : this.renderBottom()}
       </div>
     );
   }
@@ -91,4 +97,5 @@ Action.propTypes = {
   isShared: React.PropTypes.bool,
   isNotification: React.PropTypes.bool,
   isNewsItem: React.PropTypes.bool,
+  isMail: React.PropTypes.bool,
 };

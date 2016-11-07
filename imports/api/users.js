@@ -32,6 +32,17 @@ Meteor.users.schema = new SimpleSchema({
         allowedValues: [Meteor.users.genderTypes.MALE, Meteor.users.genderTypes.FEMALE],
         defaultValue: Meteor.users.genderTypes.MALE,
       },
+      reports: {
+        type: new SimpleSchema({
+          interval: {type: Number, defaultValue: 60 * 20},
+          nextDate: {type: Date, defaultValue: new Date()},
+          send: {type: new SimpleSchema({
+            news: {type: Boolean, defaultValue: false},
+            notifications: {type: Boolean, defaultValue: true},
+            chats: {type: Boolean, defaultValue: true},
+          })},
+        }),
+      },
     }),
   },
   services: {type: Object, optional: true, blackbox: true},

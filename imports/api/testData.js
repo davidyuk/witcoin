@@ -1,9 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import faker from 'faker';
+import * as fs from 'fs';
 
 import './users';
 import { Actions } from './actions';
 import { Chats, Messages } from './chats';
+import { generateMessage } from '../mails/report';
 
 if (Meteor.isDevelopment) {
   faker.locale = 'ru';
@@ -13,6 +15,7 @@ if (Meteor.isDevelopment) {
     'generate.messages': generateMessages,
     'generate.actions': generateActions,
     'generate.actions.possible': generateAllPossibleActions,
+    'generate.reportToFile': generateReportToFile,
   });
 }
 
@@ -68,4 +71,11 @@ function generateAllPossibleActions(n) {
   };
 
   while (n--) addLayer();
+}
+
+function generateReportToFile(userId = this.userId) {
+  if (Meteor.isServer) {
+    const user = Meteor.users.findOne(userId);
+    fs.writeFile('./report.html', generateMessage(user, false));
+  }
 }
