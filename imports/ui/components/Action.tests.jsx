@@ -14,7 +14,7 @@ if (Meteor.isClient) {
   }
 
   describe('Action', () => {
-    const hasCommentList = node => node.find('div.list-group').length == 1;
+    const hasCommentList = node => node.find('div.list-group, a:contains("Комментировать")').length == 1;
     const hasRateButton = node => node.find('button[title="Нравится"]').length == 1;
     const hasShareButton = node => node.find('button[title="Поделиться"]').length == 1;
 

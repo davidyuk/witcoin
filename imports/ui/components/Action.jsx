@@ -10,6 +10,17 @@ import RemoveButton from './RemoveButton';
 import Date from './Date';
 
 export default class Action extends React.Component {
+  constructor() {
+    super();
+    this.state = {showComments: false};
+    this.toggleComments = this.toggleComments.bind(this);
+  }
+
+  toggleComments(event) {
+    event.preventDefault();
+    this.setState({showComments: !this.state.showComments})
+  }
+
   renderBottom() {
     const action = this.props.action;
     if (this.props.isShared) return null;
@@ -22,9 +33,13 @@ export default class Action extends React.Component {
           </div>
           <small>
             <Date value={action.createdAt} isRelative={true} />
+            {!action.comments.length ? <span>
+              {' | '}<a onClick={this.toggleComments} href="#">Комментировать</a>
+            </span> : null}
           </small>
         </div>
-        {!this.props.isNotification ? <CommentList comments={action.comments} actionId={action._id} /> : null}
+        {action.comments.length || this.state.showComments
+          ? <CommentList comments={action.comments} actionId={action._id} /> : null}
       </div>
     );
   }
