@@ -37,6 +37,8 @@ Actions.types = {
   SHARE: 'share',
 };
 
+Actions.relevantTypes = [Actions.types.DEFAULT, Actions.types.SHARE];
+
 Actions.schema = new SimpleSchema({
   _id: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
   userId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },

@@ -91,5 +91,5 @@ ActionTypeFilter.defaultProps = {
     },
     'Выбрать все': Object.values(Actions.types),
   },
-  defaultTypes: [T.DEFAULT, T.SHARE],
+  defaultTypes: Actions.relevantTypes,
 };
