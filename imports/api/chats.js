@@ -7,15 +7,6 @@ import faker from 'faker';
 
 export const Chats = new Mongo.Collection('chats');
 
-Chats.schema = new SimpleSchema({
-  _id: { type: String, regEx: SimpleSchema.RegEx.Id },
-  userIds: { type: [String], minCount: 1 },
-  'userIds.$': { type: String, regEx: SimpleSchema.RegEx.Id },
-  lastMessage: { type: Object, blackbox: true, optional: true },
-});
-
-Chats.attachSchema(Chats.schema);
-
 class MessagesCollection extends Mongo.Collection {
   insert(doc, callback) {
     const message = Messages.findOne(super.insert(doc, callback));
@@ -39,6 +30,20 @@ Messages.schema = new SimpleSchema({
 
 Messages.attachSchema(Messages.schema);
 
+Chats.schema = new SimpleSchema({
+  _id: { type: String, regEx: SimpleSchema.RegEx.Id },
+  userIds: { type: [String], minCount: 1 },
+  'userIds.$': { type: String, regEx: SimpleSchema.RegEx.Id },
+  lastMessage: { type: new SimpleSchema({
+    ...Messages.schema.schema(),
+    createdAt: { type: Date },
+    updatedAt: { type: Date, optional: true },
+    deletedAt: { type: Date, optional: true },
+  }), optional: true, defaultValue: null },
+});
+
+Chats.attachSchema(Chats.schema);
+
 if (Meteor.isServer) {
   const getChatUsersCursor = chat => Meteor.users.find({_id: {$in: chat.userIds}}, {fields: Meteor.users.publicFields});
 
@@ -50,7 +55,7 @@ if (Meteor.isServer) {
 
     let q = {
       userIds: this.userId,
-      lastMessage: { $exists: true },
+      lastMessage: { $ne: null },
     };
     Counts.publish(this, 'chats', Chats.find(q));
     return {
