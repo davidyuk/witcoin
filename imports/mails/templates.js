@@ -1,16 +1,33 @@
+import * as fs from 'fs';
+import juice from 'juice';
+
+juice.excludedProperties.push('box-sizing', '-webkit-box-sizing', '-moz-box-sizing');
+
 const siteName = 'Кленинка';
 
-export const htmlTemplate = message => `
+const styles = (() => {
+  const list = fs.readdirSync('../web.browser');
+  const fileName = list.find(f => f.substr(f.length - 4) == '.css');
+  return fs.readFileSync('../web.browser/' + fileName, 'utf8');
+})();
+
+export const htmlTemplate = message =>
+  juice(`
 <!DOCTYPE html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8">
   </head>
   <body>
-    ${message}
-    <p>Это автоматическое сообщение. Пожалуйста, не отвечайте на него.</p>
+    <div class="container-fluid" style="max-width: 800px">
+      ${message}
+      <p>Это автоматическое сообщение. Пожалуйста, не отвечайте на него.</p>
+    </div>
   </body>
-</html>`;
+</html>`, {
+    extraCss: styles,
+    insertPreservedExtraCss: false,
+  });
 
 export const resetPasswordSubject = 'Подтверждение сброса пароля';
 export const resetPasswordHtmlTemplate = (userName, siteUrl, url) =>

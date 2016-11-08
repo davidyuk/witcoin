@@ -3,10 +3,6 @@ import { Accounts } from 'meteor/accounts-base';
 import { browserHistory } from 'react-router';
 
 import { capitalize } from '../helpers/capitalize';
-import {
-  resetPasswordSubject, resetPasswordHtmlTemplate,
-  verifyEmailSubject, verifyEmailHtmlTemplate
-} from '../mails/templates';
 import '../api/users';
 
 const GT = Meteor.users.genderTypes;
@@ -82,6 +78,11 @@ if (Meteor.isServer) {
   Accounts.urls.resetPassword = token => Meteor.absoluteUrl('reset-password/' + token);
 
   Accounts.urls.verifyEmail = token => Meteor.absoluteUrl('verify-email/' + token);
+
+  const {
+    resetPasswordSubject, resetPasswordHtmlTemplate,
+    verifyEmailSubject, verifyEmailHtmlTemplate
+  } = require('../mails/templates');
 
   Object.assign(Accounts.emailTemplates, {
     from: 'Кленинка <no-reply@witcoin.ru>',
