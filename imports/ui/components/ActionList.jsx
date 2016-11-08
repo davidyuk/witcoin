@@ -32,7 +32,7 @@ export default class ActionList extends React.Component {
 
 ActionList.propTypes = {
   actions: React.PropTypes.array,
-  actionsLoading: React.PropTypes.bool.isRequired,
+  actionsLoading: React.PropTypes.bool,
   isNotifications: React.PropTypes.bool,
   isNews: React.PropTypes.bool,
   showProgressBarPermanently: React.PropTypes.bool,
@@ -41,6 +41,7 @@ ActionList.propTypes = {
 };
 
 ActionList.defaultProps = {
+  actionsLoading: false,
   showProgressBarPermanently: false,
   onEmptyMessage: 'Нет действий',
 };
