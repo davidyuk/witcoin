@@ -7,7 +7,6 @@ import { Actions } from '../../api/actions';
 
 export default () => {
   const T = Actions.types;
-  const defaultTypes = [T.SHARE, T.SUBSCRIBE, T.RATE, T.COMMENT];
   const typesTree = {
     'Репосты': T.SHARE,
     'Подписки': T.SUBSCRIBE,
@@ -17,7 +16,7 @@ export default () => {
 
   return (
     <InfiniteScroll>
-      <ActionTypeFilter {...{ typesTree, defaultTypes }}>
+      <ActionTypeFilter {...{ typesTree }}>
         <FeedListContainer selector={{isNotification: true}} onEmptyMessage="Уведомления не найдены" />
       </ActionTypeFilter>
     </InfiniteScroll>

@@ -7,6 +7,7 @@ import UserList from '../components/UserList';
 import InfiniteScroll from '../components/InfiniteScroll';
 import ActionCreator from '../components/ActionCreator';
 import ActionTypeFilter from '../components/ActionTypeFilter';
+import { Actions } from '../../api/actions';
 
 export default class UserPage extends React.Component {
   goToChat() {
@@ -53,7 +54,7 @@ export default class UserPage extends React.Component {
             <ActionCreator />
           : null }
           <InfiniteScroll>
-            <ActionTypeFilter>
+            <ActionTypeFilter defaultTypes={Actions.relevantTypes}>
               <ActionListContainer selector={{ userId: this.props.user._id }} onEmptyMessage="Действия не найдены" />
             </ActionTypeFilter>
           </InfiniteScroll>

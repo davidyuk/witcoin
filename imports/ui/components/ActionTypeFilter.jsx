@@ -12,7 +12,7 @@ export default class ActionTypeFilter extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({selectedTypes: this.props.defaultTypes});
+    this.setState({selectedTypes: this.props.defaultTypes || this.getAvailableTypes()});
     this.props.typesTree['Выбрать все'] = this.getAvailableTypes();
   }
 
@@ -102,5 +102,4 @@ ActionTypeFilter.defaultProps = {
       'Подписки': T.SUBSCRIBE, 'Оценки': T.RATE, 'Комментарии': T.COMMENT,
     },
   },
-  defaultTypes: Actions.relevantTypes,
 };
