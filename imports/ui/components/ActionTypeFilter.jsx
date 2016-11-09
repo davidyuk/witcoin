@@ -4,7 +4,7 @@ import { Actions } from '../../api/actions';
 
 export default class ActionTypeFilter extends React.Component {
   componentWillMount() {
-    this._types = new Set(this.props.defaultTypes);
+    this.setState({selectedTypes: this.props.defaultTypes});
   }
 
   render() {
@@ -13,17 +13,16 @@ export default class ActionTypeFilter extends React.Component {
       return event => {
         event.preventDefault();
         event.target.blur();
-        const oldSize = this._types.size;
-        types.forEach(type => this._types.add(type));
-        if (oldSize == this._types.size)
-          types.forEach(type => this._types.delete(type));
-        this.forceUpdate();
+        const set = new Set([...this.state.selectedTypes, ...types]);
+        if (set.size == this.state.selectedTypes.length)
+          types.forEach(t => set.delete(t));
+        this.setState({selectedTypes: Array.from(set)});
       }
     };
 
     const isActive = types => {
       types = typeof types == 'string' ? [types] : types;
-      return types.reduce((prev, curr) => prev && this._types.has(curr), true);
+      return types.reduce((prev, curr) => prev && this.state.selectedTypes.includes(curr), true);
     };
 
     const renderButton = (name, types) =>
@@ -66,7 +65,7 @@ export default class ActionTypeFilter extends React.Component {
           ...this.props,
           selector: {
             ...this.props.children.props.selector,
-            type: {$in: Array.from(this._types.values())},
+            type: {$in: this.state.selectedTypes},
           },
         })}
       </div>
