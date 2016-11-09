@@ -91,15 +91,6 @@ ActionTypeFilter.propTypes = {
   defaultTypes: React.PropTypes.array,
 };
 
-const T = Actions.types;
-
 ActionTypeFilter.defaultProps = {
-  typesTree: {
-    'Записи': {
-      'Обычные': T.DEFAULT, 'Репосты': T.SHARE,
-    },
-    'Ответы': {
-      'Подписки': T.SUBSCRIBE, 'Оценки': T.RATE, 'Комментарии': T.COMMENT,
-    },
-  },
+  typesTree: Actions.typesTree,
 };

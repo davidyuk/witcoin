@@ -39,6 +39,22 @@ Actions.types = {
 
 Actions.relevantTypes = [Actions.types.DEFAULT, Actions.types.SHARE];
 
+Actions.typesTree = {
+  'Записи': {
+    'Обычные': Actions.types.DEFAULT, 'Репосты': Actions.types.SHARE,
+  },
+  'Ответы': {
+    'Подписки': Actions.types.SUBSCRIBE, 'Оценки': Actions.types.RATE, 'Комментарии': Actions.types.COMMENT,
+  },
+};
+
+Actions.notificationTypesTree = {
+  'Репосты': Actions.types.SHARE,
+  'Подписки': Actions.types.SUBSCRIBE,
+  'Оценки': Actions.types.RATE,
+  'Комментарии': Actions.types.COMMENT,
+};
+
 Actions.schema = new SimpleSchema({
   _id: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
   userId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
