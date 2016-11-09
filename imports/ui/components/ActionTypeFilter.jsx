@@ -3,8 +3,21 @@ import React from 'react';
 import { Actions } from '../../api/actions';
 
 export default class ActionTypeFilter extends React.Component {
+  getAvailableTypes() {
+    return (function leafNodes(node) {
+      return typeof node == 'object'
+        ? Object.values(node).reduce((p, childNode) => (p.push(...leafNodes(childNode)), p), [])
+        : [node];
+    })(this.props.typesTree);
+  }
+
   componentWillMount() {
     this.setState({selectedTypes: this.props.defaultTypes});
+    this.props.typesTree['Выбрать все'] = this.getAvailableTypes();
+  }
+
+  componentWillUpdate() {
+    this.props.typesTree['Выбрать все'] = this.getAvailableTypes();
   }
 
   render() {
@@ -88,7 +101,6 @@ ActionTypeFilter.defaultProps = {
     'Ответы': {
       'Подписки': T.SUBSCRIBE, 'Оценки': T.RATE, 'Комментарии': T.COMMENT,
     },
-    'Выбрать все': Object.values(Actions.types),
   },
   defaultTypes: Actions.relevantTypes,
 };

@@ -13,7 +13,6 @@ export default () => {
     'Подписки': T.SUBSCRIBE,
     'Оценки': T.RATE,
     'Комментарии': T.COMMENT,
-    'Выбрать все': defaultTypes,
   };
 
   return (
