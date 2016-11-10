@@ -75,8 +75,16 @@ export const renderRoutes = () => (
         <Route path="feed" component={NewsPage} onEnter={requireAuth} />
         <Route path="notifications" component={NotificationPage} onEnter={requireAuth} />
 
+        {renderRoutes._routes.map(route =>
+          React.cloneElement(route, {...route.props, key: route.props.path})
+        )}
+
         <Route path="*" component={NotFoundPage} />
       </Route>
     </Router>
   </IntlProvider>
 );
+
+renderRoutes._routes = [];
+
+renderRoutes.registerRoute = route => renderRoutes._routes.push(route);
