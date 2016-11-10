@@ -67,7 +67,15 @@ class Action extends React.Component {
       case Actions.types.SHARE:
         return isN ? `поделил${v1} Вашей записью` : '';
     }
+    if (this._typeRenders[action.type]) {
+      const Render = this._typeRenders[action.type];
+      return <Render {...this.props} />;
+    }
     return '';
+  }
+
+  static registerActionRender(type, render) {
+    Action.prototype._typeRenders[type] = render;
   }
 
   render() {
@@ -97,6 +105,8 @@ class Action extends React.Component {
   }
 }
 
+Action.prototype._typeRenders = {};
+
 Action.propTypes = {
   action: React.PropTypes.object,
   user: React.PropTypes.object,
@@ -114,5 +124,7 @@ const ActionWrapped = createContainer(
   }),
   Action
 );
+
+ActionWrapped.registerActionRender = Action.registerActionRender;
 
 export default ActionWrapped;
