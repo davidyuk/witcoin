@@ -16,6 +16,8 @@ import '../imports/api/homepage';
 import '../imports/api/testData';
 import { sendMails } from '../imports/mails/report';
 
+import '../imports/packages';
+
 global.Intl = Intl;
 
 Inject.rawBody('body', Assets.getText('body.html'));

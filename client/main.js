@@ -9,6 +9,8 @@ import '../imports/startup/accounts-config';
 import '../imports/startup/client/user-status-config';
 import { renderRoutes } from '../imports/startup/client/routes.jsx';
 
+import '../imports/packages';
+
 moment.locale('ru');
 
 Meteor.startup(() => {
