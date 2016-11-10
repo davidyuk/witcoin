@@ -38,6 +38,7 @@ Actions.types = {
 };
 
 Actions.relevantTypes = [Actions.types.DEFAULT, Actions.types.SHARE];
+Actions.simpleTypes = [Actions.types.DEFAULT];
 
 Actions.typesTree = {
   'Записи': {
@@ -185,7 +186,7 @@ Meteor.methods({
   'action.create' (description, type = Actions.types.DEFAULT) {
     check(description, String);
     check(description, Match.Where(a => a.length));
-    check(type, Match.Where(a => [Actions.types.DEFAULT].includes(a)));
+    check(type, Match.Where(a => Actions.simpleTypes.includes(a)));
 
     if (!this.userId)
       throw new Meteor.Error('not-authorized');
