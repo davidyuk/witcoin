@@ -9,9 +9,7 @@ const renderDefault = () =>
                 placeholder="Текст записи" buttonText="Сохранить" />;
 
 const ActionCreator = () => {
-  const creators = [
-    {type: Actions.types.DEFAULT, title: 'Запись', render: renderDefault},
-  ];
+  const creators = ActionCreator._creators;
 
   return (
     <div className="panel panel-default panel-body" style={{marginBottom: '10px'}}>
@@ -33,5 +31,12 @@ const ActionCreator = () => {
     </div>
   );
 };
+
+ActionCreator._creators = [
+  {type: Actions.types.DEFAULT, title: 'Запись', render: renderDefault},
+];
+
+ActionCreator.registerCreator = creator =>
+  ActionCreator._creators.push(creator);
 
 export default ActionCreator;
