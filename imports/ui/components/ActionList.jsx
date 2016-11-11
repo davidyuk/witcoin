@@ -6,10 +6,8 @@ import OnUserActive from './OnUserActive';
 export default class ActionList extends React.Component {
   render() {
     const actions = this.props.actions;
-    const commonProps = {
-      isNotification: this.props.isNotifications,
-      isNewsItem: this.props.isNews,
-    };
+    const proxyProps = Object.assign({}, this.props);
+    Object.keys(ActionList.propTypes).forEach(key => delete proxyProps[key]);
     const onUserActive = this.props.onUserActive;
 
     return (
@@ -17,7 +15,7 @@ export default class ActionList extends React.Component {
         {onUserActive ? <OnUserActive handler={onUserActive} /> : null}
         <div className="list-group">
           {actions && actions.length ? actions.map(item =>
-            <Action action={item} key={item._id} {...commonProps} />
+            <Action action={item} key={item._id} {...proxyProps} />
           ) : <i>{this.props.onEmptyMessage}</i>}
         </div>
         {this.props.showProgressBarPermanently || this.props.actionsLoading ? (
@@ -33,8 +31,6 @@ export default class ActionList extends React.Component {
 ActionList.propTypes = {
   actions: React.PropTypes.array,
   actionsLoading: React.PropTypes.bool,
-  isNotifications: React.PropTypes.bool,
-  isNews: React.PropTypes.bool,
   showProgressBarPermanently: React.PropTypes.bool,
   onEmptyMessage: React.PropTypes.string,
   onUserActive: React.PropTypes.func,
