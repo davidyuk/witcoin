@@ -3,30 +3,27 @@ import React from 'react';
 import Action from './Action';
 import OnUserActive from './OnUserActive';
 
-export default class ActionList extends React.Component {
-  render() {
-    const actions = this.props.actions;
-    const proxyProps = Object.assign({}, this.props);
-    Object.keys(ActionList.propTypes).forEach(key => delete proxyProps[key]);
-    const onUserActive = this.props.onUserActive;
+const ActionList = props => {
+  const {actions, actionsLoading, onEmptyMessage, onUserActive, showProgressBarPermanently} = props;
+  const proxyProps = Object.assign({}, props);
+  Object.keys(ActionList.propTypes).forEach(key => delete proxyProps[key]);
 
-    return (
-      <div>
-        {onUserActive ? <OnUserActive handler={onUserActive} /> : null}
-        <div className="list-group">
-          {actions && actions.length ? actions.map(item =>
-            <Action action={item} key={item._id} {...proxyProps} />
-          ) : <i>{this.props.onEmptyMessage}</i>}
-        </div>
-        {this.props.showProgressBarPermanently || this.props.actionsLoading ? (
-          <div className="progress" style={{visibility: this.props.actionsLoading ? 'visible' : 'hidden'}}>
-            <div className="progress-bar progress-bar-striped active" style={{width: '100%'}} />
-          </div>
-        ) : null}
+  return (
+    <div>
+      {onUserActive ? <OnUserActive handler={onUserActive} /> : null}
+      <div className="list-group">
+        {actions.length ? actions.map(item =>
+          <Action action={item} key={item._id} {...proxyProps} />
+        ) : actionsLoading ? null : <i>{onEmptyMessage}</i>}
       </div>
-    );
-  }
-}
+      {showProgressBarPermanently || actionsLoading ? (
+        <div className="progress" style={{visibility: actionsLoading ? 'visible' : 'hidden'}}>
+          <div className="progress-bar progress-bar-striped active" style={{width: '100%'}} />
+        </div>
+      ) : null}
+    </div>
+  );
+};
 
 ActionList.propTypes = {
   actions: React.PropTypes.array,
@@ -41,3 +38,5 @@ ActionList.defaultProps = {
   showProgressBarPermanently: false,
   onEmptyMessage: 'Нет действий',
 };
+
+export default ActionList;
