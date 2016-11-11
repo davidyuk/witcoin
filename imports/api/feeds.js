@@ -11,6 +11,17 @@ class FeedItemsCollection extends Mongo.Collection {
     if (doc.userId == doc.authorId) return null;
     return super.insert(doc, callback);
   }
+
+  insertBasedOnAction(action, overrideDoc, callback) {
+    action = typeof action == 'object' ? action : Actions.findOne(action);
+    return this.insert({
+      actionId: action._id,
+      authorId: action.userId,
+      type: action.type,
+      createdAt: action.createdAt,
+      ...overrideDoc,
+    }, callback);
+  }
 }
 
 export const FeedItems = new FeedItemsCollection('feeds');
@@ -30,28 +41,17 @@ FeedItems.schema = new SimpleSchema({
 FeedItems.attachSchema(FeedItems.schema);
 
 if (Meteor.isServer) {
-  const getActionFields = action => ({
-    actionId: action._id,
-    authorId: action.userId,
-    type: action.type,
-    createdAt: action.createdAt,
-  });
-
   Actions.after.insert((userId, doc) => {
-    const actionFields = getActionFields(doc);
-
     Actions
       .find({type: Actions.types.SUBSCRIBE, objectId: doc.userId})
       .forEach(subscription =>
-        FeedItems.insert({
-          ...actionFields,
+        FeedItems.insertBasedOnAction(doc, {
           userId: subscription.userId,
         })
       );
 
     if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(doc.type)) {
-      FeedItems.insert({
-        ...actionFields,
+      FeedItems.insertBasedOnAction(doc, {
         userId: Actions.findOne(doc.objectId).userId,
         isNotification: true,
       });
@@ -61,15 +61,13 @@ if (Meteor.isServer) {
       Actions
         .find({userId: doc.objectId})
         .forEach(act =>
-          FeedItems.insert({
-            ...getActionFields(act),
+          FeedItems.insertBasedOnAction(act, {
             userId: doc.userId,
             isRead: true,
           })
         );
 
-      FeedItems.insert({
-        ...actionFields,
+      FeedItems.insertBasedOnAction(doc, {
         userId: doc.objectId,
         isNotification: true,
       });
