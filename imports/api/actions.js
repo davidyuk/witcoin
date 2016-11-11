@@ -92,6 +92,8 @@ Actions.schema = new SimpleSchema({
 
   sharesCount: { type: Number, defaultValue: 0, optional: true },
 
+  extra: { type: Object, blackbox: true, optional: true },
+
   createdAt: SchemaHelpers.createdAt,
   updatedAt: SchemaHelpers.updatedAt,
   deletedAt: SchemaHelpers.deletedAt,
