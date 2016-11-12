@@ -24,9 +24,9 @@ const ActionCreator = () => {
       </ul>
 
       <div className="tab-content">
-        {creators.map(({type, render}, i) =>
+        {creators.map(({type, render: Render}, i) =>
           <div className={'tab-pane fade ' + (i ? '' : 'in active')} id={type} key={i}>
-            {render()}
+            <Render />
           </div>
         )}
       </div>
