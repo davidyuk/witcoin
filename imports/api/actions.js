@@ -143,21 +143,10 @@ const joinActionUsers = action => {
   return action;
 };
 
-const joinActionUserReaction = action => {
-  if (Meteor.isServer) return action;
-  const shareAction = Actions.findOne({
-    type: Actions.types.SHARE,
-    objectId: action._id, userId: Meteor.userId()
-  });
-  action.currentUserShared = !!shareAction;
-  return action;
-};
-
 const joinActionComments = action => {
   action.comments = Actions.find({
     type: Actions.types.COMMENT, objectId: action._id
   }, {sort: {createdAt: 1}}).fetch().filter(joinActionUsers);
-  action.comments.forEach(joinActionUserReaction);
   return action;
 };
 
@@ -172,7 +161,7 @@ const joinActionParent = action => {
 };
 
 export const joinAction = action => {
-  const valid = [joinActionUsers, joinActionUserReaction, joinActionComments, joinActionParent]
+  const valid = [joinActionUsers, joinActionComments, joinActionParent]
     .reduce((p, join) => p && join(action), !!action);
   return valid ? action : null;
 };
