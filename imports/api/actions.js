@@ -145,11 +145,6 @@ const joinActionUsers = action => {
 
 const joinActionUserReaction = action => {
   if (Meteor.isServer) return action;
-  const rateAction = Actions.findOne({
-    type: Actions.types.RATE,
-    objectId: action._id, userId: Meteor.userId()
-  });
-  if (rateAction) action.currentUserRate = rateAction.rate;
   const shareAction = Actions.findOne({
     type: Actions.types.SHARE,
     objectId: action._id, userId: Meteor.userId()

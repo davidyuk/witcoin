@@ -1,44 +1,43 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 
-export default class VoteButton extends React.Component {
-  getVoteHandler(rate) {
-    return () => {
-      Meteor.call('action.rate', this.props.action._id, rate);
-    }
-  }
+import { Actions } from '../../api/actions';
 
-  renderRating() {
-    const action = this.props.action;
+const VoteButton = ({ action, rate }) => {
+  const getVoteHandler = rate => () => Meteor.call('action.rate', action._id, rate);
 
-    if (!action.rates.up && !action.rates.down) return null;
-    return (
-      <button className="btn btn-default disabled"
-              title={`Нравится: ${action.rates.up}, не нравится: ${action.rates.down}`}>
-        {action.rates.up - action.rates.down}
+  return (
+    <div className="btn-group btn-group-xs">
+      {action.rates.up || action.rates.down ? (
+        <button className="btn btn-default disabled"
+                title={`Нравится: ${action.rates.up}, не нравится: ${action.rates.down}`}>
+          {action.rates.up - action.rates.down}
+        </button>
+      ) : null}
+      <button onClick={getVoteHandler(rate == 1 ? 0 : 1)} title="Нравится"
+              className={'btn btn-default' + (rate == 1 ? ' active' : '')}>
+        <span className="glyphicon glyphicon-arrow-up" />
       </button>
-    );
-  }
-
-  render() {
-    const action = this.props.action;
-    const rate = action.currentUserRate;
-
-    return (
-      <div className="btn-group btn-group-xs">
-        {this.renderRating()}
-        <button onClick={this.getVoteHandler(rate == 1 ? 0 : 1)} title="Нравится"
-                className={'btn btn-default' + (rate == 1 ? ' active' : '')}>
-          <span className="glyphicon glyphicon-arrow-up" />
-        </button>
-        <button onClick={this.getVoteHandler(rate == -1 ? 0 : -1)} title="Не нравится"
-                className={'btn btn-default' + (rate == -1 ? ' active' : '')}>
-          <span className="glyphicon glyphicon-arrow-down" />
-        </button>
-      </div>
-    );
-  }
-}
+      <button onClick={getVoteHandler(rate == -1 ? 0 : -1)} title="Не нравится"
+              className={'btn btn-default' + (rate == -1 ? ' active' : '')}>
+        <span className="glyphicon glyphicon-arrow-down" />
+      </button>
+    </div>
+  );
+};
 
 VoteButton.propTypes = {
   action: React.PropTypes.object.isRequired,
+  rate: React.PropTypes.number.isRequired,
 };
+
+export default createContainer(({ action }) => {
+  const rateAction = Actions.findOne({
+    type: Actions.types.RATE,
+    objectId: action._id, userId: Meteor.userId(),
+  });
+  return {
+    rate: rateAction ? rateAction.rate : 0,
+  };
+}, VoteButton);
