@@ -72,6 +72,7 @@ export default class SelectUser extends React.Component {
         {this.state.resultVisible ? (
           <div className="list-group" style={{zIndex: 10, position: 'absolute', width: '100%'}}>
             {this.data.users
+              .filter(u => this.props.canSelectYourself || u.__originalId != Meteor.userId())
               .map(user =>
                 <button type="button" key={user._id} className="list-group-item"
                         onClick={() => this.handleSelect(user.__originalId, user.getFullName())}>
@@ -94,6 +95,7 @@ SelectUser.propTypes = {
   placeholder: React.PropTypes.string,
   name: React.PropTypes.string,
   required: React.PropTypes.bool,
+  canSelectYourself: React.PropTypes.bool,
 };
 
 SelectUser.defaultProps = {
@@ -102,6 +104,7 @@ SelectUser.defaultProps = {
   updateInput: true,
   placeholder: 'Имя пользователя',
   required: false,
+  canSelectYourself: true,
 };
 
 ReactMixin(SelectUser.prototype, ReactMeteorData);
