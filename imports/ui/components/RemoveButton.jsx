@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
+import { Actions } from '../../api/actions';
+
 export default class RemoveButton extends React.Component {
   removeAction(event) {
     event.preventDefault();
@@ -15,6 +17,7 @@ export default class RemoveButton extends React.Component {
   getHandler() {
     if (this.props.isShared) return null;
     if (this.props.isNotification || this.props.isNewsItem) return this.removeFeedItem.bind(this);
+    if (Actions.undeletableTypes.includes(this.props.action.type)) return null;
     if (this.props.action.userId == Meteor.userId()) return this.removeAction.bind(this);
   }
 

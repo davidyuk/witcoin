@@ -40,6 +40,7 @@ Actions.types = {
 Actions.relevantTypes = [Actions.types.DEFAULT, Actions.types.SHARE];
 Actions.simpleTypes = [Actions.types.DEFAULT];
 Actions.hasParentActionTypes = [Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE];
+Actions.undeletableTypes = [];
 
 Actions.typesTree = {
   'Записи': {
@@ -158,6 +159,8 @@ Meteor.methods({
     const action = Actions.findOne(actionId);
     if (!action)
       throw new Meteor.Error('action-not-found');
+    if (Actions.undeletableTypes.includes(action.type))
+      throw new Meteor.Error('actions-of-this-type-cannot-be-deleted');
     if (action.userId != this.userId)
       throw new Meteor.Error('forbidden');
 
