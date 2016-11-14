@@ -136,10 +136,6 @@ if (Meteor.isServer) {
 const joinActionUsers = action => {
   action.user = Meteor.users.findOne(action.userId);
   if (!action.user) return null;
-  if (action.type == Actions.types.SUBSCRIBE) {
-    action.object = Meteor.users.findOne(action.objectId);
-    if (!action.object) return null;
-  }
   return action;
 };
 

@@ -51,10 +51,14 @@ export default class Action extends React.Component {
     const v2 = ['', 'а'][+!action.user.isMale()];
     switch (action.type) {
       case Actions.types.SUBSCRIBE:
-        return <span>
-          подписал{v1} на {isN ? 'Ваши' : ''} обновления
-          {' '}{isN ? null : <LinkToUser user={action.object} inflection={Meteor.users.inflectionTypes.GENITIVE} />}
-          </span>;
+        const Subscribe = createContainer(
+          ({ action }) => ({userTo: Meteor.users.findOne(action.objectId)}),
+          ({ user, userTo, isNotification }) => <span>
+            подписал{user.isMale() ? 'ся' : 'ась'} на {isNotification ? 'Ваши' : ''} обновления
+            {' '}{isNotification ? null : <LinkToUser user={userTo} inflection={Meteor.users.inflectionTypes.GENITIVE} />}
+          </span>
+        );
+        return <Subscribe {...this.props} />;
       case Actions.types.COMMENT:
         return `прокомментировал${v2} ${isN ? 'Вашу' : ''} запись`;
       case Actions.types.RATE:
