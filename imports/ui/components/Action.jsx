@@ -72,7 +72,7 @@ export default class Action extends React.Component {
   render() {
     const action = this.props.action;
     const inflection = action.type == Actions.types.RATE ? Meteor.users.inflectionTypes.DATIVE : null;
-    const hasParentRecord = [Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(action.type);
+    const hasParentRecord = Actions.hasParentActionTypes.includes(action.type);
     const style = !this.props.isShared ? {}
       : { borderTop: 'none', borderRight: 'none', borderBottom: 'none', padding: '0 5px', margin: '5px' };
 

@@ -39,6 +39,7 @@ Actions.types = {
 
 Actions.relevantTypes = [Actions.types.DEFAULT, Actions.types.SHARE];
 Actions.simpleTypes = [Actions.types.DEFAULT];
+Actions.hasParentActionTypes = [Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE];
 
 Actions.typesTree = {
   'Записи': {
@@ -107,7 +108,7 @@ if (Meteor.isServer) {
 
   const actionParentCursor = {
     find: action => {
-      if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(action.type))
+      if (Actions.hasParentActionTypes.includes(action.type))
         return Actions.find(action.objectId);
     },
     children: [actionUsersCursor],
@@ -140,7 +141,7 @@ const joinActionUsers = action => {
 };
 
 const joinActionParent = action => {
-  if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(action.type)) {
+  if (Actions.hasParentActionTypes.includes(action.type)) {
     action.object = Actions.findOne(action.objectId);
     const valid = [joinActionUsers, joinActionParent]
       .reduce((p, join) => p && join(action.object), !!action.object);
