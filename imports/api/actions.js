@@ -102,46 +102,61 @@ Actions.schema = new SimpleSchema({
 Actions.attachSchema(Actions.schema);
 
 if (Meteor.isServer) {
-  const actionUsersCursor = {
+  export const actionChildrenCursors = [];
+
+  const _actionChildrenRequiredCursors = [];
+
+  export const registerActionChildrenRequiredCursor = ActionChildrenCursor => {
+    if (ActionChildrenCursor)
+      _actionChildrenRequiredCursors.push(ActionChildrenCursor);
+
+    const creatorCursor = {
+      find: action => Meteor.users.find(action.userId, {fields: Meteor.users.publicFields}),
+    };
+
+    const userReactionCursor = {
+      find: function(action) {
+        return Actions.find({
+          type: {$in: [Actions.types.RATE, Actions.types.SHARE]},
+          objectId: action._id, userId: this.userId
+        })
+      }
+    };
+
+    const commentsCursor = {
+      find: action => Actions.find({
+        type: Actions.types.COMMENT, objectId: action._id,
+      }),
+      children: [creatorCursor, userReactionCursor],
+    };
+
+    const parentCursor = {
+      find: action => {
+        if (Actions.hasParentActionTypes.includes(action.type))
+          return Actions.find(action.objectId);
+      },
+      children: [creatorCursor, ..._actionChildrenRequiredCursors],
+    };
+    parentCursor.children.push(parentCursor);
+
+    actionChildrenCursors.length = 0;
+    actionChildrenCursors.push(
+      ..._actionChildrenRequiredCursors,
+      creatorCursor,
+      userReactionCursor,
+      commentsCursor,
+      parentCursor,
+    );
+  };
+
+  registerActionChildrenRequiredCursor();
+
+  registerActionChildrenRequiredCursor({
     find: action => {
-      const userIds = [action.userId];
       if (action.type == Actions.types.SUBSCRIBE)
-        userIds.push(action.objectId);
-      return Meteor.users.find({_id: {$in: userIds}}, {fields: Meteor.users.publicFields});
+        return Meteor.users.find(action.objectId, {fields: Meteor.users.publicFields});
     }
-  };
-
-  const actionUserReactionCursor = {
-    find: function(action) {
-      return Actions.find({
-        type: {$in: [Actions.types.RATE, Actions.types.SHARE]},
-        objectId: action._id, userId: this.userId
-      })
-    }
-  };
-
-  const actionCommentsCursor = {
-    find: action => Actions.find({
-      type: Actions.types.COMMENT, objectId: action._id,
-    }),
-    children: [actionUsersCursor, actionUserReactionCursor],
-  };
-
-  const actionParentCursor = {
-    find: action => {
-      if (Actions.hasParentActionTypes.includes(action.type))
-        return Actions.find(action.objectId);
-    },
-    children: [actionUsersCursor],
-  };
-  actionParentCursor.children.push(actionParentCursor);
-
-  export const actionChildrenCursors = [
-    actionUsersCursor,
-    actionUserReactionCursor,
-    actionCommentsCursor,
-    actionParentCursor,
-  ];
+  });
 
   Meteor.publishComposite('actions', function (selector, sort, limit) {
     check(selector, Object);
