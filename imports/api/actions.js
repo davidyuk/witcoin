@@ -143,13 +143,6 @@ const joinActionUsers = action => {
   return action;
 };
 
-const joinActionComments = action => {
-  action.comments = Actions.find({
-    type: Actions.types.COMMENT, objectId: action._id
-  }, {sort: {createdAt: 1}}).fetch().filter(joinActionUsers);
-  return action;
-};
-
 const joinActionParent = action => {
   if ([Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE].includes(action.type)) {
     action.object = Actions.findOne(action.objectId);
@@ -161,7 +154,7 @@ const joinActionParent = action => {
 };
 
 export const joinAction = action => {
-  const valid = [joinActionUsers, joinActionComments, joinActionParent]
+  const valid = [joinActionUsers, joinActionParent]
     .reduce((p, join) => p && join(action), !!action);
   return valid ? action : null;
 };

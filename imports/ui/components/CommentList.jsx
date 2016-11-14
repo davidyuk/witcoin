@@ -1,45 +1,25 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 
-import LinkToUser from './LinkToUser';
-import VoteButton from './VoteButton';
-import RemoveButton from './RemoveButton';
 import MessageInput from './MessageInput';
-import Date from './Date';
+import Comment from './Comment';
+import { Actions } from '../../api/actions';
 
-export default class CommentList extends React.Component {
+class CommentList extends React.Component {
   addComment(comment) {
     Meteor.call('action.comment', this.props.actionId, comment);
   }
 
-  renderComments() {
+  render() {
     const comments = this.props.comments;
 
-    return comments && comments.length ? comments.map(comment =>
-      <div className="list-group-item" key={comment._id}>
-        <div className="pull-right">
-          <RemoveButton action={comment} />
-        </div>
-
-        <LinkToUser user={comment.user} />
-        <div>{comment.description}</div>
-
-        <div style={{overflow: 'hidden'}}>
-          <div className="pull-right">
-            <VoteButton action={comment} />
-          </div>
-          <small>
-            <Date value={comment.createdAt} isRelative={true} />
-          </small>
-        </div>
-      </div>
-    ) : null;
-  }
-
-  render() {
     return (
       <div style={{padding: '5px 0 0 40px'}}>
         <div className="list-group" style={{marginBottom: 0}}>
-          {this.renderComments()}
+          {comments.map(comment =>
+            <Comment comment={comment} key={comment._id} />
+          )}
         </div>
         <MessageInput handler={this.addComment.bind(this)} placeholder="Текст комментария" />
       </div>
@@ -51,3 +31,12 @@ CommentList.propTypes = {
   comments: React.PropTypes.array.isRequired,
   actionId: React.PropTypes.string.isRequired,
 };
+
+export default createContainer(
+  ({ actionId }) => ({
+    comments: Actions.find({
+      type: Actions.types.COMMENT, objectId: actionId,
+    }, {sort: {createdAt: 1}}).fetch(),
+  }),
+  CommentList
+);
