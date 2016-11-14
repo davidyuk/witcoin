@@ -6,7 +6,7 @@ import { IntlProvider } from 'react-intl';
 import { Router, RouterContext, Route, match } from 'react-router';
 
 import { htmlTemplate } from './templates';
-import { Actions, joinAction } from '../api/actions';
+import { Actions } from '../api/actions';
 import { Chats } from '../api/chats';
 import { FeedItems } from '../api/feeds';
 import MailReport from '../ui/components/MailReport';
@@ -23,7 +23,7 @@ export const getActions = (userId, isNotifications, markAsMailed = true) => {
   if (!isNotifications) selector.type = {$in: Actions.relevantTypes};
 
   const feedItems = FeedItems.find(selector, {sort: {createdAt: -1}})
-    .map(fi => joinAction(Actions.findOne(fi.actionId))).filter(a => a);
+    .map(fi => Actions.findOne(fi.actionId));
   if (markAsMailed) FeedItems.update(selector, {$set: {isMailed: true}}, {multi: true});
   return feedItems;
 };

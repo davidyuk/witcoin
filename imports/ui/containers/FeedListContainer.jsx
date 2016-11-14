@@ -3,7 +3,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import ActionList from '../components/ActionList';
 import { FeedItems } from '../../api/feeds';
-import { Actions, joinAction } from '../../api/actions';
+import { Actions } from '../../api/actions';
 
 export default FeedListContainer = createContainer(({ selector, limit, countCallback }) => {
   const handle = Meteor.subscribe('feedItems', selector, limit);
@@ -12,10 +12,9 @@ export default FeedListContainer = createContainer(({ selector, limit, countCall
     .find({userId: Meteor.userId()}, {sort: {createdAt: -1}})
     .map(feedItem => {
       const action = Actions.findOne(feedItem.actionId);
-      if (action) action.feedItemId = feedItem._id;
+      action.feedItemId = feedItem._id;
       return action;
-    })
-    .filter(joinAction);
+    });
 
   countCallback && countCallback(actions.length);
 

@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 
 import LinkToUser from './LinkToUser';
 import { Actions } from '../../api/actions';
@@ -9,7 +10,7 @@ import CommentList from './CommentList';
 import RemoveButton from './RemoveButton';
 import Date from './Date';
 
-export default class Action extends React.Component {
+class Action extends React.Component {
   constructor() {
     super();
     this.state = {showComments: false};
@@ -33,13 +34,13 @@ export default class Action extends React.Component {
           </div>
           <small>
             <Date value={action.createdAt} isRelative={true} />
-            {!action.comments.length ? <span>
+            {!action.commentsCount ? <span>
               {' | '}<a onClick={this.toggleComments} href="#">Комментировать</a>
             </span> : null}
           </small>
         </div>
-        {action.comments.length || this.state.showComments
-          ? <CommentList comments={action.comments} actionId={action._id} /> : null}
+        {action.commentsCount || this.state.showComments
+          ? <CommentList actionId={action._id} /> : null}
       </div>
     );
   }
@@ -47,8 +48,8 @@ export default class Action extends React.Component {
   getMessage() {
     const action = this.props.action;
     const isN = this.props.isNotification;
-    const v1 = ['ся', 'ась'][+!action.user.isMale()];
-    const v2 = ['', 'а'][+!action.user.isMale()];
+    const v1 = ['ся', 'ась'][+!this.props.user.isMale()];
+    const v2 = ['', 'а'][+!this.props.user.isMale()];
     switch (action.type) {
       case Actions.types.SUBSCRIBE:
         const Subscribe = createContainer(
@@ -72,7 +73,6 @@ export default class Action extends React.Component {
   render() {
     const action = this.props.action;
     const inflection = action.type == Actions.types.RATE ? Meteor.users.inflectionTypes.DATIVE : null;
-    const hasParentRecord = Actions.hasParentActionTypes.includes(action.type);
     const style = !this.props.isShared ? {}
       : { borderTop: 'none', borderRight: 'none', borderBottom: 'none', padding: '0 5px', margin: '5px' };
 
@@ -84,9 +84,9 @@ export default class Action extends React.Component {
           </div>
         ) : null}
 
-        <LinkToUser user={action.user} inflection={inflection} /> {this.getMessage()}
+        <LinkToUser user={this.props.user} inflection={inflection} /> {this.getMessage()}
         <div>{action.description}</div>
-        {hasParentRecord ? <Action action={action.object} isShared={true} /> : null}
+        {this.props.parentAction ? <ActionWrapped action={this.props.parentAction} isShared={true} /> : null}
 
         {this.props.isMail
           ? <small><Date value={action.createdAt} /></small>
@@ -98,8 +98,20 @@ export default class Action extends React.Component {
 
 Action.propTypes = {
   action: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object.isRequired,
+  parentAction: React.PropTypes.object,
   isShared: React.PropTypes.bool,
   isNotification: React.PropTypes.bool,
   isNewsItem: React.PropTypes.bool,
   isMail: React.PropTypes.bool,
 };
+
+const ActionWrapped = createContainer(
+  ({ action }) => ({
+    parentAction: Actions.hasParentActionTypes.includes(action.type) ? Actions.findOne(action.objectId) : null,
+    user: Meteor.users.findOne(action.userId),
+  }),
+  Action
+);
+
+export default ActionWrapped;

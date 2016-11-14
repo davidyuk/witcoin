@@ -134,28 +134,6 @@ if (Meteor.isServer) {
   });
 }
 
-const joinActionUsers = action => {
-  action.user = Meteor.users.findOne(action.userId);
-  if (!action.user) return null;
-  return action;
-};
-
-const joinActionParent = action => {
-  if (Actions.hasParentActionTypes.includes(action.type)) {
-    action.object = Actions.findOne(action.objectId);
-    const valid = [joinActionUsers, joinActionParent]
-      .reduce((p, join) => p && join(action.object), !!action.object);
-    if (!valid) return null;
-  }
-  return action;
-};
-
-export const joinAction = action => {
-  const valid = [joinActionUsers, joinActionParent]
-    .reduce((p, join) => p && join(action), !!action);
-  return valid ? action : null;
-};
-
 Meteor.methods({
   'action.create' (description, type = Actions.types.DEFAULT) {
     check(description, String);
