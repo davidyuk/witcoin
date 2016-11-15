@@ -143,5 +143,5 @@ Factory.define('user', Meteor.users, {
     };
   }
 }).after(user => {
-  Accounts.setPassword(user._id, 'password');
+  Meteor.isServer && Accounts.setPassword(user._id, 'password');
 });
