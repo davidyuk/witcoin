@@ -23,6 +23,29 @@ function requireAuth(nextState, replace) {
   }
 }
 
+const handleNotAuthError = err => {
+  if (err && err.error == 'not-authorized') {
+    browserHistory.push({
+      pathname: '/sign-in',
+      state: { nextPathname: window.location.pathname },
+    });
+  }
+};
+
+const _meteorCall = Meteor.call;
+Meteor.call = function() {
+  if (typeof arguments[arguments.length - 1] == 'function') {
+    const cb = arguments[arguments.length - 1];
+    arguments[arguments.length - 1] = function (err) {
+      cb.apply(this, arguments);
+      handleNotAuthError.apply(this, arguments);
+    };
+    _meteorCall.apply(this, arguments);
+  } else {
+    _meteorCall.apply(this, [...arguments, handleNotAuthError]);
+  }
+};
+
 export const renderRoutes = () => (
   <IntlProvider locale="ru">
     <Router history={browserHistory}>

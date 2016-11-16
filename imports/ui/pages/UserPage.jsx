@@ -11,10 +11,9 @@ import { Actions } from '../../api/actions';
 
 export default class UserPage extends React.Component {
   goToChat() {
-    Meteor.call('chat.get', [this.props.user._id], (err, chatId) => {
-      if (err || !chatId) alert(err || 'Неизвестная ошибка');
-      else this.context.router.push('/im/' + chatId);
-    });
+    Meteor.call('chat.get', [this.props.user._id], (err, chatId) =>
+      chatId && this.context.router.push('/im/' + chatId)
+    );
   }
 
   subscribe() {
