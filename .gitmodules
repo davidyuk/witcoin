@@ -4,3 +4,25 @@
 [submodule "packages/meteor-accounts-t9n"]
 	path = packages/meteor-accounts-t9n
 	url = https://github.com/Davidyuk/meteor-accounts-t9n.git
+
+[submodule "imports/packages/transactions"]
+	path = imports/packages/transactions
+	url = http://github.com/Davidyuk/witcoin-transactions/
+[submodule "imports/packages/services"]
+	path = imports/packages/services
+	url = http://github.com/Davidyuk/witcoin-services/
+[submodule "imports/packages/tasks"]
+	path = imports/packages/tasks
+	url = http://github.com/Davidyuk/witcoin-tasks/
+[submodule "imports/packages/fefu-auth"]
+	path = imports/packages/fefu-auth
+	url = http://github.com/Davidyuk/witcoin-fefuAuth/
+[submodule "imports/packages/lessons"]
+	path = imports/packages/lessons
+	url = http://github.com/Davidyuk/witcoin-lessons/
+[submodule "imports/packages/printer"]
+	path = imports/packages/printer
+	url = http://github.com/Davidyuk/witcoin-printer/
+[submodule "imports/packages/consultations"]
+	path = imports/packages/consultations
+	url = http://github.com/Davidyuk/witcoin-consultations/
