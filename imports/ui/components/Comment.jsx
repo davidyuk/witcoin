@@ -14,7 +14,7 @@ const Comment = ({ comment, user }) =>
     </div>
 
     <LinkToUser user={user} />
-    <div>{comment.description}</div>
+    <div style={{whiteSpace: 'pre-wrap'}}>{comment.description}</div>
 
     <div style={{overflow: 'hidden'}}>
       <div className="pull-right">

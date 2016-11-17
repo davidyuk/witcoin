@@ -11,7 +11,7 @@ const Message  = ({ message, isMail }) =>
       </div>
       <LinkToUser user={message.user} />
       <br />
-      {message.content}
+      <span style={{whiteSpace: 'pre-wrap'}}>{message.content}</span>
       {!isMail && message.userId == Meteor.userId()? (
         <div className="pull-right text-muted">
           <span title={'Сообщение ' + (message.isRead ? '' : 'не ') + 'доставлено'}

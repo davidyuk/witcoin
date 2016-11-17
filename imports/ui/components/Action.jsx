@@ -85,7 +85,7 @@ class Action extends React.Component {
         ) : null}
 
         <LinkToUser user={this.props.user} inflection={inflection} /> {this.getMessage()}
-        <div>{action.description}</div>
+        <div style={{whiteSpace: 'pre-wrap'}}>{action.description}</div>
         {this.props.parentAction ? <ActionWrapped action={this.props.parentAction} isShared={true} /> : null}
 
         {this.props.isMail
