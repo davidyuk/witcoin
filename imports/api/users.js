@@ -27,6 +27,7 @@ Meteor.users.schema = new SimpleSchema({
     type: new SimpleSchema({
       firstName: {type: String, defaultValue: 'Имя'},
       lastName: {type: String, defaultValue: 'Фамилия'},
+      about: {type: String, optional: true},
       gender: {
         type: String,
         allowedValues: [Meteor.users.genderTypes.MALE, Meteor.users.genderTypes.FEMALE],
@@ -140,6 +141,7 @@ Factory.define('user', Meteor.users, {
       gender,
       firstName: faker.name.firstName(+ (gender == Meteor.users.genderTypes.FEMALE)),
       lastName: faker.name.lastName(+ (gender == Meteor.users.genderTypes.FEMALE)),
+      about: faker.lorem.sentences(faker.random.number(8) + 1),
     };
   }
 }).after(user => {

@@ -7,9 +7,27 @@ import UserList from '../components/UserList';
 import InfiniteScroll from '../components/InfiniteScroll';
 import ActionCreator from '../components/ActionCreator';
 import ActionTypeFilter from '../components/ActionTypeFilter';
+import MessageInput from '../components/MessageInput';
 import { Actions } from '../../api/actions';
 
 export default class UserPage extends React.Component {
+  constructor() {
+    super();
+    this.state = {isAboutEdit: false};
+    this.aboutEditClickHandler = this.aboutEditClickHandler.bind(this);
+    this.aboutSaveHandler = this.aboutSaveHandler.bind(this);
+  }
+
+  aboutEditClickHandler(event) {
+    event.preventDefault();
+    this.setState({isAboutEdit: !this.state.isAboutEdit});
+  }
+
+  aboutSaveHandler(content) {
+    Meteor.users.update(this.props.user._id, {$set: {'profile.about': content}});
+    this.setState({isAboutEdit: false});
+  }
+
   goToChat() {
     Meteor.call('chat.get', [this.props.user._id], (err, chatId) =>
       chatId && this.context.router.push('/im/' + chatId)
@@ -25,6 +43,7 @@ export default class UserPage extends React.Component {
       return <NotFoundPage/>;
 
     const isSubscribed = this.props.isSubscribed;
+    const user = this.props.user;
 
     return (
       <div className="row">
@@ -44,6 +63,29 @@ export default class UserPage extends React.Component {
               </button>
             </div>
           : null }
+          {user.profile.about || user._id == Meteor.userId() ? (
+            <div className="panel panel-default">
+              <div className="panel-heading">О себе
+                {user._id == Meteor.userId() ? (
+                  <a className={'btn btn-default btn-xs pull-right' + (this.state.isAboutEdit ? ' active' : '')}
+                     title="Изменить" href="#" onClick={this.aboutEditClickHandler}>
+                    <span className="glyphicon glyphicon-pencil" />
+                  </a>
+                ) : null}
+              </div>
+              {this.state.isAboutEdit || user.profile.about ? (
+                <div className="panel-body">
+                  {this.state.isAboutEdit ? (
+                    <MessageInput placeholder="Произвольная информация на вашей странице. Например, контактные данные."
+                                  defaultValue={user.profile.about} handler={this.aboutSaveHandler} required={false}
+                                  buttonText="Сохранить" />
+                  ) : (
+                    <div style={{whiteSpace: 'pre-wrap'}}>{user.profile.about}</div>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
           { this.props.subscribersCount ?
             <UserList users={ this.props.subscribers } count={ this.props.subscribersCount } title="Подписчики"/>
           : null }
