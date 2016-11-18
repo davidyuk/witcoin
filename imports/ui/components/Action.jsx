@@ -71,6 +71,7 @@ class Action extends React.Component {
   }
 
   render() {
+    if (!this.props.action || !this.props.user) return null;
     const action = this.props.action;
     const inflection = action.type == Actions.types.RATE ? Meteor.users.inflectionTypes.DATIVE : null;
     const style = !this.props.isShared ? {}
@@ -97,8 +98,8 @@ class Action extends React.Component {
 }
 
 Action.propTypes = {
-  action: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired,
+  action: React.PropTypes.object,
+  user: React.PropTypes.object,
   parentAction: React.PropTypes.object,
   isShared: React.PropTypes.bool,
   isNotification: React.PropTypes.bool,

@@ -7,8 +7,9 @@ import VoteButton from './VoteButton';
 import RemoveButton from './RemoveButton';
 import Date from './Date';
 
-const Comment = ({ comment, user }) =>
-  <div className="list-group-item" key={comment._id}>
+const Comment = ({ comment, user }) => {
+  if (!user) return null;
+  return <div className="list-group-item" key={comment._id}>
     <div className="pull-right">
       <RemoveButton action={comment} />
     </div>
@@ -25,10 +26,11 @@ const Comment = ({ comment, user }) =>
       </small>
     </div>
   </div>;
+};
 
 Comment.propTypes = {
   comment: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object,
 };
 
 export default createContainer(

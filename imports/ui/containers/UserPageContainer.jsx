@@ -9,7 +9,8 @@ export default UserPageContainer = createContainer(({ params: { userId } }) => {
   const user = Meteor.users.findOne(userId);
   const subscribers = Actions
     .find({ type: Actions.types.SUBSCRIBE, objectId: userId }, { limit: 10 })
-    .map(action => Meteor.users.findOne(action.userId));
+    .map(action => Meteor.users.findOne(action.userId))
+    .filter(Boolean);
   const subscribersCount = Counts.get('subscribers');
   const isSubscribed = !!Actions.findOne({ type: Actions.types.SUBSCRIBE, userId: Meteor.userId(), objectId: userId });
 
