@@ -55,7 +55,13 @@ const App = ({ children }) =>
           , <a href="http://vk.com/witcoin">VK</a>
         </div>
         <div className="col-xs-6 text-right">
-          {/*informer.html*/}
+          {/* Yandex.Metrika informer */}
+          <a href="https://metrika.yandex.ru/stat/?id=37336595&amp;from=informer" target="_blank" rel="nofollow">
+            <img src="https://informer.yandex.ru/informer/37336595/3_0_FFFFFFFF_EFEFEFFF_0_pageviews"
+                 style={{width: '88px', height: '31px', border: 0}} alt="Яндекс.Метрика"
+                 title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" />
+          </a>
+          {/* /Yandex.Metrika informer */}
         </div>
       </div>
     </footer>
