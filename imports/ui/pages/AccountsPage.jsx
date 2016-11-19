@@ -43,6 +43,12 @@ export default class AccountsPage extends React.Component {
       <div className="row">
         <Helmet title={T9n.get(AccountsTemplates.texts.title[state], false)} />
         <div className="col-md-6 col-md-offset-3">
+          {window.location.host != 'witcoin.ru' && ['signIn', 'signUp'].includes(state) ? (
+            <div className="alert alert-info">
+              По техническим причинам социальная авторизация доступна только
+              на&nbsp;<a className="alert-link" href="http://witcoin.ru/">witcoin.ru</a>.
+            </div>
+          ) : null}
           {state == 'signIn' ? (
             <div className="alert alert-info" style={{overflow: 'hidden'}}>
               <Link className="alert-link" to="/">19 ноября 2016</Link> сайт был обновлён. Если последний раз вы
