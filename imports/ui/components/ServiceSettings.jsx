@@ -33,7 +33,9 @@ const ServiceSettings = ({ user }) => {
 
   return <div>
     <h2>Аккаунты сторонних сервисов</h2>
-    Указанные ниже аккаунты сторонних сервисов можно использовать для входа в систему.
+    Указанные ниже аккаунты сторонних сервисов можно использовать для входа в систему
+    {window.location.host != 'witcoin.ru'
+      ? <span> (сейчас работает только на <a href="http://witcoin.ru/">witcoin.ru</a>)</span> : null}.
     <table className="table table-noTopBorder">
       <tbody>
       {user.services && Object.keys(user.services).length ? Object.keys(user.services).map((name, i) =>
