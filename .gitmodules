@@ -1,3 +1,6 @@
 [submodule "packages/bootstrap"]
 	path = packages/bootstrap
 	url = https://github.com/Davidyuk/bootstrap.git
+[submodule "packages/meteor-accounts-t9n"]
+	path = packages/meteor-accounts-t9n
+	url = https://github.com/Davidyuk/meteor-accounts-t9n.git
