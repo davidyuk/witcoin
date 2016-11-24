@@ -127,13 +127,14 @@ if (Meteor.isServer) {
     actionParentCursor,
   ];
 
-  Meteor.publishComposite('actions', function (selector, limit) {
+  Meteor.publishComposite('actions', function (selector, sort, limit) {
     check(selector, Object);
+    check(sort, Object);
     check(limit, Match.Integer);
 
     Counts.publish(this, 'actions', Actions.find(selector));
     return {
-      find: () => Actions.find(selector, { sort: {createdAt: -1}, limit: limit }),
+      find: () => Actions.find(selector, {sort, limit}),
       children: actionChildrenCursors,
     };
   });

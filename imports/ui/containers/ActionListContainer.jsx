@@ -4,10 +4,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 import ActionList from '../components/ActionList';
 import { Actions } from '../../api/actions';
 
-export default ActionListContainer = createContainer(({ selector, limit, countCallback }) => {
-  const handle = Meteor.subscribe('actions', selector, limit);
+export default ActionListContainer = createContainer(({ selector, sort = {createdAt: -1}, limit, countCallback }) => {
+  const handle = Meteor.subscribe('actions', selector, sort, limit);
 
-  const actions = Actions.find(selector, {sort: {createdAt: -1}}).fetch();
+  const actions = Actions.find(selector, {sort, limit}).fetch();
   const actionsCount = Counts.get('actions');
 
   countCallback && countCallback(actions.length);
