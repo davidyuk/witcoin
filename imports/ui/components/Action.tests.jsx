@@ -1,6 +1,6 @@
 import React from 'react';
 import { expect, assert } from 'meteor/practicalmeteor:chai';
-import faker from 'faker';
+const faker = Meteor.isDevelopment && require('faker');
 import StubCollections from 'meteor/hwillson:stub-collections';
 
 import { mountWithIntl } from '../../helpers/intl-enzyme-test-helper';

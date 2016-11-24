@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import faker from 'faker';
+const faker = Meteor.isDevelopment && require('faker');
 import * as fs from 'fs';
 
 import './users';

@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import faker from 'faker';
+const faker = Meteor.isDevelopment && require('faker');
 import petrovich from 'petrovich';
 import { EasySearch } from 'meteor/easysearch:core';
 
