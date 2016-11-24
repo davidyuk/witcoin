@@ -109,6 +109,7 @@ if (Meteor.isServer) {
             const action = Actions.findOne(actionId);
             expect(action.rates.up).to.equal(up);
             expect(action.rates.down).to.equal(down);
+            expect(action.rates.total).to.equal(up - down);
           };
 
           rateAction.call({userId: user1Id}, actionId, 1);

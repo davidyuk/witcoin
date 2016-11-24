@@ -18,7 +18,10 @@ const updateParentActionCounter = isInc => (_, action) => {
       Actions.update(action.objectId, {$inc: {commentsCount: d}});
       break;
     case Actions.types.RATE:
-      action.rate && Actions.update(action.objectId, {$inc: {['rates.' + (action.rate == 1 ? 'up' : 'down')]: d}});
+      action.rate && Actions.update(action.objectId, {$inc: {
+        ['rates.' + (action.rate == 1 ? 'up' : 'down')]: d,
+        'rates.total': (action.rate == 1 ? 1 : -1) * d,
+      }});
       break;
     case Actions.types.SHARE:
       Actions.update(action.objectId, {$inc: {sharesCount: d}});
@@ -68,6 +71,7 @@ Actions.schema = new SimpleSchema({
   commentsCount: { type: Number, defaultValue: 0, optional: true },
 
   rates: { type: Object, optional: true },
+  'rates.total': { type: Number, defaultValue: 0 },
   'rates.up': { type: Number, defaultValue: 0 },
   'rates.down': { type: Number, defaultValue: 0 },
   rate: { type: Number, optional: true, denyUpdate: true },

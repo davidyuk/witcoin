@@ -12,7 +12,7 @@ const VoteButton = ({ action, rate }) => {
       {action.rates.up || action.rates.down ? (
         <button className="btn btn-default disabled"
                 title={`Нравится: ${action.rates.up}, не нравится: ${action.rates.down}`}>
-          {action.rates.up - action.rates.down}
+          {action.rates.total}
         </button>
       ) : null}
       <button onClick={getVoteHandler(rate == 1 ? 0 : 1)} title="Нравится"
