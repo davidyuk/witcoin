@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { check } from 'meteor/check';
-import faker from 'faker';
+const faker = Meteor.isDevelopment && require('faker');
 
 import { Actions, actionChildrenCursors } from './actions';
 

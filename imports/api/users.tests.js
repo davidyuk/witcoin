@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { expect } from 'meteor/practicalmeteor:chai';
-import faker from 'faker';
+const faker = Meteor.isDevelopment && require('faker');
 
 import './users';
 

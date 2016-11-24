@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Match, check } from 'meteor/check';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import faker from 'faker';
+const faker = Meteor.isDevelopment && require('faker');
 
 import { SchemaHelpers } from './common';
 import './users';
