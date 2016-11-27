@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Link } from 'react-router';
 import { FormattedPlural } from 'react-intl';
+import Helmet from 'react-helmet';
 
 import TruncateText from '../components/TruncateText';
 import ChatContainer from '../containers/ChatContainer';
@@ -26,6 +27,7 @@ export default class ChatPage extends React.Component {
 
     return (
       <div style={{height: 100 + '%', display: 'flex', paddingBottom: 20 + 'px'}}>
+        <Helmet title="Сообщения" />
         <div className={'list-group ' + listClass} style={{marginBottom: 0, flex: '1 0 250px', display: 'flex', flexDirection: 'column'}}>
           <span className="list-group-item" style={{flexShrink: 0}}>
             <string>

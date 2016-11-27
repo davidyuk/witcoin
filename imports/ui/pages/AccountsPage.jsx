@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Helmet from 'react-helmet';
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
@@ -39,6 +40,7 @@ export default class AccountsPage extends React.Component {
 
     return (
       <div className="row">
+        <Helmet title={T9n.get(AccountsTemplates.texts.title[state], false)} />
         <div className="col-md-6 col-md-offset-3">
           <span ref="container" />
         </div>

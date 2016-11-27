@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import Helmet from 'react-helmet';
 
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 import ActionListContainer from '../containers/ActionListContainer';
@@ -47,6 +48,7 @@ export default class UserPage extends React.Component {
 
     return (
       <div className="row">
+        <Helmet title={this.props.user.getFullName()} />
         <div className="col-md-4">
           <h3>
             {this.props.user.getFullName()}

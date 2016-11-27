@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Helmet from 'react-helmet';
 import { Meteor } from 'meteor/meteor';
 
 import EmailSettings from '../components/EmailSettings';
@@ -56,6 +57,7 @@ const SettingsPage = ({ user }) => {
   };
 
   return <div>
+    <Helmet title="Настройки" />
     <h2>Личные данные</h2>
     <form className="form-horizontal" onSubmit={updatePersonalData}>
       {textField('Имя', 'firstName')}

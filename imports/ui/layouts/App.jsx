@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Helmet from 'react-helmet';
 
 import UserMenu from '../containers/UserMenuContainer';
 import UserSearch from '../components/UserSearch';
 
 const App = ({ children }) =>
   <div>
+    <Helmet defaultTitle="Кленинка" titleTemplate="%s - Кленинка" />
     <nav className="navbar navbar-default">
       <div className="container">
         <div className="navbar-header">

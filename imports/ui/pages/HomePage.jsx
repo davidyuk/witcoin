@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormattedPlural } from 'react-intl';
+import Helmet from 'react-helmet';
 
 import UserList from '../components/UserList';
 
@@ -7,6 +8,7 @@ export default class HomePage extends React.Component {
   render() {
     return (
       <div className="row">
+        <Helmet title="Привет!" />
         <div className="col-sm-8">
           <div className="panel panel-default">
             <div className="panel-heading">Информация о системе</div>
