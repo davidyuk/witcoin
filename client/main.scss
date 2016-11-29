@@ -18,6 +18,7 @@ $panel-footer-padding:          5px 8px;
 $nav-link-padding: 5px 8px; /* 10px 15px */
 
 @import "{}/node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "{}/node_modules/eonasdan-bootstrap-datetimepicker/src/sass/_bootstrap-datetimepicker.scss";
 
 .list-group-item {
   padding: 6px 9px; /* 10px 15px; */

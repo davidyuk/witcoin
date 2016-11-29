@@ -8,6 +8,7 @@
   "dependencies": {
     "bcrypt": "^0.8.7",
     "bootstrap-sass": "^3.3.7",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.43",
     "fs": "0.0.2",
     "intl": "^1.2.5",
     "juice": "^4.0.2",
