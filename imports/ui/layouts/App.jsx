@@ -4,6 +4,7 @@ import Helmet from 'react-helmet';
 
 import UserMenu from '../containers/UserMenuContainer';
 import UserSearch from '../components/UserSearch';
+import ConnectionStatus from '../components/ConnectionStatus';
 
 const App = ({ children }) =>
   <div>
@@ -24,6 +25,7 @@ const App = ({ children }) =>
 
           <UserSearch />
           <UserMenu />
+          <ConnectionStatus />
         </div>
       </div>
     </nav>
