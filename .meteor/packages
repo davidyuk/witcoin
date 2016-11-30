@@ -44,3 +44,4 @@ easysearch:core
 email
 hwillson:stub-collections
 percolate:migrations
+meteorhacks:inject-initial
