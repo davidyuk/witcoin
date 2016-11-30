@@ -66,7 +66,8 @@ Actions.schema = new SimpleSchema({
   userId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true },
   objectId: { type: String, regEx: SimpleSchema.RegEx.Id, denyUpdate: true, optional: true },
   description: { type: String, optional: true },
-  type: { type: String, defaultValue: Actions.types.DEFAULT, denyUpdate: true },
+  type: { type: String, defaultValue: Actions.types.DEFAULT, denyUpdate: true,
+    allowedValues: () => Object.values(Actions.types) },
 
   commentsCount: { type: Number, defaultValue: 0, optional: true },
 
