@@ -6,6 +6,7 @@ import Helmet from 'react-helmet';
 
 import TruncateText from '../components/TruncateText';
 import ChatContainer from '../containers/ChatContainer';
+import UserStatus from '../components/UserStatus';
 
 export default class ChatPage extends React.Component {
   getUsers(chat) {
@@ -43,7 +44,9 @@ export default class ChatPage extends React.Component {
             {this.props.chats.map(chat => (
               <Link to={'/im/' + chat._id} key={chat._id} className="list-group-item" activeClassName="active">
                 <b className="list-group-item-heading">
-                  {this.getUsers(chat).map(user => user.getFullName())}
+                  {this.getUsers(chat).map(user => <span key={user._id}>
+                    {user.getFullName()}<UserStatus user={user} />
+                  </span>)}
                   {chat.unreadMessagesCount ?
                     <span className="badge pull-right">{chat.unreadMessagesCount}</span> : null}
                 </b>

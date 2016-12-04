@@ -8,6 +8,8 @@ Meteor.users.publicFields = {
   'profile.firstName': 1,
   'profile.lastName': 1,
   'profile.gender': 1,
+  'status.online': 1,
+  'status.idle': 1,
 };
 
 Meteor.users.genderTypes = {
@@ -46,6 +48,16 @@ Meteor.users.schema = new SimpleSchema({
       },
     }),
   },
+  status: {type: new SimpleSchema({
+    online: {type: Boolean},
+    lastLogin: {type: new SimpleSchema({
+      date: {type: Date},
+      ipAddr: {type: String},
+      userAgent: {type: String},
+    })},
+    idle: {type: Boolean, optional: true},
+    lastActivity: {type: Date, optional: true},
+  })},
   services: {type: Object, optional: true, blackbox: true},
   heartbeat: {type: Date, optional: true},
 });
@@ -134,7 +146,15 @@ Factory.define('user', Meteor.users, {
       lastName: faker.name.lastName(+ (gender == Meteor.users.genderTypes.FEMALE)),
       about: faker.lorem.sentences(faker.random.number(8) + 1),
     };
-  }
+  },
+  status: () => ({
+    online: false,
+    lastLogin: {
+      date: faker.date.past(),
+      ipAddr: faker.internet.ip(),
+      userAgent: faker.internet.userAgent(),
+    },
+  }),
 }).after(user => {
   Meteor.isServer && Accounts.setPassword(user._id, 'password');
 });
