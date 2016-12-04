@@ -1,6 +1,7 @@
 import React from 'react';
 
 import LinkToUser from './LinkToUser';
+import UserStatus from './UserStatus';
 
 const UserList = ({title, count, users}) =>
   <div className="panel panel-default">
@@ -14,6 +15,7 @@ const UserList = ({title, count, users}) =>
       {users.map(user =>
         <li key={user._id} className="list-group-item">
           <LinkToUser user={user} />
+          <UserStatus user={user} />
         </li>
       )}
     </ul>

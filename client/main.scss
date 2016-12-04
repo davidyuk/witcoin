@@ -48,6 +48,16 @@ textarea { resize: vertical; }
   border-top: none;
 }
 
+.user-status {
+  cursor: default;
+  position: relative;
+  bottom: .4em;
+  &:before {content: '\25CF'}
+  &.online {color: $brand-success}
+  &.idle {color: $brand-warning}
+  &.offline {display: none}
+}
+
 #app {
   > div {
     display: flex;

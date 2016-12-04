@@ -9,6 +9,7 @@ import InfiniteScroll from '../components/InfiniteScroll';
 import ActionCreator from '../components/ActionCreator';
 import ActionTypeFilter from '../components/ActionTypeFilter';
 import MessageInput from '../components/MessageInput';
+import UserStatus from '../components/UserStatus';
 import { Actions } from '../../api/actions';
 
 export default class UserPage extends React.Component {
@@ -52,6 +53,7 @@ export default class UserPage extends React.Component {
         <div className="col-md-4">
           <h3>
             {this.props.user.getFullName()}
+            <UserStatus user={user} />
           </h3>
           { this.props.user._id != Meteor.userId() ?
             <div className="btn-group" style={{ marginBottom: 20 + 'px' }}>

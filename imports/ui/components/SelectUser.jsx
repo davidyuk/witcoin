@@ -2,6 +2,8 @@ import React from 'react';
 import ReactMixin from 'react-mixin';
 import { ReactMeteorData } from 'meteor/react-meteor-data';
 
+import UserStatus from './UserStatus';
+
 export default class SelectUser extends React.Component {
   constructor() {
     super();
@@ -77,6 +79,7 @@ export default class SelectUser extends React.Component {
                 <button type="button" key={user._id} className="list-group-item"
                         onClick={() => this.handleSelect(user.__originalId, user.getFullName())}>
                   {user.getFullName()}
+                  <UserStatus user={user} />
                 </button>
               )
             }
