@@ -4,37 +4,34 @@ import Helmet from 'react-helmet';
 
 import UserList from '../components/UserList';
 
-export default class HomePage extends React.Component {
-  render() {
-    return (
-      <div className="row">
-        <Helmet title="Привет!" />
-        <div className="col-sm-8">
-          <div className="panel panel-default">
-            <div className="panel-heading">Информация о системе</div>
-            <table className="table">
-              <tbody>
-              <tr><td>Зарегистрировано пользователей</td><td>
-                {this.props.usersCount}&nbsp;
-                <FormattedPlural value={this.props.usersCount}
-                                 one="пользователь"
-                                 few="пользователя"
-                                 many="пользователей"
-                                 other="пользователей" />
-              </td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="col-sm-4">
-          <UserList users={this.props.lastUsers} title="Недавно зарегистрировавшиеся"/>
-        </div>
+const HomePage = ({lastUsers, usersCount}) =>
+  <div className="row">
+    <Helmet title="Привет!" />
+    <div className="col-sm-8">
+      <div className="panel panel-default">
+        <div className="panel-heading">Информация о системе</div>
+        <table className="table">
+          <tbody>
+          <tr>
+            <td>Зарегистрировано пользователей</td>
+            <td>
+              {usersCount}&nbsp;
+              <FormattedPlural value={usersCount}
+                               one="пользователь" few="пользователя" other="пользователей" />
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
-    );
-  }
-}
+    </div>
+    <div className="col-sm-4">
+      <UserList users={lastUsers} title="Недавно зарегистрировавшиеся" />
+    </div>
+  </div>;
 
 HomePage.propTypes = {
   lastUsers: React.PropTypes.array,
   usersCount: React.PropTypes.number,
 };
+
+export default HomePage;
