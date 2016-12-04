@@ -8,6 +8,7 @@ export default HomePageContainer = createContainer(() => {
     usersLast: Meteor.users.find({}, {sort: {createdAt: -1}, limit: 5}).fetch(),
     counts: {
       users: Counts.get('users'),
+      messages: Counts.get('messages'),
     },
   };
 }, HomePage);
