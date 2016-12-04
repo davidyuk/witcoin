@@ -8,6 +8,8 @@ const HomePage = ({lastUsers, usersCount}) =>
   <div className="row">
     <Helmet title="Привет!" />
     <div className="col-sm-8">
+    </div>
+    <div className="col-sm-4">
       <div className="panel panel-default">
         <div className="panel-heading">Информация о системе</div>
         <table className="table">
@@ -23,8 +25,6 @@ const HomePage = ({lastUsers, usersCount}) =>
           </tbody>
         </table>
       </div>
-    </div>
-    <div className="col-sm-4">
       <UserList users={lastUsers} title="Недавно зарегистрировавшиеся" />
     </div>
   </div>;
