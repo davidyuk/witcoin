@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 
 import UserList from '../components/UserList';
 
-const HomePage = ({lastUsers, usersCount}) =>
+const HomePage = ({counts, usersLast}) =>
   <div className="row">
     <Helmet title="Привет!" />
     <div className="col-sm-8">
@@ -17,21 +17,30 @@ const HomePage = ({lastUsers, usersCount}) =>
           <tr>
             <td>Зарегистрировано</td>
             <td>
-              {usersCount}&nbsp;
-              <FormattedPlural value={usersCount}
+              {counts.users}&nbsp;
+              <FormattedPlural value={counts.users}
                                one="пользователь" few="пользователя" other="пользователей" />
             </td>
           </tr>
           </tbody>
         </table>
       </div>
-      <UserList users={lastUsers} title="Недавно зарегистрировавшиеся" />
+      <UserList users={usersLast} title="Недавно зарегистрировавшиеся" />
     </div>
   </div>;
 
 HomePage.propTypes = {
-  lastUsers: React.PropTypes.array,
-  usersCount: React.PropTypes.number,
+  counts: React.PropTypes.shape({
+    users: React.PropTypes.number,
+  }),
+  usersLast: React.PropTypes.array,
+};
+
+HomePage.defaultProps = {
+  counts: {
+    users: 0,
+  },
+  usersLast: [],
 };
 
 export default HomePage;
