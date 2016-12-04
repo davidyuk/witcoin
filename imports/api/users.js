@@ -80,15 +80,6 @@ if (Meteor.isServer) {
       return p;
     }, {})});
   });
-
-  Meteor.publish('users.last', function () {
-    Counts.publish(this, 'users', Meteor.users.find());
-    return Meteor.users.find({}, {
-      sort: {createdAt: -1},
-      limit: 5,
-      fields: {...Meteor.users.publicFields, createdAt: 1},
-    });
-  });
 }
 
 Meteor.users.helpers({

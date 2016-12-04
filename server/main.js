@@ -11,6 +11,7 @@ import '../imports/api/chats';
 import '../imports/api/actions';
 import '../imports/api/feeds';
 import '../imports/api/userpage';
+import '../imports/api/homepage';
 
 import '../imports/api/testData';
 import { sendMails } from '../imports/mails/report';
