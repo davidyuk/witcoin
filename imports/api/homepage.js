@@ -1,8 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 
+import { Messages } from './chats';
+
 if (Meteor.isServer) {
   Meteor.publish('homePage.counters', function() {
     Counts.publish(this, 'users', Meteor.users.find());
+    Counts.publish(this, 'messages', Messages.find());
   });
 
   Meteor.publish('homePage.users.last', () =>

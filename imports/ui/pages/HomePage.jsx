@@ -22,6 +22,14 @@ const HomePage = ({counts, usersLast}) =>
                                one="пользователь" few="пользователя" other="пользователей" />
             </td>
           </tr>
+          <tr>
+            <td>Отправлено</td>
+            <td>
+              {counts.messages}&nbsp;
+              <FormattedPlural value={counts.messages}
+                               one="сообщение" few="сообщения" other="сообщений" />
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -32,6 +40,7 @@ const HomePage = ({counts, usersLast}) =>
 HomePage.propTypes = {
   counts: React.PropTypes.shape({
     users: React.PropTypes.number,
+    messages: React.PropTypes.number,
   }),
   usersLast: React.PropTypes.array,
 };
@@ -39,6 +48,7 @@ HomePage.propTypes = {
 HomePage.defaultProps = {
   counts: {
     users: 0,
+    messages: 0,
   },
   usersLast: [],
 };
