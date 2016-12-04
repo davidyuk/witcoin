@@ -13,7 +13,7 @@ const HomePage = ({lastUsers, usersCount}) =>
         <table className="table">
           <tbody>
           <tr>
-            <td>Зарегистрировано пользователей</td>
+            <td>Зарегистрировано</td>
             <td>
               {usersCount}&nbsp;
               <FormattedPlural value={usersCount}
