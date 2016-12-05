@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Helmet from 'react-helmet';
 
-import NotFoundPage from '../pages/NotFoundPage.jsx';
 import ActionListContainer from '../containers/ActionListContainer';
 import UserList from '../components/UserList';
 import InfiniteScroll from '../components/InfiniteScroll';
@@ -42,9 +41,6 @@ export default class UserPage extends React.Component {
   }
 
   render() {
-    if (!this.props.user)
-      return <NotFoundPage/>;
-
     const isSubscribed = this.props.isSubscribed;
     const user = this.props.user;
 
@@ -112,7 +108,7 @@ export default class UserPage extends React.Component {
 }
 
 UserPage.propTypes = {
-  user: React.PropTypes.object,
+  user: React.PropTypes.object.isRequired,
   subscribers: React.PropTypes.array.isRequired,
   subscribersCount: React.PropTypes.number.isRequired,
   isSubscribed: React.PropTypes.bool.isRequired,
