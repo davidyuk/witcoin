@@ -6,7 +6,7 @@ import { Actions } from '../../api/actions';
 
 export default UserPageContainer = createContainer(({ params: { userId } }) => {
   Meteor.subscribe('user.page', userId);
-  const user = Meteor.users.findOne(userId);
+  const user = Meteor.users.findOne({_id: userId, status: {$exists: true}});
   const subscribers = Actions
     .find({ type: Actions.types.SUBSCRIBE, objectId: userId }, { limit: 10 })
     .map(action => Meteor.users.findOne(action.userId))

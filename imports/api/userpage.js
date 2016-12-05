@@ -13,6 +13,8 @@ if (Meteor.isServer) {
         ...Meteor.users.publicFields,
         createdAt: 1,
         'profile.about': 1,
+        'status.lastLogin.date': 1,
+        'status.lastActivity': 1,
       }}),
       children: [
         { find: user => Actions.find({ type: Actions.types.SUBSCRIBE, objectId: userId, userId: this.userId }) },

@@ -10,6 +10,7 @@ import ActionCreator from '../components/ActionCreator';
 import ActionTypeFilter from '../components/ActionTypeFilter';
 import MessageInput from '../components/MessageInput';
 import UserStatus from '../components/UserStatus';
+import UserStatusDate from '../components/UserStatusDate';
 import { Actions } from '../../api/actions';
 
 export default class UserPage extends React.Component {
@@ -55,6 +56,7 @@ export default class UserPage extends React.Component {
             {this.props.user.getFullName()}
             <UserStatus user={user} />
           </h3>
+          <UserStatusDate user={user} />
           { this.props.user._id != Meteor.userId() ?
             <div className="btn-group" style={{ marginBottom: 20 + 'px' }}>
               <button className="btn btn-default btn-sm" onClick={this.goToChat.bind(this)}>
