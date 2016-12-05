@@ -19,6 +19,7 @@ const EmailReportSettings = ({ user }) => {
 
   const send = user.profile.reports.send;
   const enabled = Object.values(send).find(a => a);
+  const showReceiveWarning = enabled && !user.emails.find(email => email.primary);
 
   return <div>
     <h2>Уведомления</h2>
@@ -49,6 +50,11 @@ const EmailReportSettings = ({ user }) => {
           </select>
         </div>
       </div>
+      {showReceiveWarning ? (
+        <div className="alert alert-warning">
+          Для получения уведомлений требуется указать основной адрес электронной почты.
+        </div>
+      ) : null}
     </div>
   </div>;
 };
