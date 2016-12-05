@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
-import UserPage from '../pages/UserPage';
 
+import UserPage from '../pages/UserPage';
 import { Actions } from '../../api/actions';
 
 export default UserPageContainer = createContainer(({ params: { userId } }) => {
