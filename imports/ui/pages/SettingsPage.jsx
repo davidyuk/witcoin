@@ -5,11 +5,9 @@ import { Meteor } from 'meteor/meteor';
 
 import EmailSettings from '../components/EmailSettings';
 import ServiceSettings from '../components/ServiceSettings';
-import { injectUser } from '../hocs';
+import { injectUser, pageWrapper } from '../hocs';
 
 const SettingsPage = ({ user }) => {
-  if (!user) return <span>Загрузка</span>;
-
   const updatePersonalData = event => {
     event.preventDefault();
     Meteor.users.update(Meteor.userId(), {$set: {
@@ -113,7 +111,7 @@ const SettingsPage = ({ user }) => {
 };
 
 SettingsPage.propTypes = {
-  user: React.PropTypes.object,
+  user: React.PropTypes.object.isRequired,
 };
 
-export default injectUser(SettingsPage);
+export default injectUser(pageWrapper(SettingsPage));
