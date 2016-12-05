@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import LinkMenu from './LinkMenu';
-import { injectUser } from '../injectors';
+import { injectUser } from '../hocs';
 
 const UserMenu = ({ user, chatsUnreadCount, notificationsUnreadCount }) => {
   const renderBadge = count => count ? <span className="badge">{count}</span> : null;
