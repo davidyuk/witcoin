@@ -57,7 +57,7 @@ Meteor.users.schema = new SimpleSchema({
     })},
     idle: {type: Boolean, optional: true},
     lastActivity: {type: Date, optional: true},
-  })},
+  }), optional: true},
   services: {type: Object, optional: true, blackbox: true},
   heartbeat: {type: Date, optional: true},
 });
