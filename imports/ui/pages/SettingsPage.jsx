@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 
 import EmailSettings from '../components/EmailSettings';
 import ServiceSettings from '../components/ServiceSettings';
-import { injectUser } from '../injectors';
+import { injectUser } from '../hocs';
 
 const SettingsPage = ({ user }) => {
   if (!user) return <span>Загрузка</span>;
