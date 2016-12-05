@@ -1,7 +1,9 @@
+import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
+
 import HomePage from '../pages/HomePage';
 
-export default HomePageContainer = createContainer(() => {
+export default createContainer(() => {
   Meteor.subscribe('homePage.counters');
   const usersLastReady = Meteor.subscribe('homePage.users.last').ready();
   const usersOnlineReady = Meteor.subscribe('homePage.users.online').ready();
