@@ -20,7 +20,16 @@ const App = ({ children }) =>
           <Link to="/" className="navbar-brand">Кленинка</Link>
         </div>
         <div id="navbar" className="collapse navbar-collapse">
-          <ul className="nav navbar-nav">
+          <ul className="nav navbar-nav hidden-xs hidden-sm">
+          </ul>
+          <ul className="nav navbar-nav visible-xs visible-sm">
+            <li>
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#">
+                Разделы <span className="caret"/>
+              </a>
+              <ul className="dropdown-menu">
+              </ul>
+            </li>
           </ul>
 
           <UserSearch />
