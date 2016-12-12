@@ -53,18 +53,21 @@ export default class UserPage extends React.Component {
             <UserStatus user={user} />
           </h3>
           <UserStatusDate user={user} />
-          { this.props.user._id != Meteor.userId() ?
-            <div className="btn-group" style={{ marginBottom: 20 + 'px' }}>
-              <button className="btn btn-default btn-sm" onClick={this.goToChat.bind(this)}>
-                <span className="glyphicon glyphicon-send"/>&nbsp;
-                Написать сообщение
-              </button>
-              <button className="btn btn-default btn-sm" onClick={this.subscribe.bind(this)}>
-                <span className={ 'glyphicon glyphicon-eye-' + (isSubscribed ? 'close' : 'open') }/>&nbsp;
-                { isSubscribed ? 'Отписаться' : 'Подписаться' }
-              </button>
-            </div>
-          : null }
+          {this.props.user._id != Meteor.userId() ?
+            <ul className="nav nav-pills nav-stacked" style={{marginBottom: 10 + 'px'}}>
+              <li>
+                <a href="#" onClick={this.goToChat.bind(this)}>
+                  <span className="glyphicon glyphicon-send" /> Написать сообщение
+                </a>
+              </li>
+              <li>
+                <a href="#" onClick={this.subscribe.bind(this)}>
+                  <span className={`glyphicon glyphicon-eye-${isSubscribed ? 'close' : 'open'}`} />
+                  {` ${isSubscribed ? 'Отписаться' : 'Подписаться'}`}
+                </a>
+              </li>
+            </ul>
+          : null}
           {user.profile.about || user._id == Meteor.userId() ? (
             <div className="panel panel-default">
               <div className="panel-heading">О себе
