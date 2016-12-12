@@ -67,6 +67,12 @@ textarea { resize: vertical; }
   }
 }
 
+@media only screen and (max-width: $screen-sm-min) {
+  .select-user > .list-group {
+    position: static !important;
+  }
+}
+
 #app {
   > div {
     display: flex;

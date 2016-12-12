@@ -63,7 +63,7 @@ export default class SelectUser extends React.Component {
     };
 
     return (
-      <div ref={c => this._root = c} style={{position: 'relative'}}>
+      <div ref={c => this._root = c} style={{position: 'relative'}} className="select-user">
         {this.props.name ? <input type="hidden" value={this.state.userId} name={this.props.name} /> : null}
 
         <input ref={c => this._input = c} onChange={event => this.setState({query: event.target.value, userId: ''})}
@@ -72,7 +72,7 @@ export default class SelectUser extends React.Component {
         + (this.props.required && this.state.query ? this.state.userId ? 'text-success' : 'text-danger' : '')} />
 
         {this.state.resultVisible ? (
-          <div className="list-group" style={{zIndex: 10, position: 'absolute', width: '100%'}}>
+          <div className="list-group" style={{zIndex: 10, position: 'absolute', width: '100%', marginBottom: 0}}>
             {this.data.users
               .filter(u => this.props.canSelectYourself || u.__originalId != Meteor.userId())
               .map(user =>
