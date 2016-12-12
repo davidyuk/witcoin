@@ -58,6 +58,15 @@ textarea { resize: vertical; }
   &.offline {display: none}
 }
 
+.navbar .navbar-nav .connection-status {
+  @each $context in primary success info warning danger {
+    > a.#{$context} {
+      @extend .bg-#{$context};
+      @extend .text-#{$context};
+    }
+  }
+}
+
 #app {
   > div {
     display: flex;

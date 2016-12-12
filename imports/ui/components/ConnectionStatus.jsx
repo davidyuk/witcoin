@@ -29,14 +29,19 @@ export default class ConnectionStatus extends React.Component {
       this.setState({open: !this.state.open});
     };
 
-    let notice;
+    const title = {
+      connected: 'Соединение с сервером установлено.',
+      connecting: 'Выполняется подключение к серверу.',
+      waiting: 'Не удалось подключиться к серверу.',
+      failed: 'Ошибка соединения с сервером.',
+      offline: 'Соединение с сервером отключено.',
+    }[status.status];
+
+    let description = '';
     switch (status.status) {
-      case 'connected': notice = 'Соединение с сервером установлено.'; break;
-      case 'connecting': notice = 'Выполняется подключение к серверу.'; break;
       case 'waiting':
         const s = Math.floor((Meteor.status().retryTime - Date.now()) / 1000);
-        notice = <span>
-          Не удалось подключиться к серверу.
+        description = <span>
           Повторное подключение произойдёт через {s}&nbsp;
           <FormattedPlural value={s} one="секунду" few="секунды" other="секунд" />.
           Всего{' '}
@@ -47,8 +52,7 @@ export default class ConnectionStatus extends React.Component {
           {' '}подключения.
         </span>;
         break;
-      case 'failed': notice = `Ошибка соединения с сервером (${status.reason}).`; break;
-      case 'offline': notice = 'Соединение с сервером отключено.'; break;
+      case 'failed': description = `(${status.reason})`; break;
     }
 
     const reconnectTitle = {
@@ -72,12 +76,15 @@ export default class ConnectionStatus extends React.Component {
 
     return (
       <ul className="nav navbar-nav navbar-right">
-        <li className={`alert-${context} ${this.state.open ? 'open' : ''}`}>
-          <a href="#" className="dropdown-toggle" style={{color: 'inherit'}} onClick={dropDownToggle}>
+        <li className={`connection-status ${this.state.open ? 'open' : ''}`}>
+          <a href="#" className={context + ' dropdown-toggle'} onClick={dropDownToggle}>
             <span className="glyphicon glyphicon-signal" />
+            <span className="visible-xs-inline"> {title}</span>
           </a>
-          <ul className="dropdown-menu" style={{minWidth: 0}}>
-            <li className="dropdown-header" style={{whiteSpace: 'normal'}}>{notice}</li>
+          <ul className="dropdown-menu">
+            <li className="dropdown-header" style={{whiteSpace: 'normal'}}>
+              <span className="hidden-xs">{title} </span>{description}
+            </li>
             {reconnectTitle ? <li>
               <a href="#" onClick={reconnectHandler}>
                 {reconnectTitle}
