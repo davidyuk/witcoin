@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { IntlProvider } from 'react-intl';
+import { jQuery } from 'meteor/jquery';
 
 import App from '../../ui/layouts/App';
 import HomePageContainer from '../../ui/containers/HomePageContainer';
@@ -13,6 +14,10 @@ import NotFoundPage from '../../ui/pages/NotFoundPage';
 import NewsPage from '../../ui/pages/NewsPage';
 import NotificationPage from '../../ui/pages/NotificationPage';
 import SettingsPage from '../../ui/pages/SettingsPage';
+
+const hideNavbar = () => {
+  jQuery('.navbar-collapse.in').collapse('hide');
+};
 
 function requireAuth(nextState, replace) {
   if (!Meteor.userId()) {
@@ -49,7 +54,7 @@ Meteor.call = function() {
 export const renderRoutes = () => (
   <IntlProvider locale="ru">
     <Router history={browserHistory}>
-      <Route path="/" component={App}>
+      <Route path="/" component={App} onChange={hideNavbar}>
         <IndexRoute component={HomePageContainer} />
 
         <Route path="sign-in" component={AccountsPage} />
