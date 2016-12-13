@@ -66,6 +66,9 @@ export default class UserPage extends React.Component {
                   {` ${isSubscribed ? 'Отписаться' : 'Подписаться'}`}
                 </a>
               </li>
+              {UserPage._buttons.map((Button, key) =>
+                <Button {...{key}} userToId={this.props.user._id} />
+              )}
             </ul>
           : null}
           {user.profile.about || user._id == Meteor.userId() ? (
@@ -109,6 +112,10 @@ export default class UserPage extends React.Component {
     );
   }
 }
+
+UserPage._buttons = [];
+
+UserPage.registerButton = button => UserPage._buttons.push(button);
 
 UserPage.propTypes = {
   user: React.PropTypes.object.isRequired,
