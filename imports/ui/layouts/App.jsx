@@ -21,8 +21,8 @@ const App = ({ children }) =>
         </div>
         <div id="navbar" className="collapse navbar-collapse">
           <ul className="nav navbar-nav hidden-xs hidden-sm">
-            {App._menuItems.map(item =>
-              React.cloneElement(item, {...item.props, key: item.props.to})
+            {App._menuItems.map((item, key) =>
+              React.cloneElement(item, {...item.props, key})
             )}
           </ul>
           <ul className="nav navbar-nav visible-xs visible-sm">
@@ -31,8 +31,8 @@ const App = ({ children }) =>
                 Разделы <span className="caret"/>
               </a>
               <ul className="dropdown-menu">
-                {App._menuItems.map(item =>
-                  React.cloneElement(item, {...item.props, key: item.props.to})
+                {App._menuItems.map((item, key) =>
+                  React.cloneElement(item, {...item.props, key})
                 )}
               </ul>
             </li>
