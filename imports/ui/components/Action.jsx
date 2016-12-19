@@ -29,6 +29,9 @@ class Action extends React.Component {
       <div>
         <div style={{overflow: 'hidden'}}>
           <div className="pull-right">
+            {this._bottomButtons.map((Button, key) => <span {...{key}}>
+              <Button action={this.props.action} />&nbsp;
+            </span>)}
             <ShareButton action={this.props.action} />
             &nbsp;<VoteButton action={this.props.action} />
           </div>
@@ -78,6 +81,10 @@ class Action extends React.Component {
     Action.prototype._typeRenders[type] = render;
   }
 
+  static registerBottomButton(button) {
+    Action.prototype._bottomButtons.push(button);
+  }
+
   render() {
     if (!this.props.action || !this.props.user) return null;
     const action = this.props.action;
@@ -106,6 +113,7 @@ class Action extends React.Component {
 }
 
 Action.prototype._typeRenders = {};
+Action.prototype._bottomButtons = [];
 
 Action.propTypes = {
   action: React.PropTypes.object,
@@ -126,5 +134,6 @@ const ActionWrapped = createContainer(
 );
 
 ActionWrapped.registerActionRender = Action.registerActionRender;
+ActionWrapped.registerBottomButton = Action.registerBottomButton;
 
 export default ActionWrapped;
