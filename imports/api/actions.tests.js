@@ -55,6 +55,12 @@ if (Meteor.isServer) {
             , Meteor.Error, 'forbidden');
         });
 
+        it('fail when remove un deletable action', () => {
+          const action = Factory.create('action', {unDeletable: true});
+          assert.throws(() => removeAction.call({userId: action.userId}, action._id)
+            , Meteor.Error, 'this-action-cannot-be-removed');
+        });
+
         it('remove', () => {
           const action = Factory.create('action');
           const userId = action.userId;
@@ -182,5 +188,12 @@ if (Meteor.isServer) {
         });
       });
     });
+
+    it('marks parent actions as un deletable', () => {
+      const ids = [Factory.create('action.default')._id];
+      ids.push(Factory.create('action.share', {objectId: ids[ids.length - 1]})._id);
+      ids.push(Factory.create('action.share', {objectId: ids[ids.length - 1], unDeletable: true})._id);
+      ids.forEach(id => expect(Actions.findOne(id).unDeletable).to.equal(true));
+    })
   });
 }
