@@ -32,6 +32,19 @@ const updateParentActionCounter = isInc => (_, action) => {
 Actions.after.insert(updateParentActionCounter(true));
 Actions.after.remove(updateParentActionCounter(false));
 
+const markParentActionsAsUnDeletable = actionId => {
+  if (!actionId) return;
+  const action = Actions.findOne(actionId);
+  if (action.unDeletable) return;
+  Actions.update(actionId, {$set: {unDeletable: true}});
+  if (action.type != Actions.types.SUBSCRIBE)
+    markParentActionsAsUnDeletable(action.objectId);
+};
+
+Actions.before.insert((_, action) => {
+  if (action.unDeletable) markParentActionsAsUnDeletable(action.objectId);
+});
+
 Actions.types = {
   DEFAULT: 'default',
   SUBSCRIBE: 'subscribe',
@@ -43,7 +56,6 @@ Actions.types = {
 Actions.relevantTypes = [Actions.types.DEFAULT, Actions.types.SHARE];
 Actions.simpleTypes = [Actions.types.DEFAULT];
 Actions.hasParentActionTypes = [Actions.types.COMMENT, Actions.types.RATE, Actions.types.SHARE];
-Actions.undeletableTypes = [];
 
 Actions.typesTree = {
   'Записи': {
@@ -68,6 +80,7 @@ Actions.schema = new SimpleSchema({
   description: { type: String, optional: true },
   type: { type: String, defaultValue: Actions.types.DEFAULT, denyUpdate: true,
     allowedValues: () => Object.values(Actions.types) },
+  unDeletable: { type: Boolean, defaultValue: false },
 
   commentsCount: { type: Number, defaultValue: 0, optional: true },
 
@@ -165,8 +178,8 @@ Meteor.methods({
     const action = Actions.findOne(actionId);
     if (!action)
       throw new Meteor.Error('action-not-found');
-    if (Actions.undeletableTypes.includes(action.type))
-      throw new Meteor.Error('actions-of-this-type-cannot-be-deleted');
+    if (action.unDeletable)
+      throw new Meteor.Error('this-action-cannot-be-removed');
     if (action.userId != this.userId)
       throw new Meteor.Error('forbidden');
 
