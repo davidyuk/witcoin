@@ -48,6 +48,11 @@ textarea { resize: vertical; }
   border-top: none;
 }
 
+.table-noStretchLastColumn tr td:last-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
 .user-status {
   cursor: default;
   position: relative;
