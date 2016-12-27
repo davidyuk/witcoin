@@ -68,9 +68,11 @@ Actions.typesTree = {
 
 Actions.notificationTypesTree = {
   'Репосты': Actions.types.SHARE,
-  'Подписки': Actions.types.SUBSCRIBE,
   'Оценки': Actions.types.RATE,
   'Комментарии': Actions.types.COMMENT,
+  'Другие': {
+    'Подписки на Ваши обновления': Actions.types.SUBSCRIBE,
+  },
 };
 
 Actions.schema = new SimpleSchema({
