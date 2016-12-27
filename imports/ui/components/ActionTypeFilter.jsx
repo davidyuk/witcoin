@@ -54,8 +54,8 @@ export default class ActionTypeFilter extends React.Component {
             {Object.keys(child).map(name =>
               <li key={name}>
                 <a onClick={genToggleTypeHandler(child[name])} href="#">
-                  {isActive(child[name]) ? <span className="pull-right glyphicon glyphicon-ok" /> : null}
-                  {name}
+                  <span className={'glyphicon glyphicon-' + (isActive(child[name]) ? 'check' : 'unchecked')} />
+                  {' ' + name}
                 </a>
               </li>
             )}
