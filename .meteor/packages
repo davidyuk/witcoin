@@ -47,3 +47,4 @@ percolate:migrations
 meteorhacks:inject-initial
 appcache
 mizzao:user-status
+mdg:validated-method
