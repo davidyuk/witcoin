@@ -17,12 +17,3 @@
 [submodule "imports/packages/fefu-auth"]
 	path = imports/packages/fefu-auth
 	url = http://github.com/Davidyuk/witcoin-fefuAuth/
-[submodule "imports/packages/lessons"]
-	path = imports/packages/lessons
-	url = http://github.com/Davidyuk/witcoin-lessons/
-[submodule "imports/packages/printer"]
-	path = imports/packages/printer
-	url = http://github.com/Davidyuk/witcoin-printer/
-[submodule "imports/packages/consultations"]
-	path = imports/packages/consultations
-	url = http://github.com/Davidyuk/witcoin-consultations/
