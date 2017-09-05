@@ -4,16 +4,3 @@
 [submodule "packages/meteor-accounts-t9n"]
 	path = packages/meteor-accounts-t9n
 	url = https://github.com/Davidyuk/meteor-accounts-t9n.git
-
-[submodule "imports/packages/transactions"]
-	path = imports/packages/transactions
-	url = http://github.com/Davidyuk/witcoin-transactions/
-[submodule "imports/packages/services"]
-	path = imports/packages/services
-	url = http://github.com/Davidyuk/witcoin-services/
-[submodule "imports/packages/tasks"]
-	path = imports/packages/tasks
-	url = http://github.com/Davidyuk/witcoin-tasks/
-[submodule "imports/packages/fefu-auth"]
-	path = imports/packages/fefu-auth
-	url = http://github.com/Davidyuk/witcoin-fefuAuth/
