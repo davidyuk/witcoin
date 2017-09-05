@@ -1,8 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 const faker = Meteor.isDevelopment && require('faker');
 
-import '../transactions';
-import { registerTransactionType } from '../transactions/register';
+import { registerTransactionType } from '../transactions';
 import { PRECISION_FACTOR } from '../transactions/constants';
 
 import Action from '../../ui/components/Action';

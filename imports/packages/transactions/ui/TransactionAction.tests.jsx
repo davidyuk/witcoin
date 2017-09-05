@@ -19,13 +19,11 @@ if (Meteor.isClient) {
 
     it('render', () => {
       const user = Factory.create('user', {}, {gender: Meteor.users.genderTypes.MALE});
-      const transaction = Factory.create('transaction', {
-        userId: user._id,
-        objectId: Factory.create('user', {
-          'profile.firstName': 'Пётр',
-          'profile.lastName': 'Петров',
-        }, {gender: Meteor.users.genderTypes.MALE})._id,
-      });
+      const userToId = Factory.create('user', {
+        'profile.firstName': 'Пётр',
+        'profile.lastName': 'Петров',
+      }, {gender: Meteor.users.genderTypes.MALE})._id;
+      const transaction = Factory.create('transaction', {userId: user._id}, {userToId});
       const item = mount(<TransactionAction action={transaction} user={user} />).render();
 
       expect(item.text()).string('перевёл').string('Петру Петрову');

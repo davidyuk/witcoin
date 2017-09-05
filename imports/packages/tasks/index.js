@@ -4,7 +4,7 @@ import React from 'react';
 import { Actions } from '../../api/actions';
 import Action from '../../ui/components/Action';
 
-import { TransactionParentActionTypes } from '../transactions';
+import { registerTransactionParentType } from '../transactions';
 
 import TaskAction from './ui/TaskAction';
 import TaskSuggestionAction from './ui/TaskSuggestionAction';
@@ -13,11 +13,12 @@ Actions.types.TASK = 'task';
 Actions.types.TASK_SUGGESTION = 'task_suggestion';
 
 Actions.relevantTypes.push(Actions.types.TASK);
-Actions.typesTree['Задания'] = Actions.types.TASK;
-Actions.typesTree['Ответы']['Предложения'] = Actions.types.TASK_SUGGESTION;
-Actions.notificationTypesTree['Предложения'] = Actions.types.TASK_SUGGESTION;
+Actions.typesTree['Другие'] = [];
+Actions.typesTree['Другие']['Задания'] = Actions.types.TASK;
+Actions.typesTree['Ответы']['Предложения к заданиям'] = Actions.types.TASK_SUGGESTION;
+Actions.notificationTypesTree['Другие']['Предложения к Вашим заданиям'] = Actions.types.TASK_SUGGESTION;
 
-TransactionParentActionTypes.push(Actions.types.TASK_SUGGESTION);
+registerTransactionParentType(Actions.types.TASK_SUGGESTION);
 
 export const TaskStates = {
   ACTUAL: 'actual',

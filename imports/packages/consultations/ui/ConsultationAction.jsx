@@ -4,21 +4,31 @@ import { FormattedPlural } from 'react-intl';
 
 import { Actions } from '../../../api/actions';
 
-import { ConsultationStates } from '../index';
 import ConsultationState from './ConsultationState';
 
-const ConsultationAction = ({baseType, action, user}) =>
-  Actions.types.CONSULTATION == baseType ? <span>
-    {' '}| <ConsultationState state={action.extra.actual ? ConsultationStates.WAITING : ConsultationStates.DISABLED} />
-    {' | '}
-    <Link className="label label-default" to={'/consultations/' + action._id}>
-      {action.extra.suggestionsCount}&nbsp;
-      <FormattedPlural value={action.extra.suggestionsCount}
-                       one="предложение" few="предложения" other="предложений" />
+const ConsultationAction = ({baseType, action, user}) => {
+  const {
+    extra: {
+      counts: {suggestions, participations, completed}
+    }
+  } = action;
+
+  return Actions.types.CONSULTATION == baseType ? <span>
+    {' '}| <ConsultationState consultation={action} />
+      {' | '}
+      <Link className="label label-default" to={'/consultations/' + action._id}>
+        {suggestions - completed}&nbsp;
+        <FormattedPlural value={suggestions - completed}
+                         one="предложение" few="предложения" other="предложений" />
+        ,&nbsp;
+        {completed}&nbsp;
+        <FormattedPlural value={completed}
+                         one="консультация" few="консультации" other="консультаций" />
     </Link>
   </span> : <span>
     добавил{user.isMale() ? '' : 'а'} <Link to={'/consultations/' + action._id}>консультацию</Link>
-  </span>;
+  </span>
+};
 
 ConsultationAction.propTypes = {
   action: React.PropTypes.object.isRequired,

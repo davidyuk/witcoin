@@ -3,7 +3,7 @@ import React from 'react';
 import SelectUser from '../../../ui/components/SelectUser';
 import { injectUser } from '../../../ui/hocs';
 
-import CoinsAmount from './CoinsAmount';
+import CurrentUserBalance from './CurrentUserBalance';
 import { PRECISION_FACTOR } from '../constants';
 
 const TransactionCreator = ({ user }) => {
@@ -27,7 +27,7 @@ const TransactionCreator = ({ user }) => {
                   canSelectYourself={false} />
       <input type="number" name="amount" className="form-control input-sm" placeholder="Сумма" style={style} required
              min="0.1" max={balance / PRECISION_FACTOR} step="0.1" />
-      <span className="text-muted" style={{fontSize: '12px'}}>Доступно: <CoinsAmount value={balance} /></span>
+      <span className="text-muted" style={{fontSize: '12px'}}><CurrentUserBalance /></span>
       <textarea name="description" className="form-control input-sm" placeholder="Причина перевода"
                 style={{minHeight: 50 + 'px', margin: '5px 0'}} required />
       <button className="btn btn-primary btn-sm">Перевести</button>

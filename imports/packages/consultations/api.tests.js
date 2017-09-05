@@ -5,7 +5,9 @@ import { expect, assert } from 'meteor/practicalmeteor:chai';
 import { Actions } from '../../api/actions';
 import { FeedItems } from '../../api/feeds';
 
-import { createConsultation, setConsultationActual, createSuggestion } from './api';
+import './server';
+import { ConsultationStates } from './action-types';
+import { createConsultation, toggleConsultationState, createSuggestion } from './api';
 
 if (Meteor.isServer) {
   describe('consultations', () => {
@@ -76,22 +78,25 @@ if (Meteor.isServer) {
             canParticipateForFree: true,
             canParticipateWithPaid: true,
             fixedCoinsPerHour: 1,
-            actual: true,
-            suggestionsCount: 0,
+            state: ConsultationStates.WAITING,
+            counts: {
+              suggestions: 0,
+              participations: 0,
+              completed: 0,
+            },
           });
         });
       });
 
       describe('consultation.actual', () => {
         it('change consultation state', () => {
-          const consultation = Factory.create('consultation', {extra: {actual: false}});
-          setConsultationActual._execute({userId: consultation.userId}, {
+          const consultation = Factory.create('consultation', {extra: {state: ConsultationStates.DISABLED}});
+          toggleConsultationState._execute({userId: consultation.userId}, {
             actionId: consultation._id,
-            actual: true,
           });
 
           const action = Actions.findOne(consultation._id);
-          expect(action.extra.actual).to.equal(true);
+          expect(action.extra.state).to.equal(ConsultationStates.WAITING);
         });
       });
 
@@ -134,6 +139,16 @@ if (Meteor.isServer) {
           }, Meteor.Error, 'coinsPerHour-is-required');
         });
 
+        it('fail when paid is disabled and try to participate with paid', () => {
+          const actionId = Factory.create('consultation', {}, {
+            canParticipateWithPaid: false,
+            canParticipateForFree: true,
+          })._id;
+          assert.throws(() => {
+            createSuggestion._execute({userId: Factory.create('user')._id}, {actionId, coinsPerHour: 1});
+          }, Meteor.Error, 'cannot-participate-with-paid');
+        });
+
         it('fail when coinsPerHour not equal to fixedCoinsPerHour', () => {
           const actionId = Factory.create('consultation', {}, {
             canParticipateForFree: false,
@@ -160,7 +175,7 @@ if (Meteor.isServer) {
           const removeAction = Meteor.server.method_handlers['action.remove'];
           const consultationId = Factory.create('consultation')._id;
           const assertSuggestionCount = count =>
-            expect(Actions.findOne(consultationId).extra.suggestionsCount).to.equal(count);
+            expect(Actions.findOne(consultationId).extra.counts.suggestions).to.equal(count);
 
           assertSuggestionCount(0);
           const suggestion = Factory.create('consultation.suggestion', {objectId: consultationId});
@@ -171,12 +186,20 @@ if (Meteor.isServer) {
       });
     });
 
-    it('create notification', () => {
+    it('create notification on suggestion', () => {
       const suggestion = Factory.create('consultation.suggestion');
       const consultation = Actions.findOne(suggestion.objectId);
       const notification = FeedItems.findOne({userId: consultation.userId, isNotification: true});
       expect(notification).not.to.equal(undefined);
       expect(notification.actionId).to.equal(suggestion._id);
+    });
+
+    it('create notification on participation', () => {
+      const participation = Factory.create('consultation.participation');
+      const suggestion = Actions.findOne(participation.objectId);
+      const notification = FeedItems.findOne({userId: suggestion.userId, isNotification: true});
+      expect(notification).not.to.equal(undefined);
+      expect(notification.actionId).to.equal(participation._id);
     });
   });
 }

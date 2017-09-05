@@ -6,6 +6,7 @@ import { Match } from 'meteor/check';
 import { Actions } from '../../api/actions';
 import { FeedItems } from '../../api/feeds';
 
+import { registerTransactionParentType } from './packages-api';
 import './api';
 
 if (Meteor.isServer) {
@@ -70,7 +71,7 @@ if (Meteor.isServer) {
         const userToId = Factory.create('user')._id;
         assert.throws(() => {
           createTransaction.call({userId}, userToId, 2, description);
-        }, Meteor.Error, 'not-enough-money');
+        }, Meteor.Error, 'balance-cannot-be-below-zero');
         expect(Actions.find({userId}).count()).to.equal(0);
         expect(Actions.find({userId: userToId}).count()).to.equal(0);
       });
@@ -83,11 +84,38 @@ if (Meteor.isServer) {
         const action = Actions.findOne({userId});
         expect(action.description).to.equal(description);
         expect(action.type).to.equal(Actions.types.TRANSACTION);
-        expect(action.extra).to.eql({amount: 1});
-        expect(action.objectId).to.equal(userToId);
+        expect(action.extra).to.eql({amount: 1, userId: userToId});
         expect(action.userId).to.equal(userId);
+        expect(action.unDeletable).to.equal(true);
         expect(Meteor.users.findOne(userId).balance).to.equal(0);
         expect(Meteor.users.findOne(userToId).balance).to.equal(1);
+      });
+
+      it('fail when create transaction based on uncreated action', () => {
+        const userId = Factory.create('user', {balance: 1})._id;
+        assert.throws(() => {
+          createTransaction.call({userId}, Random.id(), 1, description, false);
+        }, Meteor.Error, 'action-not-found');
+      });
+
+      it('create based on action', () => {
+        Actions.types.TEST_TRANSACTION_PARENT_TYPE = 'test-transaction-parent-type';
+        registerTransactionParentType(Actions.types.TEST_TRANSACTION_PARENT_TYPE);
+        const userId = Factory.create('user', {balance: 1})._id;
+        const action = Factory.create('action.default', {type: Actions.types.TEST_TRANSACTION_PARENT_TYPE});
+        createTransaction.call({userId}, action._id, 1, '', false);
+        const transaction = Actions.findOne({userId});
+        expect(transaction.description).to.equal(undefined);
+        expect(transaction.objectId).to.equal(action._id);
+        expect(transaction.extra.userId).to.equal(action.userId);
+      });
+
+      it('fail when create transaction based on action with wrong type', () => {
+        const userId = Factory.create('user', {balance: 1})._id;
+        const actionId = Factory.create('action')._id;
+        assert.throws(() => {
+          createTransaction.call({userId}, actionId, 1, description, false);
+        }, Meteor.Error, 'action-should-be-oneOf');
       });
     });
 
@@ -96,14 +124,23 @@ if (Meteor.isServer) {
       const transaction = Factory.create('transaction');
       assert.throws(() => {
         removeAction.call({userId: transaction.userId}, transaction._id);
-      }, Meteor.Error, 'actions-of-this-type-cannot-be-deleted');
+      }, Meteor.Error, 'this-action-cannot-be-removed');
     });
 
     it('create notification', () => {
       const transaction = Factory.create('transaction');
-      const notification = FeedItems.findOne({userId: transaction.objectId, isNotification: true});
+      const notification = FeedItems.findOne({userId: transaction.extra.userId, isNotification: true});
       expect(notification).not.to.equal(undefined);
       expect(notification.actionId).to.equal(transaction._id);
+    });
+
+    it('update parent action coins count', () => {
+      const action = Factory.create('action');
+      const transaction = Factory.create('transaction', {objectId: action._id, unDeletable: false});
+      expect(transaction.extra.amount).not.to.equal(0);
+      expect(Actions.findOne(action._id).extra.coinsCount).to.equal(transaction.extra.amount);
+      Actions.remove(transaction._id);
+      expect(Actions.findOne(action._id).extra.coinsCount).to.equal(0);
     });
   });
 }

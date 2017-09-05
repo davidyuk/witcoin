@@ -3,7 +3,7 @@ import { jQuery } from 'meteor/jquery';
 
 import { injectUser } from '../../../ui/hocs';
 
-import CoinsAmount from './CoinsAmount';
+import CurrentUserBalance from './CurrentUserBalance';
 import { PRECISION_FACTOR } from '../constants';
 
 const TransactionCreatorModal = ({user, id, objectId, objectIsUser}) => {
@@ -38,7 +38,7 @@ const TransactionCreatorModal = ({user, id, objectId, objectIsUser}) => {
                 <div className="col-sm-10">
                   <input type="number" name="amount" id="amount" className="form-control" placeholder="Сумма" required
                          min="0.1" max={balance / PRECISION_FACTOR} step="0.1" />
-                  <span className="help-block">Доступно: <CoinsAmount value={balance} /></span>
+                  <span className="help-block"><CurrentUserBalance /></span>
                 </div>
               </div>
               <div className="form-group">

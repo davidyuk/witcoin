@@ -6,11 +6,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Actions } from '../../../api/actions';
 
 import TransactionCreatorModal from './TransactionCreatorModal';
-import { TransactionParentActionTypes } from '../index';
+import { registeredTransactionParentTypes } from '../internal';
 import { PRECISION_FACTOR } from '../constants';
 
 const TransactionActionButton = ({userId, action, payed}) => {
-  if (!TransactionParentActionTypes.includes(action.type)) return null;
+  if (!registeredTransactionParentTypes.includes(action.type)) return null;
   const modalId = 'transaction-modal-' + action._id;
   const disabled = action.userId == userId;
   const coinsCount = action.extra && action.extra.coinsCount / PRECISION_FACTOR;

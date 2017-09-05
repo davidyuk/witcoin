@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Actions } from '../../api/actions';
 
 import { isFefuEmail } from './utils';
+import './migrations';
 
 const _emailAdd = Meteor.server.method_handlers['user.email.add'];
 Meteor.server.method_handlers['user.email.add'] = function(email) {

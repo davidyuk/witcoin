@@ -5,7 +5,7 @@ const faker = Meteor.isDevelopment && require('faker');
 import { Actions } from '../../api/actions';
 import Action from '../../ui/components/Action';
 
-import { registerTransactionType } from '../transactions/register';
+import { registerTransactionType } from '../transactions';
 
 import LessonAction from './ui/LessonAction';
 import LessonParticipationAction from './ui/LessonParticipationAction';
@@ -13,7 +13,7 @@ import LessonParticipationAction from './ui/LessonParticipationAction';
 Actions.types.LESSON = 'lesson';
 Actions.types.LESSON_PARTICIPATION = 'lesson_participation';
 registerTransactionType(Actions.types.LESSON_PARTICIPATION);
-Actions.undeletableTypes.push(Actions.types.LESSON, Actions.types.LESSON_PARTICIPATION);
+// Actions.undeletableTypes.push(Actions.types.LESSON, Actions.types.LESSON_PARTICIPATION);
 
 Actions.relevantTypes.push(Actions.types.LESSON);
 Actions.relevantTypes.push(Actions.types.LESSON_PARTICIPATION);

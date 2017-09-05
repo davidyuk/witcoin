@@ -5,26 +5,42 @@ import { Actions } from '../../../api/actions';
 
 import CoinsAmount from '../../transactions/ui/CoinsAmount';
 
-import FormattedPluralMinutes from './FormattedPluralMinutes';
+import { ConsultationParticipationStates } from '../action-types';
 
-const ConsultationSuggestionAction = ({action, baseType, user, isNotification}) => {
+import { createParticipation } from '../api';
+import Duration from './Duration';
+
+const ConsultationSuggestionAction = ({action, baseType, user, isNotification, consultationOwner}) => {
   const {objectId: consultationId, extra: {coinsPerHour, minutes}} = action;
-  const _minutes = minutes == Number.MAX_SAFE_INTEGER ? 0 : minutes;
+  const participation = Actions.findOne({
+    type: Actions.types.CONSULTATION_PARTICIPATION,
+    objectId: action._id,
+  });
+
+  const label = participation && {
+    [ConsultationParticipationStates.WAITING]: {context: 'default', text: 'Ожидание подтверждения'},
+    [ConsultationParticipationStates.ACTIVE]: {context: 'success', text: 'В процессе'},
+  }[participation.extra.state];
 
   return <span>
-    {Actions.types.CONSULTATION_SUGGESTION == baseType ? null : <span>
+    {Actions.types.CONSULTATION_SUGGESTION == baseType ? <span>
+        {!label && consultationOwner && (
+          <button className="btn btn-xs btn-default"
+                  onClick={() => createParticipation.call({actionId: action._id})}>
+            Начать консультацию
+          </button>
+        )}
+        {label && <span className={'label label-' + label.context}>{label.text}</span>}
+      </span> : <span>
       добавил{user.isMale() ? '' : 'а'} предложение к {isNotification ? 'Вашей' : ''}
       {' '}<Link to={'/consultations/' + consultationId}>консультации</Link>
     </span>}
     <div><i>
       {coinsPerHour ? <span><CoinsAmount value={coinsPerHour} /> в час</span> : null}
-      {coinsPerHour && _minutes ? ', ' : null}
-      {_minutes ? <span>
-        {_minutes}{' '}
-        <FormattedPluralMinutes value={_minutes} />
-      </span> : null}
-      {coinsPerHour && _minutes ? <span>
-        {' '}(<CoinsAmount value={Math.round(coinsPerHour * _minutes / 60)} />)
+      {coinsPerHour && minutes ? ', ' : null}
+      {minutes && <Duration beginAt={new Date(0)} endAt={new Date(minutes * 60 * 1000)} />}
+      {coinsPerHour && minutes ? <span>
+        {' '}(<CoinsAmount value={Math.round(coinsPerHour * minutes / 60)} />)
       </span> : null}
     </i></div>
   </span>;
@@ -35,6 +51,7 @@ ConsultationSuggestionAction.propTypes = {
   baseType: React.PropTypes.string,
   user: React.PropTypes.object.isRequired,
   isNotification: React.PropTypes.bool,
+  consultationOwner: React.PropTypes.bool,
 };
 
 export default ConsultationSuggestionAction;

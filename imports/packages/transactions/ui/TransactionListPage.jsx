@@ -5,7 +5,7 @@ import InfiniteScroll from '../../../ui/components/InfiniteScroll';
 import ActionListContainer from '../../../ui/containers/ActionListContainer';
 
 import TransactionCreator from './TransactionCreator';
-import { registeredTransactionTypes } from '../register';
+import { registeredTransactionTypes } from '../internal';
 
 export default () =>
   <div className="row">
